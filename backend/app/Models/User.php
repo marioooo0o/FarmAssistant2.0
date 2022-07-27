@@ -49,12 +49,20 @@ class User extends Authenticatable implements JWTSubject
     }
     /**
      * Return a key value array, containing any custom claims to be added to
-the JWT.
+     * the JWT.
      *
      * @return array
      */
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    /**
+     * Get the farm associated with the user.
+     */
+    public function farm()
+    {
+        return $this->hasOne(Farm::class);
     }
 }

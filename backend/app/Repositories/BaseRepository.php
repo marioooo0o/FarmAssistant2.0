@@ -24,7 +24,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
     public function find($id, $columns = array('*'))
     {
-        return $this->model->find($id, $columns);
+        return $this->model->findOrFail($id, $columns);
     }
     public function update(array $data, $id)
     {

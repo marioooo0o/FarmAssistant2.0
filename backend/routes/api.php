@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-
+use App\Http\Controllers\FarmController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,9 +16,16 @@ use App\Http\Controllers\AuthController;
 |
 */
 
+Route::middleware(['api'])->group(function () {
+    Route::controller(FarmController::class)->group(function () {
+        Route::post('/farms', 'store');
+        Route::get('/farms/{id}', 'show');
+        Route::post('/farms/{id}', 'update');
+        Route::delete('/farms/{id}', 'destroy');
+    });
+});
 Route::group([
     'middleware' => 'api',
-    'prefix' => 'auth'
 ], function ($router) {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
