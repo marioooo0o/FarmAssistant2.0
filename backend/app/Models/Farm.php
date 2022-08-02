@@ -24,4 +24,12 @@ class Farm extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Get the fields for the farm.
+     */
+    public function fields()
+    {
+        return $this->hasMany(Field::class);
+    }
 }
