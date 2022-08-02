@@ -13,7 +13,7 @@ class FarmController extends Controller
     private FarmService $farmService;
 
     /**
-     * Create a new AuthController instance.
+     * Create a new FarmController instance.
      *
      * @return void
      */
