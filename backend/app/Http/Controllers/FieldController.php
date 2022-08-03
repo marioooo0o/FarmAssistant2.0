@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreFieldRequest;
+use App\Http\Requests\UpdateFieldRequest;
 use App\Http\Resources\FieldResource;
 use App\Models\Field;
 use App\Services\FarmService;
@@ -68,9 +70,18 @@ class FieldController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($farmId, $id)
     {
-        //
+        $field = $this->fieldService->find($id);
+        if (auth()->user()->id == $field->farm->user_id) {
+            return response()->json([
+                "success" => true,
+                "message" => "Field retrieved successfully.",
+                'field' => new FieldResource($field)
+            ]);
+        } else {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
     }
 
     /**
@@ -82,7 +93,25 @@ class FieldController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->only('field_name', 'cadastral_parcels', 'crop');
+        $field = Field::findOrFail($id);
+        if (auth()->user()->id == $field->farm->user_id) {
+            $field = $this->fieldService->update($data, $field);
+            if ($field instanceof Field) {
+                return response()->json([
+                    "success" => true,
+                    "message" => "Field updated successfully.",
+                    'field' => new FieldResource($field)
+                ]);
+            } else {
+                return response()->json([
+                    "success" => false,
+                    "message" => $field,
+                ], 400);
+            }
+        } else {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
     }
 
     /**
@@ -91,8 +120,24 @@ class FieldController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($farmId, $id)
     {
-        //
+        $field = Field::findOrFail($id);
+        if (auth()->user()->id == $field->farm->user_id) {
+            $field = $this->fieldService->delete($field);
+            if ($field) {
+                return response()->json([
+                    "success" => true,
+                    "message" => "Field deleted successfully."
+                ], 204);
+            } else {
+                return response()->json([
+                    "success" => false,
+                    "message" => $field,
+                ], 400);
+            }
+        } else {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
     }
 }

@@ -74,4 +74,90 @@ class FieldService
             return "Something goes wrong";
         }
     }
+
+    public function find($fieldId)
+    {
+        return Field::findOrFail($fieldId);
+    }
+
+    public function update($fieldAtributes, Field $field)
+    {
+        $success = false;
+        DB::beginTransaction();
+
+        try {
+            $crop = Crop::where('name', $fieldAtributes['crop'])->firstOrFail();
+            //update field
+            $field->update([
+                'crop_id' => $crop->id,
+                'field_name' =>  $fieldAtributes['field_name'],
+            ]);
+            $this->foo($field);
+            //remove all parcels from a field
+            $field->cadastralParcels()->detach();
+            foreach ($fieldAtributes['cadastral_parcels'] as $singleParcel) {
+                //find first parcel with equal parcel number or create new record in db
+                $parcel = CadastralParcel::firstOrCreate([
+                    'parcel_number' => $singleParcel['parcel_number']
+                ]);
+                $pivotData = array('area' => $singleParcel['area']);
+                //add data and ids to pivot table 
+                $field->cadastralParcels()->attach($parcel->id, $pivotData);
+                //calculate parcel area from pivot
+                $parcel->parcel_area = $parcel->sumParcelArea();
+                $parcel->save();
+            }
+            //calculate field area from pivot
+            $field->field_area = $field->cadastralParcels->sum('pivot.area');
+
+            if ($field->save()) {
+                $success = true;
+            }
+        } catch (Exception $e) {
+            DB::rollback();
+            return $e->getMessage();
+        }
+
+        if ($success) {
+            DB::commit();
+            return $field;
+        } else {
+            DB::rollback();
+            return "Something goes wrong";
+        }
+    }
+
+    public function delete(Field $field)
+    {
+        $success = false;
+        DB::beginTransaction();
+        try {
+            $this->foo($field);
+            //remove all parcels from a field
+            $field->cadastralParcels()->detach();
+            if ($field->delete()) {
+                $success = true;
+            }
+        } catch (Exception $e) {
+            DB::rollback();
+            return $e->getMessage();
+        }
+
+        if ($success) {
+            DB::commit();
+            return true;
+        } else {
+            DB::rollback();
+            return "Something goes wrong";
+        }
+    }
+    //TODO: wymyślić normalną nazwe xd
+    public function foo(Field $field)
+    {
+        $parcels = $field->cadastralParcels()->get();
+        foreach ($parcels as $parcel) {
+            $parcel->parcel_area -= $parcel->pivot->area;
+            $parcel->save();
+        }
+    }
 }
