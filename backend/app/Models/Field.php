@@ -15,7 +15,7 @@ class Field extends Model
      * @var array
      */
     protected $fillable = [
-        'field_name', 'field_area',
+        'field_name', 'field_area', 'farm_id', 'crop_id'
     ];
 
     /**
@@ -32,6 +32,14 @@ class Field extends Model
     public function cadastralParcels()
     {
         return $this->belongsToMany(CadastralParcel::class)->withPivot('area')->withTimestamps();
+    }
+
+    /**
+     * Get the crop that owns the field.
+     */
+    public function crop()
+    {
+        return $this->belongsTo(Crop::class);
     }
 
     public function sumFieldArea()

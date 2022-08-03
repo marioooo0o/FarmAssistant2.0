@@ -17,4 +17,12 @@ class Crop extends Model
     protected $fillable = [
         'name',
     ];
+
+    /**
+     * Get the fields for the crop.
+     */
+    public function fields()
+    {
+        return $this->hasMany(Field::class);
+    }
 }

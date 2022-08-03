@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\CadastralParcel;
+use App\Models\Field;
+use App\Models\Crop;
 use App\Repositories\CadastralParcelRepository;
 use App\Repositories\FarmRepository;
 use App\Repositories\FieldRepository;
@@ -33,9 +35,14 @@ class FieldService
 
         try {
             $farm = $this->farmRepository->find($farmId);
-            $fieldData = array('field_name' => $fieldAtributes['field_name']);
+            $crop = Crop::where('name', $fieldAtributes['crop'])->firstOrFail();
             //create field
-            $newField = $farm->fields()->create($fieldData);
+            $newField = Field::create([
+                'farm_id' => $farm->id,
+                'crop_id' => $crop->id,
+                'field_name' =>  $fieldAtributes['field_name'],
+            ]);
+
             foreach ($fieldAtributes['cadastral_parcels'] as $singleParcel) {
                 //find first parcel with equal parcel number or create new record in db
                 $parcel = CadastralParcel::firstOrCreate([
@@ -50,6 +57,7 @@ class FieldService
             }
             //calculate field area from pivot
             $newField->field_area = $newField->cadastralParcels->sum('pivot.area');
+
             if ($newField->save()) {
                 $success = true;
             }
@@ -63,6 +71,7 @@ class FieldService
             return $newField;
         } else {
             DB::rollback();
+            return "Something goes wrong";
         }
     }
 }
