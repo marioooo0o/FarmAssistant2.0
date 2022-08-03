@@ -41,7 +41,7 @@ class FieldController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $farmId)
+    public function store(StoreFieldRequest $request, $farmId)
     {
         $data = $request->only('field_name', 'cadastral_parcels', 'crop');
         $farm = $this->farmService->find($farmId);
@@ -91,7 +91,7 @@ class FieldController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateFieldRequest $request, $farmId, $id)
     {
         $data = $request->only('field_name', 'cadastral_parcels', 'crop');
         $field = Field::findOrFail($id);
