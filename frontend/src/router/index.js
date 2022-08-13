@@ -1,33 +1,63 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 
-import LoginPage from '../views/auth/LoginPage.vue';
-import RegisterPage from '../views/auth/RegisterPage.vue';
+import WelcomePage from '../views/WelcomePage.vue'
+import LoginPage from '../views/LoginPage.vue';
+import RegisterPage from '../views/RegisterPage.vue';
+import Dashboard from '../views/DashboardPage.vue';
+import PractisesPage from '../views/PractisesPage.vue';
+import FieldsPage from '../views/FieldsPage.vue';
+import MagazinePage from '../views/MagazinePage.vue';
+import CropsPage from '../views/CropsPage.vue';
+import ProfilePage from '../views/ProfilePage.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
+      name: 'welcome',
+      component: WelcomePage
     },
     {
       path: '/login',
+      name: 'login',
       component: LoginPage
     },
     {
-      path: '/register', 
+      path: '/register',
+      name: "register",
       component:RegisterPage
-    }
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: Dashboard
+    },
+    {
+      path: '/zabiegi-ochrony-roslin',
+      name: 'practises',
+      component: PractisesPage
+    },
+    {
+      path: '/grunty',
+      name: 'fields',
+      component: FieldsPage
+    },
+    {
+      path: '/magazyn',
+      name: 'magazine',
+      component: MagazinePage
+    },
+    {
+      path: '/uprawy',
+      name: 'crops',
+      component: CropsPage
+    },
+    {
+      path: '/profil',
+      name: 'profile',
+      component: ProfilePage
+    },
   ]
 })
 

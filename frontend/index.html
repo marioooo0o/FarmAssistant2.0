@@ -1,13 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="flex flex-col min-h-screen" lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
+    <link
+      rel="preload"
+      href="/LatoLatin-Italic.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/LatoLatin-LightItalic.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/LatoLatin-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/LatoLatin-Semibold.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
   </head>
-  <body>
-    <div id="app"></div>
+  <body class="flex justify-center items-center flex-1 font-sans">
+    <div class="h-full w-full" id="app"></div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
