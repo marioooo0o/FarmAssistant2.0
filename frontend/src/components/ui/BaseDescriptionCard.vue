@@ -1,12 +1,12 @@
 <template>
     <transition name="card-outer">
-        <div v-show="cardVisable"
-            class="absolute w-full bg-black bg-opacity-30 h-screen top-0 left-0 flex justify-center ">
+        <div v-show="isVisable"
+            class="absolute w-full bg-black bg-opacity-30 h-screen top-0 left-0 flex justify-center "
+            @click="$emit('close-description-card')">
             <transition name="card-inner">
-                <div v-if="cardVisable"
+                <div v-if="isVisable"
                     class="bg-white self-start mt-32 rounded-lg box-border border-solid border-2 border-black shadow">
                     <slot></slot>
-                    <button class="bg-green-600" @click="$emit('close-card')">Close</button>
                 </div>
             </transition>
 
@@ -16,23 +16,18 @@
 
 </template>
 <script>
+import { inject } from 'vue';
 export default {
-    data(){
-        return {
-            cardVisable: null
-            // cardVisable: this.descriptionIsActive
-        }
-    },
+    emits: ['close-description-card'],
+    setup() {
+        const isVisable = inject('descriptionIsShowed');
+        return{
+            isVisable,
+        };
+    }
 }
 </script>
 <style scoped>
-
-
-
-
-
-
-
 .card-outer-enter-active,
 .card-outer-leave-active{
     transition: opacity 0.3s cubic-bezier(0.52, 0.02, 0.19, 1.02);
