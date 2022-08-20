@@ -1,12 +1,11 @@
 <template>
     <Navbar />
-    <div>
-        Zabiegi strona
-    </div>
+    <PractiseList/>
 </template>
 <script>
-import Navbar from '../components/navbar/Navbar.vue'
+import Navbar from '../components/navbar/TheNavbar.vue';
+import PractiseList from '../components/practises/PractiseList.vue';
 export default {
-    components: { Navbar }
+    components: { Navbar, PractiseList }
 }
 </script>

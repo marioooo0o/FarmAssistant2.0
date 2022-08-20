@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-card rounded-lg m-24">
+    <div class="bg-card rounded-lg mx-24">
         <slot></slot>
     </div>
 </template>

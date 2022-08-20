@@ -17,11 +17,12 @@
                 </div>
             </header>
             <div class="m-3">
-                <FieldListItem />
-                <FieldListItem />
-                <FieldListItem />
+                <FieldListItem @click="toggleIsShowed()" />
+                <FieldListItem @click="toggleIsShowed()" />
+                <FieldListItem @click="toggleIsShowed()" />
             </div>
-            <BaseButton :class="'m-3 text-lg'">Załaduj więcej</BaseButton>
+            <BaseButton :class="'m-3 text-lg'" @click="toggleIsShowed()">Załaduj więcej</BaseButton>
+            <FieldDescription />
         </div>
     </BaseCard>
 </template>
@@ -30,15 +31,21 @@ import { PlusCircleIcon } from '@heroicons/vue/outline'
 import BaseCard from '../ui/BaseCard.vue'
 import BaseButton from '../ui/BaseButton.vue'
 import FieldListItem from './FieldListItem.vue'
+import BaseDescriptionCard from '../ui/BaseDescriptionCard.vue'
+import FieldDescription from './FieldDescription.vue'
+import { computed } from 'vue'
 export default {
     components: {
-        FieldListItem,
-        BaseCard,
-        BaseButton,
-        PlusCircleIcon
-    },
+    FieldListItem,
+    BaseCard,
+    BaseButton,
+    PlusCircleIcon,
+    BaseDescriptionCard,
+    FieldDescription
+},
     data() {
         return {
+            descriptionIsShowed: false,
             underlineIndex: 3,
             underlineClass: 'underline underline-offset-8 text-yellow-300',
             headers: [
@@ -58,15 +65,29 @@ export default {
                     id: 3,
                     name: 'Uprawa'
                 },
-            ]
+            ],
+            
+        }
+    },
+    provide() {
+        return {
+            // explicitly provide a computed property
+            descriptionIsShowed: computed(() => this.descriptionIsShowed)
         }
     },
     methods: {
+        toggleIsShowed(){
+            this.descriptionIsShowed = !this.descriptionIsShowed;
+            console.log(this.descriptionIsShowed);
+        },
         sortHeader(headerId) {
             this.underlineIndex = headerId;
         },
         addField() {
             console.log('Dodaj pole kliknięty');
+        },
+        
+        closeDesc(){
         }
     },
 }
