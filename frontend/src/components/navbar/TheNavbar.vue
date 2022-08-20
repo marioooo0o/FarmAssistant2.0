@@ -1,5 +1,5 @@
 <template>
-    <nav class="flex items-center bg-green-main p-3 flex-wrap fixed top-0 w-full">
+    <nav class="flex items-center bg-green-main p-3 flex-wrap fixed top-0 w-full lg:shadow-2xl shadow-green-300">
         <a href="" class="p-2 mr-4 inline-flex">
             <div class="flex items-center">
                 <img src="../../assets/logoWithoutText.png" alt="Logo" height="60px" width="60px" class="w-10">
@@ -7,7 +7,6 @@
                     FarmAssistant
                 </span>
             </div>
-
         </a>
         <button class="text-white inline-flex p-3 hover:bg-gray-900 rounded lg:hidden ml-auto">
             <i class="material-icons">menu</i>
