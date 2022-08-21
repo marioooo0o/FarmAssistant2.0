@@ -19,6 +19,8 @@ module.exports = {
           900: "#22451c",
           main: "#57B148"
         },
+        "fa-primary": "#57B148",
+        "fa-secondary": "#FACC14",
         card: "#F1F1F1"
       },
       fontFamily: {

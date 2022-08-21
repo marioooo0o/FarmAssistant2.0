@@ -1,11 +1,11 @@
 <template>
-    <div v-if="to" class="lg:inline-flex lg:w-auto px-3 py-2 text-3xl text-white tracking-most-widest hover:text-yellow-300"
+    <div v-if="to" class="lg:inline-flex lg:w-auto px-3 py-2 text-3xl text-white tracking-most-widest hover:text-fa-secondary"
         :class="[isActive ? underlineClass : '']">
         <router-link :to="to">
             <slot></slot>
         </router-link>
     </div>
-    <div v-else class="lg:inline-flex lg:w-auto px-3 py-2 text-3xl text-white hover:text-yellow-300">
+    <div v-else class="lg:inline-flex lg:w-auto px-3 py-2 text-3xl text-white hover:text-fa-secondary">
         <slot></slot>
     </div>
 </template>
@@ -17,7 +17,7 @@ props:{
 },
     data() {
         return {
-            underlineClass: 'underline underline-offset-8 text-yellow-300',
+            underlineClass: 'underline underline-offset-8 text-fa-secondary',
         }
     },
 computed:{

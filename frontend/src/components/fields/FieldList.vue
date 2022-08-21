@@ -3,12 +3,17 @@
         <div class="text-center font-semibold">
             <CardHeader title="Pola" addText="Dodaj pole" :headers="headers" :activeHeaderIndex="activeHeaderIndex"
                 @add-new="addField()" @selected-header="sortHeader" />
-            <div class="m-3">
+            <div class="m-3" v-if="fieldsList.length !== 0">
                 <FieldListItem v-for="field in fieldsList" :key="field.id" :field="field"
-                    @click="toggleToShow(field.id)" />
+                    @click="$emit('show-description-page', field.id)" />
+            </div>
+            <div class="m-3 text-lg" v-else>
+                Nie posiadasz żadnych pół
             </div>
             <BaseButton :class="'m-3 text-lg'" @click="">Załaduj więcej</BaseButton>
-            <FieldDescription v-if="descriptionIsShowed" :field="selectedField" @close-description-card="closeDescriptionCard" />
+            <!-- <FieldDescription v-if="descriptionIsShowed" :field="selectedField"
+                @close-description-card="closeDescriptionCard" 
+                @show-edit-page="$emit('show-edit-page')" /> -->
         </div>
     </BaseCard>
 </template>
@@ -30,7 +35,14 @@ export default {
     BaseDescriptionCard,
     FieldDescription
     },
-    setup() {
+    props: {
+        fieldsList:{
+            type:Object,
+            required: true
+        }
+    },
+    emits:['show-description-page','show-edit-page'],
+    setup(props) {
         const headers = [
             {
                 id: 0,
@@ -50,60 +62,21 @@ export default {
             },
         ];
 
-        const fieldsList = [
-            {
-                id: 0,
-                name: 'Pole Romana',
-                area: 11.0,
-                parcels: [
-                    {
-                        id:1,
-                        name: 234,
-                    },
-                    {
-                        id: 2,
-                        name: 254
-                    },
-                ],
-                crop: {
-                    src: '/src/assets/crops/tomato.png',
-                    alt: 'tomato'
-                }
-            },
-            {
-                id: 1,
-                name: 'Pole Okiego',
-                area: 47.0,
-                parcels: [
-                    {
-                        id: 4,
-                        name: 224,
-                    },
-                    {
-                        id: 3,
-                        name: 21
-                    },
-                ],
-                crop: {
-                    src: '/src/assets/crops/tomato.png',
-                    alt: 'tomato'
-                }
-            },
-        ];
+        
         const activeHeaderIndex = ref(3);
 
         function sortHeader(headerId){
             switch(headerId){
                 case 0:
                     if(activeHeaderIndex === headerId){
-                        fieldsList.sort((a, b) => a.name < b.name ? 1 : -1);
+                        props.fieldsList.sort((a, b) => a.name < b.name ? 1 : -1);
                     }
                     else{
-                        fieldsList.sort((a, b) => a.name > b.name ? 1 : -1);
+                        props.fieldsList.sort((a, b) => a.name > b.name ? 1 : -1);
                     }
                     break;
                 case 1:
-                    fieldsList.sort((a,b)=> a.area > b.area ? 1: -1);
+                    props.fieldsList.sort((a,b)=> a.area > b.area ? 1: -1);
             }
             console.log('wybrany header', headerId);
             activeHeaderIndex.value = headerId;
@@ -133,7 +106,6 @@ export default {
         return {
             addField,
             headers,
-            fieldsList,
             activeHeaderIndex,
             sortHeader,
             toggleToShow,
