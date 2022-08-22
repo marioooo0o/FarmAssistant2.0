@@ -2,9 +2,8 @@
     <transition name="card-outer">
         <div class="absolute w-full bg-black bg-opacity-30 h-screen top-0 left-0 flex justify-center">
             <transition name="card-inner">
-                <div 
-                class="bg-white self-start mt-32 rounded-lg box-border border-solid border-2 border-black shadow" 
-                ref="target">
+                <div class="bg-white self-start mt-32 p-12 rounded-lg box-border border-solid border-2 border-black shadow"
+                    ref="target">
                     <slot></slot>
                 </div>
             </transition>
@@ -15,19 +14,15 @@
 
 </template>
 <script>
-import { ref } from 'vue';
+import { ref } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 export default {
     emits: ['close-description-card'],
-    setup() {
-        const target = ref(null);
-        onClickOutside(target, (event) => console.log(event));
-        function handleFocusOut(){
-            console.log('klik poza');
-        }
-        return {
-            target 
-        };
+    setup(props,{ emit }) {
+        const target = ref(null)
+        onClickOutside(target, function(){
+            emit('close-description-card')});
+        return { target }
     }
 }
 </script>

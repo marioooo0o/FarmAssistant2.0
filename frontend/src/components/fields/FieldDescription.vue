@@ -1,15 +1,12 @@
 <template>
-    <base-description-card 
-    @close-description-card="$emit('close-description-card', $event)"
-    @focusout="handleFocusOut"
-    tabindex="0">
-        <div class="my-4 font-semibold py-8 px-12">
+    <base-description-card @close-description-card="handleCloseCard">
+        <div class="font-semibold">
             <h1 class="flex justify-center items-center text-3xl">{{ field.name }}
                 <span class="flex justify-center items-center ml-4 gap-2">
-                    <i class="fa-regular fa-pen-to-square text-2xl cursor-pointer hover:text-fa-secondary" 
-                    @click="$emit('show-edit-page')"></i>
+                    <i class="fa-regular fa-pen-to-square text-2xl cursor-pointer hover:text-fa-secondary"
+                        @click="$emit('show-edit-page')"></i>
                     <i class="fa-regular fa-trash-can text-2xl cursor-pointer hover:text-red-500"
-                    @click="handleDeleteClicked()"></i>
+                        @click="handleDeleteClicked()"></i>
                 </span>
             </h1>
             <div class=" flex flex-row items-center justify-between text-lg mt-12 gap-36">
@@ -44,26 +41,20 @@ export default {
         }
     },
     emits: ['close-description-card', 'show-edit-page'],
-    setup() {
+    setup(props, { emit }) {
         function handleEditClicked() {
             console.log('edit clicked');
         };
-        function handleFocusOut(){
-            console.log('nareszcie focus out');
-        }
         function handleDeleteClicked() {
             console.log('delete clicked');
         };
-
-        function closeCard(){
-            console.log('otrzymano event w desc');
-            $emit('closeDescriptionCard');
+        function handleCloseCard(){
+            emit('close-description-card');
         }
         return {
             handleEditClicked,
             handleDeleteClicked,
-            handleFocusOut,
-            closeCard,
+            handleCloseCard
         }
     },
 }

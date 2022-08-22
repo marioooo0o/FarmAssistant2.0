@@ -1,12 +1,13 @@
 <template>
     <Navbar />
-    <FieldList :fieldsList="fieldsList" 
-    @show-description-page=showDescriptionPage />
-    <FieldDescription 
-    v-if="activeComponent == 'descriptionField'"
-    :field="activeField"
-    @show-edit-page="showEditPage" />
-    <EditField v-else-if="activeComponent === 'editField'" />
+    <FieldList :fieldsList="fieldsList" @show-description-page=showDescriptionPage />
+    <FieldDescription v-if="activeComponent == 'descriptionField'" 
+        :field="activeField"
+        @close-description-card="showFieldListPage" 
+        @show-edit-page="showEditPage" />
+    <EditField v-else-if="activeComponent === 'editField'"
+        :field="activeField"
+        @close-edit-card="showFieldListPage" />
 
 </template>
 <script>
@@ -28,17 +29,18 @@ export default {
                 area: 11.0,
                 parcels: [
                     {
-                        id: 1,
+                        id: 78,
                         name: 234,
                     },
                     {
-                        id: 2,
+                        id: 79,
                         name: 254
                     },
                 ],
                 crop: {
+                    id: 1,
                     src: '/src/assets/crops/tomato.png',
-                    alt: 'tomato'
+                    name: 'tomato'
                 }
             },
             {
@@ -56,8 +58,9 @@ export default {
                     },
                 ],
                 crop: {
+                    id: 1,
                     src: '/src/assets/crops/tomato.png',
-                    alt: 'tomato'
+                    name: 'tomato'
                 }
             },
         ];
@@ -66,6 +69,9 @@ export default {
             return fieldsList.find((field) => field.id === fieldId.value)
         });
 
+        function showFieldListPage(){
+            activeComponent.value = 'fieldList';
+        }
         function showDescriptionPage(id){
             activeComponent.value = 'descriptionField';
             fieldId.value = id;
@@ -80,6 +86,7 @@ export default {
             activeComponent,
             fieldsList,
             activeField,
+            showFieldListPage,
             showDescriptionPage,
             showEditPage
         }

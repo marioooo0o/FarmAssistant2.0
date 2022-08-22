@@ -21,6 +21,7 @@ module.exports = {
         },
         "fa-primary": "#57B148",
         "fa-secondary": "#FACC14",
+        "input-bg": "#EDEDED",
         card: "#F1F1F1"
       },
       fontFamily: {
