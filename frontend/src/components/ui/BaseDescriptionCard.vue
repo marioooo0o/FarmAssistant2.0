@@ -2,7 +2,7 @@
     <transition name="card-outer">
         <div class="absolute w-full bg-black bg-opacity-30 h-screen top-0 left-0 flex justify-center">
             <transition name="card-inner">
-                <div class="bg-white self-start mt-32 p-12 rounded-lg box-border border-solid border-2 border-black shadow"
+                <div class="bg-white self-start m-auto p-12 rounded-lg box-border border-solid border-2 border-fa-primary shadow"
                     ref="target">
                     <slot></slot>
                 </div>

@@ -3,7 +3,11 @@ export default {
     props: {
         class: String,
         link: Boolean,
-        to: String
+        to: String,
+        type: {
+            type: String,
+            required: false
+        }
     },
 };
 </script>
@@ -11,7 +15,8 @@ export default {
 <template>
     <button v-if="!link"
         class="bg-gradient-to-br from-green-600 via-green-500 to-green-400 p-2 text-white rounded-[10px] max-w-xs w-full tracking-most-widest transition-[background] bg-[length:200%] hover:bg-right"
-        :class="class">
+        :class="class"
+        :type="type">
         <slot></slot>
     </button>
     <router-link v-else :to="to"

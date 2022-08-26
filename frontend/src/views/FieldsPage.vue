@@ -7,6 +7,10 @@
         @show-edit-page="showEditPage" />
     <EditField v-else-if="activeComponent === 'editField'"
         :field="activeField"
+        @close-edit-card="showFieldListPage"
+        @show-parcel-form="showEditParcel" />
+    <EditParcel v-else-if="activeComponent === 'editParcel'"
+        :parcel="activeParcel"
         @close-edit-card="showFieldListPage" />
 
 </template>
@@ -15,9 +19,10 @@ import Navbar from '../components/navbar/TheNavbar.vue';
 import FieldList from '../components/fields/FieldList.vue';
 import FieldDescription from '../components/fields/FieldDescription.vue';
 import EditField from '../components/fields/EditField.vue';
+import EditParcel from '../components/fields/EditParcel.vue';
 import { ref, computed, provide } from 'vue';
 export default {
-    components: { Navbar, FieldList, FieldDescription, EditField },
+    components: { Navbar, FieldList, FieldDescription, EditField, EditParcel },
     setup() {
         const activeComponent = ref('fieldList');
 
@@ -25,16 +30,24 @@ export default {
         const fieldsList = [
             {
                 id: 0,
-                name: 'Pole Romana',
+                field_name: 'Pole Romana',
                 area: 11.0,
                 parcels: [
                     {
                         id: 78,
                         name: 234,
+                        parcel_area: 11.05,
+                        pivot:{
+                            area: 4.8
+                        }
                     },
                     {
                         id: 79,
-                        name: 254
+                        name: 254,
+                        parcel_area: 5.2,
+                        pivot:{
+                            area: 5.2
+                        }
                     },
                 ],
                 crop: {
@@ -45,16 +58,24 @@ export default {
             },
             {
                 id: 1,
-                name: 'Pole Okiego',
+                field_name: 'Pole Okiego',
                 area: 47.0,
                 parcels: [
                     {
                         id: 4,
                         name: 224,
+                        parcel_area: 11.2,
+                        pivot:{
+                            area: 11.2
+                        }
                     },
                     {
                         id: 3,
-                        name: 21
+                        name: 21,
+                        parcel_area: 1.2,
+                        pivot:{
+                            area: 1.2
+                        }
                     },
                 ],
                 crop: {
@@ -81,6 +102,12 @@ export default {
             activeComponent.value = 'editField';
         }
 
+        const activeParcel = ref(null);
+        function showEditParcel(parcel){
+            activeParcel.value = parcel;
+            activeComponent.value = 'editParcel';
+        }
+
         provide('activeComponent', activeComponent);
         return {
             activeComponent,
@@ -88,7 +115,9 @@ export default {
             activeField,
             showFieldListPage,
             showDescriptionPage,
-            showEditPage
+            showEditPage,
+            showEditParcel,
+            activeParcel
         }
     }
 }

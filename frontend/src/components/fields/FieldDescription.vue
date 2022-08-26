@@ -1,11 +1,11 @@
 <template>
     <base-description-card @close-description-card="handleCloseCard">
         <div class="font-semibold">
-            <h1 class="flex justify-center items-center text-3xl">{{ field.name }}
+            <h1 class="flex justify-center items-center text-3xl">{{ field.field_name }}
                 <span class="flex justify-center items-center ml-4 gap-2">
-                    <i class="fa-regular fa-pen-to-square text-2xl cursor-pointer hover:text-fa-secondary"
+                    <i class="fa-regular fa-pen-to-square text-2xl cursor-pointer text-fa-primary hover:text-fa-secondary"
                         @click="$emit('show-edit-page')"></i>
-                    <i class="fa-regular fa-trash-can text-2xl cursor-pointer hover:text-red-500"
+                    <i class="fa-regular fa-trash-can text-2xl cursor-pointer text-fa-primary hover:text-red-500"
                         @click="handleDeleteClicked()"></i>
                 </span>
             </h1>

@@ -1,10 +1,10 @@
 <template>
     <div class="flex flex-col">
-        <input class="bg-input-bg border border-black text-lg h-8  text-center" :class="roundedClass" :id="id"
+        <input class="bg-input-bg border border-fa-primary text-lg h-8  text-center text-gray-500 focus:text-black focus:outline-fa-primary" :class="roundedClass" :id="id"
             :required="required" :type="type" :selectedInSearch="modelValue" :placeholder="placeholder"
             v-model="inputSearchQuery" @input="handleInput" />
         <ul v-if="inputSearchResults" class="bg-input-bg border rounded-b-[10px]">
-            <li v-for="result in inputSearchResults" class="cursor-pointer hover:bg-gray-300">
+            <li v-for="result in inputSearchResults" class="cursor-pointer hover:bg-yellow-200">
                 <span class="flex items-center justify-center gap-4 my-2" @click="getSelectedValue(result.id)"><img
                         v-if="result.src" :src="result.src" :alt="result.name" class="w-6">{{ result.name}}</span>
             </li>

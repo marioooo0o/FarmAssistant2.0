@@ -1,7 +1,7 @@
 <template>
     <div
-        class="bg-white solid border-[1px] font-semibold border-black rounded-lg grid grid-cols-4 justify-center items-center text-xs box-border m-3 tracking-wider p-1 hover:ring-4 cursor-pointer">
-        <div class="flex justify-center items-center">{{ field.name }}</div>
+        class="bg-white solid border-[1px] font-semibold border-fa-primary rounded-lg grid grid-cols-4 justify-center items-center text-xs box-border m-3 tracking-wider p-1 hover:ring-4 cursor-pointer">
+        <div class="flex justify-center items-center">{{ field.field_name }}</div>
         <div class="flex justify-center items-center">{{field.area}} ha</div>
         <div class="flex justify-center items-center">
             <ul>

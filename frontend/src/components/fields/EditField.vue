@@ -14,10 +14,11 @@
                         :searchData="crops" :actualData="fieldCrop" />
                 </base-form-control>
                 <base-form-control>
-                    <SearchFormControl search id="fieldParcels" label="Działki:" required placeholder="wyszukaj działkę:"
-                        :searchData="parcels" :actualData="fieldParcels" />
+                    <ParcelSearchInput search id="fieldParcels" label="Działki NOWE:" required placeholder="wyszukaj działkę:"
+                        :searchData="parcels" :actualData="fieldParcels"
+                        @show-parcel-form="$emit('show-parcel-form', $event)" />
                 </base-form-control>
-
+                    
             </form>
         </div>
     </base-description-card>
@@ -28,17 +29,24 @@ import { ref } from 'vue';
 import BaseDescriptionCard from '../ui/BaseDescriptionCard.vue';
 import BaseFormControl from '../ui/BaseFormControl.vue';
 import SearchFormControl from '../ui/SearchFormControl.vue';
+import EditParcel from './EditParcel.vue';
+import ParcelSearchInput from './ParcelSearchInput.vue';
 export default {
-    components: { BaseDescriptionCard, BaseFormControl, BaseFormControl, SearchFormControl },
+    components: { BaseDescriptionCard, 
+        BaseFormControl, 
+        BaseFormControl, 
+        SearchFormControl, 
+        EditParcel,
+        ParcelSearchInput },
     props:{
         field:{
             type: Object,
             required: true
         }
     },
-    emits: ['close-edit-card'],
+    emits: ['close-edit-card', 'show-parcel-form'],
     setup(props) {
-        const fieldName = ref(props.field.name);
+        const fieldName = ref(props.field.field_name);
 
         const fieldArea = ref(props.field.area);
 
