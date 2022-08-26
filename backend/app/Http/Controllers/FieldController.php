@@ -46,7 +46,7 @@ class FieldController extends Controller
         $data = $request->only('field_name', 'cadastral_parcels', 'crop');
         $farm = $this->farmService->find($farmId);
         if (auth()->user()->id == $farm->user_id) {
-            $field = $this->fieldService->create($data, $farmId);
+            $field = $this->fieldService->create($data, $farm);
             if ($field instanceof Field) {
                 return response()->json([
                     "success" => true,

@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CadastralParcelController;
 use App\Http\Controllers\ExcelCSVController;
 use App\Http\Controllers\FarmController;
 use App\Http\Controllers\FieldController;
@@ -22,7 +23,7 @@ Route::get('/', [ExcelCSVController::class, 'importExcelCSV']);
 Route::middleware(['api'])->group(function () {
     Route::controller(AuthController::class)->group(function () {
         Route::post('/login', 'login');
-        Route::get('/register', 'register');
+        Route::post('/register', 'register');
         Route::post('/refresh', 'refresh');
         Route::get('/user-profile', 'userProfile');
     });
@@ -37,5 +38,8 @@ Route::middleware(['api'])->group(function () {
         Route::get('/farms/{farm_id}/fields/{id}', 'show');
         Route::post('/farms/{farm_id}/fields/{id}', 'update');
         Route::delete('/farms/{farm_id}/fields/{id}', 'destroy');
+    });
+    Route::controller(CadastralParcelController::class)->group(function () {
+        Route::post('/farms/{farm_id}/fields/{field_id}/cadastral-parcels', 'store');
     });
 });

@@ -18,6 +18,7 @@ class FieldResource extends JsonResource
             'id' => $this->id,
             'farm_id' => $this->farm_id,
             'field_name' => $this->field_name,
+            'field_area' => $this->field_area,
             'cadastral_parcels' => CadastralParcelResource::collection($this->cadastralParcels),
             'crop' => $this->crop,
             'created_at' => $this->created_at,

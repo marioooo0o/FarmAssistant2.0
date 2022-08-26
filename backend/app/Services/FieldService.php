@@ -2,8 +2,9 @@
 
 namespace App\Services;
 
-use App\Models\CadastralParcel;
+use App\Models\Farm;
 use App\Models\Field;
+use App\Models\CadastralParcel;
 use App\Models\Crop;
 use App\Repositories\CadastralParcelRepository;
 use App\Repositories\FarmRepository;
@@ -28,36 +29,18 @@ class FieldService
         $this->cadastralParcelRepository = $cadastralParceldRepository;
     }
 
-    public function create($fieldAtributes, $farmId)
+    public function create($fieldAtributes, Farm $farm)
     {
         $success = false;
         DB::beginTransaction();
 
         try {
-            $farm = $this->farmRepository->find($farmId);
             $crop = Crop::where('name', $fieldAtributes['crop'])->firstOrFail();
             //create field
-            $newField = Field::create([
-                'farm_id' => $farm->id,
-                'crop_id' => $crop->id,
-                'field_name' =>  $fieldAtributes['field_name'],
-            ]);
-
-            foreach ($fieldAtributes['cadastral_parcels'] as $singleParcel) {
-                //find first parcel with equal parcel number or create new record in db
-                $parcel = CadastralParcel::firstOrCreate([
-                    'parcel_number' => $singleParcel['parcel_number']
-                ]);
-                $pivotData = array('area' => $singleParcel['area']);
-                //add data and ids to pivot table 
-                $newField->cadastralParcels()->attach($parcel->id, $pivotData);
-                //calculate parcel area from pivot
-                $parcel->parcel_area = $parcel->sumParcelArea();
-                $parcel->save();
-            }
-            //calculate field area from pivot
-            $newField->field_area = $newField->cadastralParcels->sum('pivot.area');
-
+            $newField = new Field();
+            $newField->farm_id = $farm->id;
+            $newField->crop_id = $crop->id;
+            $newField->field_name = $fieldAtributes['field_name'];
             if ($newField->save()) {
                 $success = true;
             }
@@ -73,6 +56,49 @@ class FieldService
             DB::rollback();
             return "Something goes wrong";
         }
+        // $success = false;
+        // DB::beginTransaction();
+
+        // try {
+        //     $farm = $this->farmRepository->find($farmId);
+        //     $crop = Crop::where('name', $fieldAtributes['crop'])->firstOrFail();
+        //     //create field
+        //     $newField = Field::create([
+        //         'farm_id' => $farm->id,
+        //         'crop_id' => $crop->id,
+        //         'field_name' =>  $fieldAtributes['field_name'],
+        //     ]);
+
+        //     foreach ($fieldAtributes['cadastral_parcels'] as $singleParcel) {
+        //         //find first parcel with equal parcel number or create new record in db
+        //         $parcel = CadastralParcel::firstOrCreate([
+        //             'parcel_number' => $singleParcel['parcel_number']
+        //         ]);
+        //         $pivotData = array('area' => $singleParcel['area']);
+        //         //add data and ids to pivot table 
+        //         $newField->cadastralParcels()->attach($parcel->id, $pivotData);
+        //         //calculate parcel area from pivot
+        //         $parcel->parcel_area = $parcel->sumParcelArea();
+        //         $parcel->save();
+        //     }
+        //     //calculate field area from pivot
+        //     $newField->field_area = $newField->cadastralParcels->sum('pivot.area');
+
+        //     if ($newField->save()) {
+        //         $success = true;
+        //     }
+        // } catch (Exception $e) {
+        //     DB::rollback();
+        //     return $e->getMessage();
+        // }
+
+        // if ($success) {
+        //     DB::commit();
+        //     return $newField;
+        // } else {
+        //     DB::rollback();
+        //     return "Something goes wrong";
+        // }
     }
 
     public function find($fieldId)

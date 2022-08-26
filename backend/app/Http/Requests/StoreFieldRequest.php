@@ -25,7 +25,7 @@ class StoreFieldRequest extends FormRequest
     {
         return [
             'field_name' => 'required|string|max:100',
-            'cadastral_parcels.*.parcel_number' => 'required|integer|min:1|unique:cadastral_parcels,parcel_number',
+            'cadastral_parcels.*.parcel_number' => 'required|integer|min:1|',
             'cadastral_parcels.*.area' => 'required|numeric',
             'crop' => 'required|exists:crops,name'
         ];

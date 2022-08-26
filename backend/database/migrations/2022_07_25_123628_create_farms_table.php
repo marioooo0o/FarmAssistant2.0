@@ -19,14 +19,14 @@ return new class extends Migration
             $table->string('name', 1024);
             $table->string('street', 1024);
             $table->unsignedInteger('street_number');
-            $table->string('postal_code',6);
+            $table->string('postal_code', 6);
             $table->string('city', 1024);
             $table->float('area')->default(0.00);
             $table->timestamps();
             $table->foreign('user_id')
-                        ->references('id')
-                        ->on('users')
-                        ->onDelete('cascade');
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
         });
     }
 
