@@ -48,20 +48,22 @@ export default {
             type: [Array, Object]
         }
     },
-    setup(props) {
+    emits: ['update-search-list'],
+    setup(props, {emit}) {
         const selectedValues = ref(props.actualData);
         const isArray = ref(Array.isArray(selectedValues.value));
 
         function getSelectedValue(id){
             if(isArray.value){
-                if (!selectedValues.value.find((result) => result.id === id)){
+                if ((!selectedValues) || (!selectedValues.value.find((result) => result.id === id))){
                     selectedValues.value.push(props.searchData.find((result) => result.id === id))
                 }
             }else{
-                if (id !== selectedValues.value.id) {
+                if ((!selectedValues.value) || (selectedValues.value && id !== selectedValues.value.id)) {
                     selectedValues.value = props.searchData.find((result) => result.id === id);
                 }
             }
+            emit('update-search-list', selectedValues.value);
             
         }
 
@@ -72,6 +74,7 @@ export default {
             else{
                 selectedValues.value = null;
             }
+            emit('update-search-list', selectedValues.value);
         }
 
         return {

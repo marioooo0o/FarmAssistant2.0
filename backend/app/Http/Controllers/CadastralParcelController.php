@@ -33,7 +33,11 @@ class CadastralParcelController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            "success" => true,
+            "message" => "Cadastral Parcels retrieved successfully.",
+            'cadastral_parcels' => CadastralParcelResource::collection(CadastralParcel::with('fields')->get()),
+        ]);
     }
 
     /**

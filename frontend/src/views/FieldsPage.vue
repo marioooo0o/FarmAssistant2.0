@@ -8,10 +8,13 @@
     <EditField v-else-if="activeComponent === 'editField'"
         :field="activeField"
         @close-edit-card="showFieldListPage"
+        @show-description-page="showDescriptionPage"
         @show-parcel-form="showEditParcel" />
     <EditParcel v-else-if="activeComponent === 'editParcel'"
         :parcel="activeParcel"
-        @close-edit-card="showFieldListPage" />
+        @close-edit-card="showFieldListPage"
+        @show-edit-field="showEditPage"
+        @save-parcel="updateParcelArea" />
 
 </template>
 <script>
@@ -21,88 +24,46 @@ import FieldDescription from '../components/fields/FieldDescription.vue';
 import EditField from '../components/fields/EditField.vue';
 import EditParcel from '../components/fields/EditParcel.vue';
 import { ref, computed, provide } from 'vue';
+import { useStore } from 'vuex'
 export default {
     components: { Navbar, FieldList, FieldDescription, EditField, EditParcel },
     setup() {
+        const store = useStore();
         const activeComponent = ref('fieldList');
 
         const fieldId = ref(null);
-        const fieldsList = [
-            {
-                id: 0,
-                field_name: 'Pole Romana',
-                area: 11.0,
-                parcels: [
-                    {
-                        id: 78,
-                        name: 234,
-                        parcel_area: 11.05,
-                        pivot:{
-                            area: 4.8
-                        }
-                    },
-                    {
-                        id: 79,
-                        name: 254,
-                        parcel_area: 5.2,
-                        pivot:{
-                            area: 5.2
-                        }
-                    },
-                ],
-                crop: {
-                    id: 1,
-                    src: '/src/assets/crops/tomato.png',
-                    name: 'tomato'
-                }
-            },
-            {
-                id: 1,
-                field_name: 'Pole Okiego',
-                area: 47.0,
-                parcels: [
-                    {
-                        id: 4,
-                        name: 224,
-                        parcel_area: 11.2,
-                        pivot:{
-                            area: 11.2
-                        }
-                    },
-                    {
-                        id: 3,
-                        name: 21,
-                        parcel_area: 1.2,
-                        pivot:{
-                            area: 1.2
-                        }
-                    },
-                ],
-                crop: {
-                    id: 1,
-                    src: '/src/assets/crops/tomato.png',
-                    name: 'tomato'
-                }
-            },
-        ];
+        const fieldsList = computed(()=>{
+            return store.getters['fields/userFields'];
+        })
 
         const activeField = computed(function(){
-            return fieldsList.find((field) => field.id === fieldId.value)
+            return fieldsList.value.find((field) => field.id === fieldId.value)
         });
 
         function showFieldListPage(){
             activeComponent.value = 'fieldList';
         }
-        function showDescriptionPage(id){
+        function showDescriptionPage(id = fieldId.value){
             activeComponent.value = 'descriptionField';
             fieldId.value = id;
         }
 
-        function showEditPage(id){
+        function showEditPage(){
             activeComponent.value = 'editField';
         }
 
         const activeParcel = ref(null);
+        function updateParcelArea(formData){
+            console.log('parcelArea', parcelArea.value, typeof parcelArea.value);
+            activeParcel.value.parcel_area= parseInt(formData.parcel_area);
+            activeParcel.value.pivot = {
+                area: parseInt(formData.area)
+            }
+            activeField.value.cadastral_parcels.push(activeParcel.value)
+            // .area = parseInt(formData.area);
+            // activeParcel.value.pivot.area = parseInt(formData.area);
+            showEditPage();
+        }
         function showEditParcel(parcel){
             activeParcel.value = parcel;
             activeComponent.value = 'editParcel';
@@ -116,6 +77,7 @@ export default {
             showFieldListPage,
             showDescriptionPage,
             showEditPage,
+            updateParcelArea,
             showEditParcel,
             activeParcel
         }

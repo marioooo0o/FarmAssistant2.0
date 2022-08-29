@@ -2,9 +2,15 @@
     <transition name="card-outer">
         <div class="absolute w-full bg-black bg-opacity-30 h-screen top-0 left-0 flex justify-center">
             <transition name="card-inner">
-                <div class="bg-white self-start m-auto p-12 rounded-lg box-border border-solid border-2 border-fa-primary shadow"
+                <div class="bg-white self-start m-auto p-12 rounded-lg box-border border-solid border-2 border-fa-primary shadow relative"
                     ref="target">
-                    <slot></slot>
+                    <div v-if="mainIcons" class="absolute top-2 right-4">
+                        <i class="fa-solid fa-check text-green-500 text-3xl mr-3 hover:text-green-400" @click="$emit('save-clicked')"></i>
+                        <i class="fa-solid fa-xmark text-red-600 text-3xl hover:text-red-400" @click="$emit('cancel-clicked')"></i>
+                    </div>
+                    <slot>
+                        
+                    </slot>
                 </div>
             </transition>
 
@@ -17,7 +23,13 @@
 import { ref } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 export default {
-    emits: ['close-description-card'],
+    emits: ['close-description-card', 'save-clicked', 'cancel-clicked'],
+    props: {
+        mainIcons: {
+            type: Boolean,
+            default: false
+        }
+    },
     setup(props,{ emit }) {
         const target = ref(null)
         onClickOutside(target, function(){

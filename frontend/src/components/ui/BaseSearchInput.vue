@@ -3,16 +3,17 @@
         <input class="bg-input-bg border border-fa-primary text-lg h-8  text-center text-gray-500 focus:text-black focus:outline-fa-primary" :class="roundedClass" :id="id"
             :required="required" :type="type" :selectedInSearch="modelValue" :placeholder="placeholder"
             v-model="inputSearchQuery" @input="handleInput" />
-        <ul v-if="inputSearchResults" class="bg-input-bg border rounded-b-[10px]">
+        <ul v-if="inputSearchResults && isVisible" class="bg-input-bg border rounded-b-[10px]" ref="target">
             <li v-for="result in inputSearchResults" class="cursor-pointer hover:bg-yellow-200">
                 <span class="flex items-center justify-center gap-4 my-2" @click="getSelectedValue(result.id)"><img
-                        v-if="result.src" :src="result.src" :alt="result.name" class="w-6">{{ result.name}}</span>
+                        v-if="result.src" :src="result.src" :alt="result[searchKey]" class="w-6">{{ result[searchKey]}}</span>
             </li>
         </ul>
     </div>
 </template>
 <script>
-import { ref, computed } from 'vue'
+import { ref, computed } from 'vue';
+import { onClickOutside } from '@vueuse/core';
 export default {
     props: {
         id: "",
@@ -26,17 +27,27 @@ export default {
         searchData: {
             type: Array,
             required: false
+        },
+        searchKey :{
+            type: String,
         }
     },
     setup(props, { emit }) {
         const inputSearchQuery = ref("");
         const inputSearchResults = ref(null);
         function handleInput(event) {
-            getSearchValues();
+            getSearchValues(props.searchKey);
         }
-        function getSearchValues(){
+        function getSearchValues(key = "name"){
             if(inputSearchQuery.value !== ""){
-                inputSearchResults.value = props.searchData.filter((value) => value.name.toLowerCase().startsWith(inputSearchQuery.value.toLowerCase().trim()));
+                isVisible.value = true;
+                if(key == 'parcel_number'){
+                    inputSearchResults.value = props.searchData.filter((value) => value[key].toString().toLowerCase().startsWith(inputSearchQuery.value.toLowerCase().trim()));
+                }
+                else{
+                    inputSearchResults.value = props.searchData.filter((value) => value[key].toLowerCase().startsWith(inputSearchQuery.value.toLowerCase().trim()));
+                }
+                
             }
         }
         const roundedClass = computed(()=>{
@@ -45,17 +56,30 @@ export default {
         });
 
         function getSelectedValue(id){
+            console.log('selected w base search', id);
             emit('selected-value', id);
             inputSearchQuery.value = "";
             inputSearchResults.value = null;
         }
 
+        const target = ref(null);
+        const isVisible = ref(true);
+        onClickOutside(target, function(){
+            if(inputSearchResults.value){
+                isVisible.value = false;
+                inputSearchQuery.value = "";
+                inputSearchResults.value = null;
+            }
+            
+        });
         return {
             inputSearchQuery,
             inputSearchResults,
             roundedClass,
             handleInput,
             getSelectedValue,
+            target,
+            isVisible
         }
     }
 

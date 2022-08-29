@@ -40,6 +40,7 @@ Route::middleware(['api'])->group(function () {
         Route::delete('/farms/{farm_id}/fields/{id}', 'destroy');
     });
     Route::controller(CadastralParcelController::class)->group(function () {
+        Route::get('/cadastral-parcels', 'index');
         Route::post('/farms/{farm_id}/fields/{field_id}/cadastral-parcels', 'store');
     });
 });

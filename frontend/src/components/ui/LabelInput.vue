@@ -45,6 +45,9 @@ export default {
         step: {
             type: String,
             required: false
+        },
+        searchKey :{
+            type: String,
         }
     },
 };
@@ -61,7 +64,9 @@ export default {
         <label class="mr-2" :for="id">
             {{ label }}
         </label>
-        <BaseSearchInput :id="id" :required="required" :disabled="disabled" :type="type" :placeholder="placeholder" :searchData="searchData"
+        <BaseSearchInput :id="id" :required="required" :disabled="disabled" :type="type" :placeholder="placeholder" 
+        :searchData="searchData"
+        :searchKey="searchKey"
             @selected-value="$emit('selected-value', $event)" />
         <span v-if="unit" class="ml-1">{{unit}}</span>
     </div>

@@ -20,7 +20,7 @@ class FieldResource extends JsonResource
             'field_name' => $this->field_name,
             'field_area' => $this->field_area,
             'cadastral_parcels' => CadastralParcelResource::collection($this->cadastralParcels),
-            'crop' => $this->crop,
+            'crop' => new CropResource($this->crop),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

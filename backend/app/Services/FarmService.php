@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Farm;
 use App\Repositories\FarmRepository;
 use App\Repositories\UserRepository;
 
@@ -26,7 +27,8 @@ class FarmService
 
     public function find($farmId)
     {
-        return $this->farmRepository->find($farmId);
+        return Farm::findOrFail($farmId);
+        // return $this->farmRepository->find($farmId);
     }
 
     public function update($farmAttributes, $farmId)

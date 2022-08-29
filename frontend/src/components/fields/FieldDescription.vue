@@ -12,17 +12,17 @@
             <div class=" flex flex-row items-center justify-between text-lg mt-12 gap-36">
                 <div class="grid grid-cols-2 gap-y-6 gap-x-8">
                     <div>Powierzchnia:</div>
-                    <div>{{field.area}} ha</div>
+                    <div>{{field.field_area}} ha</div>
                     <div>Działki:</div>
                     <div>
                         <ul>
-                            <li v-for="parcel in field.parcels" :key="parcel.id">Działka {{parcel.name}}</li>
+                            <li v-for="parcel in field.cadastral_parcels" :key="parcel.id">Działka {{parcel.parcel_number}}</li>
                         </ul>
                     </div>
                 </div>
                 <div class="flex flex-col">
                     <div>Uprawy:</div>
-                    <div><img :src="field.crop.src" :alt="field.crop.alt" height="50px" width="50px" class="w-5" />
+                    <div><img :src="field.crop.src" :alt="field.crop.name" height="50px" width="50px" class="w-5" />
                     </div>
                 </div>
             </div>
