@@ -30,6 +30,7 @@ export default {
         },
         searchKey :{
             type: String,
+            default: 'name'
         }
     },
     setup(props, { emit }) {

@@ -32,7 +32,13 @@ export default {
     props:{
         field:{
             type: Object,
-            required: false
+            required: false,
+            default:{
+                field_name : "",
+                field_area: null,
+                cadastral_parcels: null,
+                crop: null
+            }
         },
         saveIsClicked:{
             type: Boolean,
@@ -43,19 +49,25 @@ export default {
     setup(props, {emit}){
         const store = useStore()
 
-        const fieldName = computed(()=>{
-            return props.field.field_name ? props.field.field_name : ""
-        });
+        const fieldName = ref(props.field.field_name ? props.field.field_name : "");
+            
 
-        const fieldParcels = ref(props.field.cadastral_parcels ? props.field.cadastral_parcels : "");
+        const fieldParcels = ref(props.field.cadastral_parcels? props.field.cadastral_parcels : null);
 
         const fieldArea = computed(()=>{
-            return fieldParcels.value.reduce((acc, item) => acc + (item.pivot.area ? item.pivot.area : 0), 0)
+            if(fieldParcels.value){
+                return fieldParcels.value.reduce((acc, item) => acc + (item.pivot.area ? item.pivot.area : 0), 0)
+            }
+            else{
+                return null;
+            }
+            
         });
 
-        const fieldCrop = ref(props.field.crop ? props.field.crop : "");
+        const fieldCrop = ref(props.field.crop ? props.field.crop : null);
 
         function updateCrop(crop){
+            console.log('crop wynois', crop);
             fieldCrop.value = crop
         }
 
@@ -70,6 +82,7 @@ export default {
         function updateParcelList(parcelList){
             fieldParcels.value = parcelList;
         }
+
         function submitForm(){
             const formData = {
                 field_name: fieldName.value,

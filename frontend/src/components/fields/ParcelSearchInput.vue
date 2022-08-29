@@ -53,14 +53,16 @@ export default {
     setup(props, {emit}) {
         const selectedValues = ref(props.actualData);
         function getSelectedValue(id){
-            console.log('id in psi', id);
-            console.log('warunek', !selectedValues.value.find((result) => result.id === id));
-                if (!selectedValues.value.find((result) => result.id === id)){
+            
+                if (selectedValues.value && !selectedValues.value.find((result) => result.id === id)){
                     const selectedFromInput = props.searchData.find((result) => result.id === id);
                     console.log('psi selected', selectedFromInput);
                     console.log('psi selected', props.searchData);
                     emit('show-parcel-form', selectedFromInput);
-                    // selectedValues.value.push(props.searchData.find((result) => result.id === id))
+                }
+                else if(!selectedValues.value){
+                    const selectedFromInput = props.searchData.find((result) => result.id === id);
+                    emit('show-parcel-form', selectedFromInput);
                 }
         }
         

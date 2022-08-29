@@ -1,8 +1,10 @@
 <template>
     <BaseCard>
         <div class="text-center font-semibold">
-            <CardHeader title="Pola" addText="Dodaj pole" :headers="headers" :activeHeaderIndex="activeHeaderIndex"
-                @add-new="addField()" @selected-header="sortHeader" />
+            <CardHeader title="Pola" addText="Dodaj pole" 
+                :headers="headers" :activeHeaderIndex="activeHeaderIndex"
+                @add-new="$emit('show-create-page')" 
+                @selected-header="sortHeader" />
             <div class="m-3" v-if="fieldsList.length !== 0">
                 <FieldListItem v-for="field in fieldsList" :key="field.id" :field="field"
                     @click="$emit('show-description-page', field.id)" />
@@ -41,7 +43,7 @@ export default {
             required: true
         }
     },
-    emits:['show-description-page','show-edit-page'],
+    emits:['show-description-page','show-edit-page', 'show-create-page'],
     setup(props) {
         const headers = [
             {
@@ -98,13 +100,10 @@ export default {
         function closeDescriptionCard(){
             descriptionIsShowed.value = false;
         }
-        function addField(){
-            console.log('Dodaj pole klikniety');
-        }
+        
 
         provide('descriptionIsShowed', descriptionIsShowed);
         return {
-            addField,
             headers,
             activeHeaderIndex,
             sortHeader,

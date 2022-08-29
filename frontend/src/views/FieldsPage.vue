@@ -1,10 +1,18 @@
 <template>
     <Navbar />
-    <FieldList :fieldsList="fieldsList" @show-description-page=showDescriptionPage />
+    <FieldList
+        :fieldsList="fieldsList" 
+        @show-description-page=showDescriptionPage
+        @show-create-page="showCreatePage" />
     <FieldDescription v-if="activeComponent == 'descriptionField'" 
         :field="activeField"
         @close-description-card="showFieldListPage" 
         @show-edit-page="showEditPage" />
+    <AddField v-if="activeComponent == 'createField'"
+        :field="activeField"
+        @close-create-card="showFieldListPage"
+        @show-parcel-form="showEditParcel"
+        />
     <EditField v-else-if="activeComponent === 'editField'"
         :field="activeField"
         @close-edit-card="showFieldListPage"
@@ -23,10 +31,11 @@ import FieldList from '../components/fields/FieldList.vue';
 import FieldDescription from '../components/fields/FieldDescription.vue';
 import EditField from '../components/fields/EditField.vue';
 import EditParcel from '../components/fields/EditParcel.vue';
-import { ref, computed, provide } from 'vue';
+import { ref, computed, provide, watch } from 'vue';
 import { useStore } from 'vuex'
+import AddField from '../components/fields/AddField.vue';
 export default {
-    components: { Navbar, FieldList, FieldDescription, EditField, EditParcel },
+    components: { Navbar, FieldList, FieldDescription, EditField, EditParcel, AddField },
     setup() {
         const store = useStore();
         const activeComponent = ref('fieldList');
@@ -36,11 +45,35 @@ export default {
             return store.getters['fields/userFields'];
         })
 
-        const activeField = computed(function(){
-            return fieldsList.value.find((field) => field.id === fieldId.value)
+        const activeField = ref({
+                field_name: "",
+                field_area: null,
+                crop: null,
+                cadastral_parcels: [],
+            });
+        // const activeField = computed(function(){
+        //     return fieldsList.value.find((field) => field.id === fieldId.value)
+        // });
+        watch(fieldId, (newValue)=> {
+            console.log('new Vlaue', newValue);
+            if(newValue){
+                activeField.value = fieldsList.value.find((field) => field.id === newValue)
+            }else{
+                activeField.value = {
+                field_name: "",
+                field_area: null,
+                crop: null,
+                cadastral_parcels: [],
+            }
+            }
         });
-
         function showFieldListPage(){
+            activeField.value = {
+                field_name: "",
+                field_area: null,
+                crop: null,
+                cadastral_parcels: [],
+                }
             activeComponent.value = 'fieldList';
         }
         function showDescriptionPage(id = fieldId.value){
@@ -48,11 +81,23 @@ export default {
             fieldId.value = id;
         }
 
+        function showCreatePage(){
+            fieldId.value = null;
+            // activeField.value = {
+            //     field_name: "",
+            //     field_area: null,
+            //     crop: null,
+            //     cadastral_parcels: [],
+            // }
+            activeComponent.value = 'createField';
+        }
+
         function showEditPage(){
             activeComponent.value = 'editField';
         }
 
         const activeParcel = ref(null);
+
         function updateParcelArea(formData){
             console.log('parcelArea', parcelArea.value, typeof parcelArea.value);
             activeParcel.value.parcel_area= parseInt(formData.parcel_area);
@@ -62,7 +107,12 @@ export default {
             activeField.value.cadastral_parcels.push(activeParcel.value)
             // .area = parseInt(formData.area);
             // activeParcel.value.pivot.area = parseInt(formData.area);
-            showEditPage();
+            if(fieldId.value){
+                showEditPage();
+            }else{
+                showCreatePage();
+            }
+            
         }
         function showEditParcel(parcel){
             activeParcel.value = parcel;
@@ -71,11 +121,13 @@ export default {
 
         provide('activeComponent', activeComponent);
         return {
+            fieldId,
             activeComponent,
             fieldsList,
             activeField,
             showFieldListPage,
             showDescriptionPage,
+            showCreatePage,
             showEditPage,
             updateParcelArea,
             showEditParcel,
