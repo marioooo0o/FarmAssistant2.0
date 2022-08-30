@@ -1,7 +1,9 @@
 <template>
     <div>
-        <base-label search :id="id" :label="label" :type="type" :placeholder="placeholder" :searchData="searchData"
-            @selected-value="getSelectedValue" />
+        <base-label search :id="id" :label="label" :type="type" :placeholder="placeholder" :name="name" :searchData="searchData" 
+            :error="error"
+            @selected-value="getSelectedValue"
+             />
         <ul v-if="selectedValues && isArray" class="flex flex-col items-end mr-4">
             <li v-for="value in selectedValues" :key="value.id">
                 <span class="flex items-center justify-center gap-4 my-2"><img v-if="value.src" :src="value.src"
@@ -36,6 +38,7 @@ export default {
             type: String,
             required: false
         },
+        name: String,
         search: {
             type: Boolean,
             required: false
@@ -46,7 +49,8 @@ export default {
         },
         actualData: {
             type: [Array, Object]
-        }
+        },
+        error: Array,
     },
     emits: ['update-search-list'],
     setup(props, {emit}) {

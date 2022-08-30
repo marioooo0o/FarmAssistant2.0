@@ -1,7 +1,8 @@
 <template>
     <base-description-card mainIcons 
         @close-description-card="$emit('close-create-card')"
-        @cancel-clicked="$emit('close-create-card')">
+        @cancel-clicked="$emit('close-create-card')"
+        @save-clicked="saveClicked">
         <div class="flex flex-col items-center font-semibold tracking-wider px-16">
             <h1 class="text-2xl">Dodaj Pole</h1>
             <FieldForm
@@ -32,6 +33,9 @@ export default {
 
         function saveClicked(){
             saveIsClicked.value = true;
+            setTimeout(() => {
+                saveIsClicked.value = false;
+            }, 3000);
             console.log('submit w create');
         }
 

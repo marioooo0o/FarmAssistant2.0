@@ -1,14 +1,14 @@
 <template>
     <form @submit.prevent="submitForm">
         <base-form-control>
-            <base-label id="fieldName" label="Nazwa Pola:" required v-model="fieldName" type="text" />
+            <base-label id="fieldName" label="Nazwa Pola:" required v-model="fieldName" type="text" name="fieldName" :error="errors['fieldName']" />
         </base-form-control>
         <base-form-control>
             <base-label id="fieldArea" label="Powierzchnia:" required v-model="fieldArea" type="number" unit="ha" disabled />
         </base-form-control>
         <base-form-control>
-            <SearchFormControl search id="fieldCrop" label="Uprawa:" required placeholder="wyszukaj uprawę:"
-                :searchData="crops" :actualData="fieldCrop"
+            <SearchFormControl search id="fieldCrop" label="Uprawa:" required placeholder="wyszukaj uprawę:" name="crop"
+                :searchData="crops" :actualData="fieldCrop" 
                 @update-search-list="updateCrop" />
         </base-form-control>
         <base-form-control>
@@ -21,8 +21,8 @@
     </form>
 </template>
 <script>
-import { ref, computed, watch } from 'vue';
-import { useStore } from 'vuex'
+import { ref, reactive, computed, watch, provide } from 'vue';
+import { useStore } from 'vuex';
 import SearchFormControl from '../ui/SearchFormControl.vue';
 import ParcelSearchInput from './ParcelSearchInput.vue';
 export default {
@@ -50,6 +50,7 @@ export default {
         const store = useStore()
 
         const fieldName = ref(props.field.field_name ? props.field.field_name : "");
+        const requiredFieldNameLength = ref(5);
             
 
         const fieldParcels = ref(props.field.cadastral_parcels? props.field.cadastral_parcels : null);
@@ -82,14 +83,59 @@ export default {
         function updateParcelList(parcelList){
             fieldParcels.value = parcelList;
         }
+        const errors = reactive({
+            fieldName: [],
+            fieldCrop: [],
+        });
 
+        const saveFirstClicked = ref(false);
+        watch(fieldName, (newValue)=>{
+            console.log('wbiło47?', newValue, saveFirstClicked.value);
+            if(saveFirstClicked.value){
+                errors.fieldName = [];
+                console.log('newValue', newValue);
+                console.log('errors', errors.fieldName);
+            if(newValue === ""){
+                errors.fieldName.push('Nazwa pola jest wymagana!');
+            }
+            if(newValue !== "" && newValue.length < 6){
+                errors.fieldName.push('Nazwa musi być dłuższa niż 6 znaków!')
+            }
+            }
+            
+        })
+        
+        function checkForm(){
+            errors.fieldName = [];
+            errors.fieldCrop = [];
+            if(fieldName.value && fieldCrop.value && fieldParcels.value){
+                console.log('validacja pomyślna');
+                return true;
+            }
+
+            if(!fieldName.value){
+                console.log('brak fieldname');
+                errors.fieldName.push('Nazwa pola jest wymagana');
+            }
+            
+            // console.log('123', fieldName.value);
+            // 
+
+            // if(!fieldCrop.value){
+            //     errors.fieldCrop.push('Uprawa jest wymagana');
+            // }
+        }
+        provide('errors', errors);
         function submitForm(){
-            const formData = {
-                field_name: fieldName.value,
-                crop: fieldCrop.value.name,
-                cadastral_parcels: fieldParcels.value
-            };
-            emit('submit-form', formData);
+            if(!saveFirstClicked.value) saveFirstClicked.value = true;
+            console.log('submit wciśnięty');
+            checkForm();
+            // const formData = {
+            //     field_name: fieldName.value,
+            //     crop: fieldCrop.value.name,
+            //     cadastral_parcels: fieldParcels.value
+            // };
+            // emit('submit-form', formData);
         }
         const saveIsClicked = computed(()=>{
             return props.saveIsClicked;
@@ -98,12 +144,12 @@ export default {
             if(newValue){
                 submitForm();
             }
-            
         })
 
         return {
             saveIsClicked,
             fieldName,
+            requiredFieldNameLength,
             fieldArea,
             fieldCrop,
             updateCrop,
@@ -111,7 +157,8 @@ export default {
             fieldParcels,
             parcels,
             updateParcelList,
-            submitForm
+            submitForm,
+            errors
         }
     }
 }
