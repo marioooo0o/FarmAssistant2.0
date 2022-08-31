@@ -74,6 +74,7 @@ export default {
                 crop: null,
                 cadastral_parcels: [],
                 }
+            fieldId.value = null;
             activeComponent.value = 'fieldList';
         }
         function showDescriptionPage(id = fieldId.value){
@@ -83,12 +84,6 @@ export default {
 
         function showCreatePage(){
             fieldId.value = null;
-            // activeField.value = {
-            //     field_name: "",
-            //     field_area: null,
-            //     crop: null,
-            //     cadastral_parcels: [],
-            // }
             activeComponent.value = 'createField';
         }
 
@@ -99,14 +94,20 @@ export default {
         const activeParcel = ref(null);
 
         function updateParcelArea(formData){
-            console.log('parcelArea', parcelArea.value, typeof parcelArea.value);
-            activeParcel.value.parcel_area= parseInt(formData.parcel_area);
+            activeParcel.value.parcel_area= parseFloat(formData.parcel_area);
             activeParcel.value.pivot = {
-                area: parseInt(formData.area)
+                area: parseFloat(formData.area)
             }
-            activeField.value.cadastral_parcels.push(activeParcel.value)
-            // .area = parseInt(formData.area);
-            // activeParcel.value.pivot.area = parseInt(formData.area);
+            const parcelInField = activeField.value.cadastral_parcels.find((parcel) => parcel.parcel_number === activeParcel.value.parcel_number)
+            if(parcelInField){
+                const index = activeField.value.cadastral_parcels.findIndex((parcel) => parcel.parcel_number === activeParcel.value.parcel_number);
+                activeField.value.cadastral_parcels[index].pivot = activeParcel.value.pivot;
+                activeField.value.cadastral_parcels[index].parcel_area = activeParcel.value.parcel_area;
+            }
+            else{
+                activeField.value.cadastral_parcels.push(activeParcel.value);
+            }
+            
             if(fieldId.value){
                 showEditPage();
             }else{

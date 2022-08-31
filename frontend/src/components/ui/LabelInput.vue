@@ -8,7 +8,7 @@
             <span>Error</span>
         </div>
     </div>
-    <div v-else-if="search" class="flex justify-between items-start text-lg">
+    <div v-else-if="search" class="grid grid-cols-2 items-center text-lg">
         <label class="mr-2" :for="id">
             {{ label }}
         </label>
@@ -16,7 +16,9 @@
         :searchData="searchData"
         :searchKey="searchKey"
             @selected-value="$emit('selected-value', $event)" />
-        <span v-if="unit" class="ml-1">{{unit}}</span>
+        <ul v-if="hasError" class="col-start-2 text-red-500 text-sm">
+                <li v-for="e in error" :key="e">{{e}}</li>
+        </ul>
     </div>
     <div v-else class="grid grid-cols-2 items-center">
         <label class="mr-2 text-lg" :for="id">

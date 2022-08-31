@@ -10,14 +10,14 @@
             <form class="flex flex-col justify-center items-center" @submit.prevent="submitForm">
                 <base-form-control>
                     <base-label id="parcelArea" label="Powierzchnia działki na wybranym polu :" required 
-                    v-model="parcelAreaInField" type="number" unit="ha" min="0" step="0.01"/>
+                    v-model="parcelAreaInField" type="number" unit="ha" min="0" step="0.01" :error="errors['parcelAreaInField']"/>
                 </base-form-control>
             </form>
         </div>
     </base-description-card>
 </template>
 <script>
-import { ref, computed } from 'vue';
+import { ref, reactive, computed, watch } from 'vue';
 import BaseDescriptionCard from '../ui/BaseDescriptionCard.vue';
 import BaseFormControl from '../ui/BaseFormControl.vue';
 export default {
@@ -51,18 +51,51 @@ export default {
                 return parcelAreaInField.value;
             }
         });
+        
+        const errors = reactive({
+            parcelAreaInField: [],
+        });
+
+        const saveFirstClicked = ref(false);
+
+        watch(parcelAreaInField, (newValue, oldValue) => {
+            if(saveFirstClicked.value){
+                errors.parcelAreaInField = [];
+
+                if(newValue === null){
+                    errors.parcelAreaInField.push('Powierzchnia działki jest wymagana');
+                }
+            }
+        }); 
+
+        function checkForm(){
+            errors.parcelAreaInField = [];
+            if(parcelAreaInField.value && parcelAreaInField.value !== "0"){
+                return true;
+            }
+            else{
+                errors.parcelAreaInField.push('Powierzchnia działki jest wymagana');
+                return false;
+            }
+        }
 
         function submitForm(){
-            const formData = {
-                area: parseInt(parcelAreaInField.value),
-                parcel_area: parseInt(parcelArea.value)
-            };
-            console.log('dane z form', formData);
-            emit('save-parcel', formData);
+            console.log('wbiło do submit');
+            if(!saveFirstClicked.value) saveFirstClicked.value = true;
+            if(checkForm()){
+                const formData = {
+                area: parseFloat(parcelAreaInField.value),
+                parcel_area: parseFloat(parcelArea.value)
+                };
+                console.log('dane z form', formData);
+                emit('save-parcel', formData);
+            }
+            
         }
         return {
             parcelArea,
             parcelAreaInField,
+            errors,
             submitForm
         }
     }

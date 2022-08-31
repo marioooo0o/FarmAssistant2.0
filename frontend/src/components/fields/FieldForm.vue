@@ -9,12 +9,14 @@
         <base-form-control>
             <SearchFormControl search id="fieldCrop" label="Uprawa:" required placeholder="wyszukaj uprawę:" name="crop"
                 :searchData="crops" :actualData="fieldCrop" 
+                :error="errors['fieldCrop']"
                 @update-search-list="updateCrop" />
         </base-form-control>
         <base-form-control>
             <ParcelSearchInput search id="fieldParcels" label="Działki:" required placeholder="wyszukaj działkę:"
                 :searchData="parcels" :actualData="fieldParcels"
                 searchKey="parcel_number"
+                :error="errors['fieldParcels']"
                 @show-parcel-form="$emit('show-parcel-form', $event)"
                 @update-parcel-list="updateParcelList" />
         </base-form-control>
@@ -81,11 +83,13 @@ export default {
         });
 
         function updateParcelList(parcelList){
+            console.log('updateParcelList', parcelList);
             fieldParcels.value = parcelList;
         }
         const errors = reactive({
             fieldName: [],
             fieldCrop: [],
+            fieldParcels: [],
         });
 
         const saveFirstClicked = ref(false);
@@ -95,47 +99,64 @@ export default {
                 errors.fieldName = [];
                 console.log('newValue', newValue);
                 console.log('errors', errors.fieldName);
-            if(newValue === ""){
+            if(newValue === null){
                 errors.fieldName.push('Nazwa pola jest wymagana!');
             }
             if(newValue !== "" && newValue.length < 6){
                 errors.fieldName.push('Nazwa musi być dłuższa niż 6 znaków!')
             }
             }
-            
         })
         
+        watch(fieldCrop, (newValue)=>{
+            if(saveFirstClicked.value){
+                errors.fieldCrop = [];
+                if(newValue === ""){
+                    errors.fieldName.push('Uprawa jest wymagana!');
+                }
+            }
+        })
         function checkForm(){
             errors.fieldName = [];
             errors.fieldCrop = [];
+            errors.fieldParcels = [];
             if(fieldName.value && fieldCrop.value && fieldParcels.value){
                 console.log('validacja pomyślna');
                 return true;
             }
-
+            
             if(!fieldName.value){
                 console.log('brak fieldname');
                 errors.fieldName.push('Nazwa pola jest wymagana');
-            }
-            
-            // console.log('123', fieldName.value);
-            // 
+            } 
 
-            // if(!fieldCrop.value){
-            //     errors.fieldCrop.push('Uprawa jest wymagana');
-            // }
+            if(!fieldCrop.value){
+                errors.fieldCrop.push('Uprawa jest wymagana');
+            }
+            if(fieldParcels.value.length === 0){
+                errors.fieldParcels.push('Działki są wymagane');
+            }
+            return false;
         }
         provide('errors', errors);
         function submitForm(){
             if(!saveFirstClicked.value) saveFirstClicked.value = true;
             console.log('submit wciśnięty');
-            checkForm();
-            // const formData = {
-            //     field_name: fieldName.value,
-            //     crop: fieldCrop.value.name,
-            //     cadastral_parcels: fieldParcels.value
-            // };
-            // emit('submit-form', formData);
+            if(checkForm()){
+                const formData = {
+                    id: 13,
+                    farm_id: 6,
+                    field_name: fieldName.value,
+                    fieldArea: 47,
+                    crop: fieldCrop.value.name,
+                    cadastral_parcels: fieldParcels.value,
+                    created_at: "2022-08-26T09:39:47.000000Z",
+                    updated_at: "2022-08-26T09:48:37.000000Z"
+                };
+                console.log('formData', formData);
+                emit('submit-form', formData);
+            }
+            
         }
         const saveIsClicked = computed(()=>{
             return props.saveIsClicked;

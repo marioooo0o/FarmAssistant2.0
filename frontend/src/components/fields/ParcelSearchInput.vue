@@ -3,6 +3,7 @@
         <base-label search :id="id" :label="label" :type="type" :placeholder="placeholder" 
         :searchData="searchData"
         :searchKey="searchKey"
+        :error="error"
         @selected-value="getSelectedValue" />
         <ul v-if="selectedValues" class="flex flex-col items-end mr-4">
             <li v-for="value in selectedValues" :key="value.id" class="flex items-center justify-center">
@@ -47,7 +48,8 @@ export default {
         searchKey :{
             type: String,
             default: 'name'
-        }
+        },
+        error: Array,
     },
     emits: ['show-parcel-form', 'update-parcel-list'],
     setup(props, {emit}) {
@@ -56,8 +58,6 @@ export default {
             
                 if (selectedValues.value && !selectedValues.value.find((result) => result.id === id)){
                     const selectedFromInput = props.searchData.find((result) => result.id === id);
-                    console.log('psi selected', selectedFromInput);
-                    console.log('psi selected', props.searchData);
                     emit('show-parcel-form', selectedFromInput);
                 }
                 else if(!selectedValues.value){

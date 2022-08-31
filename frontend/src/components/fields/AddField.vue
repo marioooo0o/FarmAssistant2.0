@@ -16,6 +16,7 @@
 </template>
 <script>
 import { ref } from 'vue';
+import { useStore } from 'vuex';
 import FieldForm from './FieldForm.vue';
 export default {
     components: {
@@ -29,18 +30,20 @@ export default {
     },
     emits: ['close-create-card', 'show-parcel-form'],
     setup(props) {
+        const store = useStore();
         const saveIsClicked = ref(false);
 
         function saveClicked(){
             saveIsClicked.value = true;
             setTimeout(() => {
                 saveIsClicked.value = false;
-            }, 3000);
+            }, 2000);
             console.log('submit w create');
         }
 
         function submitForm(formData){
             saveIsClicked.value = false;
+            store.commit('fields/setField', formData);
             console.log('formData', formData);
         }
 
