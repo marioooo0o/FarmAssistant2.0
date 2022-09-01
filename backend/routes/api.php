@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CadastralParcelController;
+use App\Http\Controllers\CropController;
 use App\Http\Controllers\ExcelCSVController;
 use App\Http\Controllers\FarmController;
 use App\Http\Controllers\FieldController;
@@ -44,3 +45,5 @@ Route::middleware(['api'])->group(function () {
         Route::post('/farms/{farm_id}/fields/{field_id}/cadastral-parcels', 'store');
     });
 });
+
+Route::post('/crops', [CropController::class, 'store']);

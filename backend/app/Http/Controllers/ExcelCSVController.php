@@ -10,9 +10,9 @@ class ExcelCSVController extends Controller
 {
     public function importExcelCSV()
     {
-        $fileUrl = 'D:\Semestr_6\Projekt_Inzynierski\plantprotectionproducts1-100.csv';
+        $fileUrl = 'D:\Semestr_6\Projekt_Inzynierski\import.xlsx';
 
         Excel::import(new PlantProtectionProductsImport, $fileUrl);
-        $oki = 47;
+        return 'udało się';
     }
 }

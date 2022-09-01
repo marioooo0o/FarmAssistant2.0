@@ -17,7 +17,6 @@ class PlantProtectionProduct extends Model
         'term_for_use',
         'type',
         'active_substance',
-        'plant',
         'pest',
         'dose',
         'recommended_dose',
@@ -31,10 +30,15 @@ class PlantProtectionProduct extends Model
 
     protected $casts = [
         'type' => 'array',
-        'plant' => 'array',
         'pest' => 'array',
         'group_name' => 'array',
-
-
     ];
+
+    /**
+     * The crops that belong to the plant protection product.
+     */
+    public function crops()
+    {
+        return $this->belongsToMany(Crop::class)->withTimestamps();
+    }
 }

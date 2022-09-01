@@ -24,11 +24,11 @@ return new class extends Migration
             $table->string('active_substance');             //substancja czynna
             $table->json('plant')->nullable();              //uprawa
             $table->json('pest')->nullable();               //agrofag
-            $table->string('dose')->nullable();             //dawka
+            $table->text('dose')->nullable();             //dawka
             $table->float('recommended_dose')->nullable();  //zalecana dawka
             $table->float('maximum_dose')->nullable();      //maksymalna dawka
             $table->string('unit')->nullable();             //jednostka [l/kg]
-            $table->string('deadline')->nullable();         //termin
+            $table->text('deadline')->nullable();         //termin
             $table->json('group_name');                     //nazwa grupy
             $table->string('small_area')->nullable();       //mało obszarowe
             $table->string('application')->nullable();      //zastosowanie/użytkownik

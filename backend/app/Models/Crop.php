@@ -16,6 +16,7 @@ class Crop extends Model
      */
     protected $fillable = [
         'name',
+        'image_path'
     ];
 
     /**
@@ -24,5 +25,13 @@ class Crop extends Model
     public function fields()
     {
         return $this->hasMany(Field::class);
+    }
+
+    /**
+     * The plant protection products that belong to the crop.
+     */
+    public function plantProtectionProducts()
+    {
+        return $this->belongsToMany(PlantProtectionProduct::class)->withTimestamps();
     }
 }
