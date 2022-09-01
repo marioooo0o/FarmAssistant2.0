@@ -44,6 +44,9 @@ Route::middleware(['api'])->group(function () {
         Route::get('/cadastral-parcels', 'index');
         Route::post('/farms/{farm_id}/fields/{field_id}/cadastral-parcels', 'store');
     });
+    Route::controller(CropController::class)->group(function () {
+        Route::get('crops/', 'index');
+    });
 });
 
 Route::post('/crops', [CropController::class, 'store']);

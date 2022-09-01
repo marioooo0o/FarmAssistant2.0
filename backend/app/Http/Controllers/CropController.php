@@ -2,11 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CropCollection;
 use Illuminate\Http\Request;
+use App\Services\CropService;
 use App\Models\Crop;
 
 class CropController extends Controller
 {
+
+    private CropService $cropService;
+    public function __construct(CropService $cropService)
+    {
+        $this->cropService = $cropService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +22,12 @@ class CropController extends Controller
      */
     public function index()
     {
-        //
+        $crops = $this->cropService->getAll();
+        return response()->json([
+            'success' => true,
+            'message' => 'All crops get successfully',
+            'crops' => new CropCollection($crops),
+        ]);
     }
 
     /**
