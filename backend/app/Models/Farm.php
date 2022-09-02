@@ -32,4 +32,12 @@ class Farm extends Model
     {
         return $this->hasMany(Field::class);
     }
+
+    /**
+     * Get the magazine associated with the farm.
+     */
+    public function magazine()
+    {
+        return $this->hasOne(Magazine::class);
+    }
 }

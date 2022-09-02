@@ -22,7 +22,9 @@ class FarmService
     {
         $user = $this->userRepository->find($userId);
 
-        return $user->farm()->create($farmAttributes);
+        $newFarm = $user->farm()->create($farmAttributes);
+        $newFarm->magazine()->create();
+        return $newFarm;
     }
 
     public function find($farmId)

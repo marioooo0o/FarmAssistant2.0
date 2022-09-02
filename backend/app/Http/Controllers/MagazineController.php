@@ -2,27 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreFieldRequest;
-use App\Http\Requests\UpdateFieldRequest;
-use App\Http\Resources\FieldResource;
-use App\Models\Field;
+use App\Http\Resources\Magazine as ResourcesMagazine;
+use App\Http\Resources\MagazineResource;
+use App\Models\Farm;
+use App\Models\Magazine;
+use App\Services\MagazineService;
+use App\Models\User;
 use App\Services\FarmService;
-use App\Services\FieldService;
 use Illuminate\Http\Request;
 
-class FieldController extends Controller
+class MagazineController extends Controller
 {
-    private FieldService $fieldService;
     private FarmService $farmService;
+    private MagazineService $magazineService;
+
+
     /**
-     * Create a new FieldController instance.
+     * Create a new MagazineController instance.
      *
      * @return void
      */
-    public function __construct(FieldService $fieldService, FarmService $farmService)
+    public function __construct(FarmService $farmService, MagazineService $magazineService)
     {
-        $this->fieldService = $fieldService;
         $this->farmService = $farmService;
+        $this->magazineService = $magazineService;
         $this->middleware('auth:api');
     }
     /**
@@ -41,22 +44,23 @@ class FieldController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreFieldRequest $request, $farmId)
+    public function store(Request $request, $farmId)
     {
-        $data = $request->only('field_name', 'cadastral_parcels', 'crop');
+        $data = $request->only('ppp_id', 'quantity');
         $farm = $this->farmService->find($farmId);
         if (auth()->user()->id == $farm->user_id) {
-            $field = $this->fieldService->create($data, $farm);
-            if ($field instanceof Field) {
+            $userMagazine = $farm->magazine;
+            $magazine = $this->magazineService->create($data, $userMagazine);
+            if ($magazine instanceof Magazine) {
                 return response()->json([
                     "success" => true,
-                    "message" => "Field created successfully.",
-                    'field' => new FieldResource($field)
-                ], 201);
+                    "message" => "Product added successfully.",
+                    'magazine' => new MagazineResource($magazine),
+                ]);
             } else {
                 return response()->json([
                     "success" => false,
-                    "message" => $field,
+                    "message" => $magazine,
                 ], 400);
             }
         } else {
@@ -70,14 +74,14 @@ class FieldController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($farmId, $id)
+    public function show($id)
     {
-        $field = $this->fieldService->find($id);
-        if (auth()->user()->id == $field->farm->user_id) {
+        $magazine = $this->magazineService->find($id);
+        if (auth()->user()->id == $magazine->farm->user_id) {
             return response()->json([
                 "success" => true,
-                "message" => "Field retrieved successfully.",
-                'field' => new FieldResource($field)
+                "message" => "Magazine retrieved successfully.",
+                'magazine' => new MagazineResource($magazine)
             ]);
         } else {
             return response()->json(['error' => 'Unauthorized'], 401);
@@ -91,22 +95,23 @@ class FieldController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateFieldRequest $request, $farmId, $id)
+    public function update(Request $request, $farmId, $id)
     {
-        $data = $request->only('field_name', 'cadastral_parcels', 'crop');
-        $field = Field::findOrFail($id);
-        if (auth()->user()->id == $field->farm->user_id) {
-            $field = $this->fieldService->update($data, $field);
-            if ($field instanceof Field) {
+        $data = $request->only('quantity');
+        $farm = $this->farmService->find($farmId);
+        if (auth()->user()->id == $farm->user_id) {
+            $userMagazine = $farm->magazine;
+            $magazine = $this->magazineService->update($data, $userMagazine, $id);
+            if ($magazine instanceof Magazine) {
                 return response()->json([
                     "success" => true,
-                    "message" => "Field updated successfully.",
-                    'field' => new FieldResource($field)
+                    "message" => "Product updated successfully.",
+                    'magazine' => new MagazineResource($magazine),
                 ]);
             } else {
                 return response()->json([
                     "success" => false,
-                    "message" => $field,
+                    "message" => $magazine,
                 ], 400);
             }
         } else {
@@ -122,10 +127,11 @@ class FieldController extends Controller
      */
     public function destroy($farmId, $id)
     {
-        $field = Field::findOrFail($id);
-        if (auth()->user()->id == $field->farm->user_id) {
-            $field = $this->fieldService->delete($field);
-            if ($field) {
+        $farm = $this->farmService->find($farmId);
+        if (auth()->user()->id == $farm->user_id) {
+            $userMagazine = $farm->magazine;
+            $magazine = $this->magazineService->delete($userMagazine, $id);
+            if ($magazine) {
                 return response()->json([
                     "success" => true,
                     "message" => "Field deleted successfully."
@@ -133,7 +139,7 @@ class FieldController extends Controller
             } else {
                 return response()->json([
                     "success" => false,
-                    "message" => $field,
+                    "message" => $magazine,
                 ], 400);
             }
         } else {

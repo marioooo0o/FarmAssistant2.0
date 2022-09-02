@@ -58,12 +58,12 @@ class CadastralParcelController extends Controller
                     "success" => true,
                     "message" => "Cadastral parcel created successfully.",
                     'cadastral_parcel' => new CadastralParcelResource($parcel)
-                ]);
+                ], 201);
             } else {
                 return response()->json([
                     "success" => false,
                     "message" => $parcel,
-                ]);
+                ], 400);
             }
         } else {
             return response()->json(['error' => 'Unauthorized'], 401);

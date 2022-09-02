@@ -54,7 +54,7 @@ class FarmController extends Controller
             "success" => true,
             "message" => "Farm created successfully.",
             'farm' => new FarmResource($farm)
-        ]);
+        ], 201);
     }
 
     /**

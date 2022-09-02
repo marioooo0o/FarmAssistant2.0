@@ -14,6 +14,7 @@ class CropController extends Controller
     public function __construct(CropService $cropService)
     {
         $this->cropService = $cropService;
+        $this->middleware('auth:api');
     }
     /**
      * Display a listing of the resource.
@@ -48,7 +49,7 @@ class CropController extends Controller
             "success" => true,
             "message" => "Crop created successfully.",
             'crop' => $crop
-        ]);
+        ], 201);
     }
 
     /**

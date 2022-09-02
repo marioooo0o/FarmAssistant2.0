@@ -8,6 +8,7 @@ use App\Http\Controllers\CropController;
 use App\Http\Controllers\ExcelCSVController;
 use App\Http\Controllers\FarmController;
 use App\Http\Controllers\FieldController;
+use App\Http\Controllers\MagazineController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,7 +46,13 @@ Route::middleware(['api'])->group(function () {
         Route::post('/farms/{farm_id}/fields/{field_id}/cadastral-parcels', 'store');
     });
     Route::controller(CropController::class)->group(function () {
-        Route::get('crops/', 'index');
+        Route::get('/crops', 'index');
+    });
+    Route::controller(MagazineController::class)->group(function () {
+        Route::post('/farms/{farm_id}/magazines/product', 'store');
+        Route::get('/magazines/{id}', 'show');
+        Route::post('/farms/{farm_id}/magazines/product/{id}', 'update');
+        Route::delete('/farms/{farm_id}/magazines/product/{id}', 'destroy');
     });
 });
 
