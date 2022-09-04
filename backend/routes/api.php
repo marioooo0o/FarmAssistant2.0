@@ -9,6 +9,7 @@ use App\Http\Controllers\ExcelCSVController;
 use App\Http\Controllers\FarmController;
 use App\Http\Controllers\FieldController;
 use App\Http\Controllers\MagazineController;
+use App\Http\Controllers\PlantProtectionProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,11 +49,14 @@ Route::middleware(['api'])->group(function () {
     Route::controller(CropController::class)->group(function () {
         Route::get('/crops', 'index');
     });
+    Route::controller(PlantProtectionProductController::class)->group(function () {
+        Route::get('/plant-protection-products', 'index');
+    });
     Route::controller(MagazineController::class)->group(function () {
-        Route::post('/farms/{farm_id}/magazines/product', 'store');
+        Route::post('/farms/{farm_id}/magazines/products', 'store');
         Route::get('/magazines/{id}', 'show');
-        Route::post('/farms/{farm_id}/magazines/product/{id}', 'update');
-        Route::delete('/farms/{farm_id}/magazines/product/{id}', 'destroy');
+        Route::post('/farms/{farm_id}/magazines/products/{id}', 'update');
+        Route::delete('/farms/{farm_id}/magazines/products/{id}', 'destroy');
     });
 });
 

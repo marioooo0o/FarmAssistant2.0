@@ -13,9 +13,6 @@
                 Nie posiadasz żadnych pół
             </div>
             <BaseButton :class="'m-3 text-lg'" @click="">Załaduj więcej</BaseButton>
-            <!-- <FieldDescription v-if="descriptionIsShowed" :field="selectedField"
-                @close-description-card="closeDescriptionCard" 
-                @show-edit-page="$emit('show-edit-page')" /> -->
         </div>
     </BaseCard>
 </template>

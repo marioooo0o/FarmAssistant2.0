@@ -12,7 +12,7 @@ import BaseLabel from './components/ui/LabelInput.vue';
 import BaseFormControl from './components/ui/BaseFormControl.vue';
 
 
-import './assets/main.css'
+import '@/assets/main.css'
 
 const app = createApp(App)
 

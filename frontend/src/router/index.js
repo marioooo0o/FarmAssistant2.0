@@ -6,9 +6,10 @@ import RegisterPage from '../views/RegisterPage.vue';
 import Dashboard from '../views/DashboardPage.vue';
 import PractisesPage from '../views/PractisesPage.vue';
 import FieldsPage from '../views/FieldsPage.vue';
-import MagazinePage from '../views/MagazinePage.vue';
+import WarehousePage from '../views/WarehousePage.vue';
 import CropsPage from '../views/CropsPage.vue';
 import ProfilePage from '../views/ProfilePage.vue';
+import PlantProtectionProductPage from '../views/PlantProtectionProductPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,8 +46,8 @@ const router = createRouter({
     },
     {
       path: '/magazyn',
-      name: 'magazine',
-      component: MagazinePage
+      name: 'warehouse',
+      component: WarehousePage
     },
     {
       path: '/uprawy',
@@ -58,6 +59,11 @@ const router = createRouter({
       name: 'profile',
       component: ProfilePage
     },
+    {
+      path: '/srodek-ochrony-roslin/:id',
+      name: 'ProductDetails',
+      component: PlantProtectionProductPage,
+    }
   ]
 })
 

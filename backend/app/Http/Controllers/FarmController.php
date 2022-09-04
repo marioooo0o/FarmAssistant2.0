@@ -6,6 +6,8 @@ use App\Http\Requests\StoreFarmRequest;
 use App\Http\Resources\FarmResource;
 use App\Services\FarmService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+
 use phpDocumentor\Reflection\Types\Resource_;
 
 class FarmController extends Controller
@@ -54,7 +56,7 @@ class FarmController extends Controller
             "success" => true,
             "message" => "Farm created successfully.",
             'farm' => new FarmResource($farm)
-        ], 201);
+        ], Response::HTTP_CREATED);
     }
 
     /**

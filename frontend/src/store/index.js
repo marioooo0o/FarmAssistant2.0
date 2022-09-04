@@ -1,6 +1,7 @@
 import { createStore } from "vuex";
 
-import fieldsModule from './modules/fields/index';
+import fieldsModule from './modules/fields/index.js';
+import warehousesModule from './modules/warehouses/index.js'
 const store = createStore({
     state(){
         return {}
@@ -13,6 +14,7 @@ const store = createStore({
     },
     modules: {
         fields: fieldsModule,
+        warehouses: warehousesModule,
     },
 
 });

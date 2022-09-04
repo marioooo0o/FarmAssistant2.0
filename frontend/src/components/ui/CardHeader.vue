@@ -5,7 +5,7 @@
             {{ addText}}
             <PlusCircleIcon class="flex items-center h-6 w-6" />
         </span>
-        <div class="text-xl grid grid-cols-4 justify-center items-center m-1 ">
+        <div class="text-xl grid justify-center items-center m-1" :class="gridCols">
             <div v-for="header in headers" :key="header.id"
                 class="flex justify-center items-center cursor-pointer hover:text-fa-secondary "
                 :class="[activeHeaderIndex == header.id ? underlineClass : '']" @click="$emit('selectedHeader', header.id)">
@@ -15,7 +15,7 @@
     </header>
 </template>
 <script>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { PlusCircleIcon } from '@heroicons/vue/outline'
 export default {
     components: {
@@ -42,9 +42,13 @@ export default {
     emits: ['addNew', 'selectedHeader'],
     setup(props) {
         const underlineClass = 'underline underline-offset-8 text-fa-secondary';
-        
+        const headersCount = computed(() => {
+            return props.headers.length
+        });
+        const gridCols = `grid-cols-${headersCount.value}`
         return {
             underlineClass,
+            gridCols
         }
     }
 }
