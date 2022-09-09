@@ -21,11 +21,9 @@
 <script>
 import { ref, reactive, computed, watch } from 'vue';
 import { useStore } from 'vuex';
-import ProductForm from './ProductForm.vue';
 import SearchFormControl from '../ui/SearchFormControl.vue';
 export default {
     components: {
-        ProductForm,
         SearchFormControl
     },
     emits: ['close-add-card', 'submit-form'],

@@ -1,11 +1,14 @@
 <template>
     <div v-if="auth">
-        <label class="flex flex-col text-2xl tracking-most-widest leading-10 max-w-md w-full" :for="id">
+        <label class="flex flex-col text-xl tracking-most-widest leading-10 max-w-md w-full" :for="id">
             {{ label }}
         </label>
         <div>
-            <BaseInput auth :id="id" @input="handleInput" :required="required" :disabled="disabled" :type="type" :value="modelValue" :name="name" />
-            <span>Error</span>
+            <BaseInput auth :id="id" @input="$emit('update:modelValue', $event.target.value)" :required="required" :disabled="disabled" :type="type" :value="modelValue" :name="name"
+            :error="error"/>
+            <ul v-if="hasError" class="col-start-2 text-red-500 text-lg">
+                <li v-for="e in error" :key="e">{{e}}</li>
+            </ul>
         </div>
     </div>
     <div v-else-if="search" class="grid grid-cols-2 items-center text-lg">
