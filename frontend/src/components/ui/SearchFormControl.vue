@@ -78,6 +78,7 @@ export default {
             else{
                 selectedValues.value = null;
             }
+            console.log('selectedValues', selectedValues.value);
             emit('update-search-list', selectedValues.value);
         }
 

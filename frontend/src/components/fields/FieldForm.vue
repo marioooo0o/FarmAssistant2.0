@@ -49,7 +49,7 @@ export default {
     },
     emits: ['show-parcel-form', 'submit-form'],
     setup(props, {emit}){
-        const store = useStore()
+        const store = useStore();
 
         const fieldName = ref(props.field.field_name ? props.field.field_name : "");
         const requiredFieldNameLength = ref(5);

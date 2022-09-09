@@ -15,6 +15,7 @@
         <BaseSearchInput :id="id" :required="required" :disabled="disabled" :type="type" :placeholder="placeholder" :name="name"
         :searchData="searchData"
         :searchKey="searchKey"
+        :error="error"
             @selected-value="$emit('selected-value', $event)" />
         <ul v-if="hasError" class="col-start-2 text-red-500 text-sm">
                 <li v-for="e in error" :key="e">{{e}}</li>

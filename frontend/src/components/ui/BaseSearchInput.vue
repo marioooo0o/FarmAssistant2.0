@@ -1,6 +1,7 @@
 <template>
     <div class="flex flex-col">
-        <input class="bg-input-bg border border-fa-primary text-lg h-8  text-center text-gray-500 focus:text-black focus:outline-fa-primary" :class="roundedClass" :id="id"
+        <input class="bg-input-bg border border-fa-primary text-lg h-8  text-center text-gray-500 focus:text-black" 
+        :class="[roundedClass, isInvalid]" :id="id"
             :required="required" :type="type" :selectedInSearch="modelValue" :placeholder="placeholder"
             v-model="inputSearchQuery" @input="handleInput" />
         <ul v-if="inputSearchResults && isVisible" class="bg-input-bg border rounded-b-[10px]" ref="target">
@@ -31,7 +32,8 @@ export default {
         searchKey :{
             type: String,
             default: 'name'
-        }
+        },
+        error: Array
     },
     setup(props, { emit }) {
         const inputSearchQuery = ref("");
@@ -46,7 +48,7 @@ export default {
                     inputSearchResults.value = props.searchData.filter((value) => value[key].toString().toLowerCase().startsWith(inputSearchQuery.value.toLowerCase().trim()));
                 }
                 else{
-                    inputSearchResults.value = props.searchData.filter((value) => value[key].toLowerCase().startsWith(inputSearchQuery.value.toLowerCase().trim()));
+                    inputSearchResults.value = props.searchData.filter((value) => value[key].toLowerCase().startsWith(inputSearchQuery.value.toLowerCase().trim())).slice(0,5);
                 }
                 
             }
@@ -54,6 +56,10 @@ export default {
         const roundedClass = computed(()=>{
             if(inputSearchResults.value) return 'rounded-t-[10px]';
             else return 'rounded-[10px]';
+        });
+
+        const isInvalid = computed(() => {
+            return (typeof props.error !== 'undefined' && props.error.length > 0) ? 'border-red-500 focus:outline-red-500' : 'border-fa-primary focus:outline-fa-primary'
         });
 
         function getSelectedValue(id){
@@ -71,12 +77,12 @@ export default {
                 inputSearchQuery.value = "";
                 inputSearchResults.value = null;
             }
-            
         });
         return {
             inputSearchQuery,
             inputSearchResults,
             roundedClass,
+            isInvalid,
             handleInput,
             getSelectedValue,
             target,
