@@ -10,6 +10,7 @@ import BaseDescriptionCard from './components/ui/BaseDescriptionCard.vue';
 import BaseInput from './components/ui/BaseInput.vue';
 import BaseLabel from './components/ui/LabelInput.vue';
 import BaseFormControl from './components/ui/BaseFormControl.vue';
+import Spinner from './components/ui/BaseSpinner.vue';
 
 
 import '@/assets/main.css'
@@ -27,5 +28,6 @@ app.component('base-description-card', BaseDescriptionCard);
 app.component('base-input', BaseInput);
 app.component('base-label', BaseLabel);
 app.component('base-form-control', BaseFormControl);
+app.component('spinner', Spinner);
 
 app.mount('#app')

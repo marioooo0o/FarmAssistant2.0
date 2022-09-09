@@ -83,7 +83,7 @@ export default {
                     password: password.value,
                 }
                 console.log('formData', formData);
-                emit('submit-form', formData);
+                
             }
         }
         return {

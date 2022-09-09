@@ -24,9 +24,23 @@ class RegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|between:2,100',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|confirmed|min:6',
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'email.required' => 'Email jest wymagany',
+            'email.unique' => 'Email jest już zajęty',
+            'password.required' => 'Hasło jest wymagane',
+            'password.min' => 'Hasło musi zawierać minimum :min znaków',
         ];
     }
 }

@@ -15,7 +15,6 @@
                     </slot>
                 </div>
             </transition>
-
         </div>
     </transition>
 

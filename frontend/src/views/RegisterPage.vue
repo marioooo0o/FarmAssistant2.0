@@ -1,5 +1,6 @@
 <template>
-    <div class="grid grid-cols-2 h-full w-full">
+    <spinner v-if="isLoading"/>
+    <div v-else class="grid grid-cols-2 h-full w-full">
         <main class="flex flex-col items-center justify-center">
             <form class="flex flex-col items-center gap-3 w-full" @submit.prevent="submitForm">
                 <LabelInput auth id="email" label="Email:" v-model.trim="email" type="email"
@@ -19,21 +20,34 @@
         </main>
         <AuthHeader border="left" />
     </div>
+    <ResponseModal v-if="responseObj.hasResponse" :success=responseObj.status :message=responseObj.message />
 </template>
 <script>
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, computed, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router'
+import { useStore } from 'vuex';
 import AuthHeader from "@/components/auth/AuthHeader.vue";
 import LabelInput from "@/components/ui/LabelInput.vue";
 import BaseButton from "@/components/ui/BaseButton.vue";
+import ResponseModal from '../components/ui/ResponseModal.vue';
 
 export default {
     components: {
-        AuthHeader,
-        LabelInput,
-        BaseButton,
-    },
+    AuthHeader,
+    LabelInput,
+    BaseButton,
+    ResponseModal
+},
     emits: ['submit-form'],
     setup(props, { emit }){
+        const store = useStore();
+        const router = useRouter();
+        const route = useRoute();
+    
+        const isLoading = computed(() => {
+            return store.getters.isLoading;
+        })
+
         const email = ref('');
         const password = ref('');
         const passwordConfirmation = ref('');
@@ -61,6 +75,9 @@ export default {
                 if(newValue === ""){
                     errors.password.push("Hasło jest wymagane");
                 }
+                if(password.value.length < 6){
+                    errors.password.push("Hasło musi zawierać minimum 6 znaków");
+                }
             }
         });
 
@@ -69,7 +86,10 @@ export default {
                 errors.passwordConfirmation = [];
                 if(newValue === ""){
                     errors.passwordConfirmation.push("Hasło jest wymagane");
-                    }
+                }
+                if(passwordConfirmation.value.length < 6){
+                    errors.passwordConfirmation.push("Hasło musi zawierać minimum 6 znaków");
+                }
             }
         });
 
@@ -96,25 +116,52 @@ export default {
             return false;
         }
 
-        function submitForm() {
+        async function submitForm() {
             if(!saveFirstClicked.value) saveFirstClicked.value = true;
             if(checkForm()){
+                store.commit('toggleLoading');
                 const formData = {
                     email: email.value,
                     password: password.value,
                     password_confirmation: passwordConfirmation.value,
                 }
-                console.log('formData', formData);
-                emit('submit-form', formData);
+                const response = await store.dispatch('auth/register', formData);
+                store.commit('toggleLoading');
+                if(response.status === 422){
+                    for (let e in response.errors){
+                        switch(e){
+                            case "email":{
+                                errors.email.push(...response.errors[e]);
+                                break;
+                            }
+                            case "password":{
+                                errors.password.push(...response.errors[e]);
+                                errors.passwordConfirmation.push(...response.errors['password']);
+                                break;
+                            }
+                        }
+                    }
+                }
+                if(response.status === 201){
+                    router.push({name: 'login'});
+                }
+                console.log('response', response);
             }
+
         }
 
+        const responseObj = computed(() => {
+                return store.getters['response/getResponse'];
+            });
+
         return {
+            isLoading,
             email,
             password,
             passwordConfirmation,
             errors,
-            submitForm
+            submitForm,
+            responseObj
         }
     }
 };

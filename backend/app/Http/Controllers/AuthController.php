@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -44,7 +46,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function register(Request $request, UserRepository $userRepo)
+    public function register(RegisterRequest $request, UserRepository $userRepo)
     {
         $user = $userRepo->create(array_merge(
             $request->only('name', 'email'),
@@ -52,9 +54,10 @@ class AuthController extends Controller
         ));
 
         return response()->json([
+            'success' => true,
             'message' => 'User successfully registered',
-            'user' => $user
-        ], 201);
+            'user' => new UserResource($user),
+        ], Response::HTTP_CREATED);
     }
 
     /**
