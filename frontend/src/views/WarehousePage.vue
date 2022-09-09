@@ -3,8 +3,7 @@
     <ProductsList :productsList="productsList"
         @show-create-page="showCreatePage"
         @edit-product="showEditPage" />
-    <AddProduct v-if="activeComponent === 'addProduct'" 
-        :product="activeProduct"
+    <AddProduct v-if="activeComponent === 'addProduct'"
         @close-add-card="showProductsListPage"/>
     <EditProduct v-if="activeComponent === 'editProduct'"
         :product="activeProduct"

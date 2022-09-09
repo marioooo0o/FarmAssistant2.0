@@ -28,12 +28,6 @@ export default {
         ProductForm,
         SearchFormControl
     },
-    props: {
-        product: {
-            type: Object,
-            required: true,
-        },
-    },
     emits: ['close-add-card', 'submit-form'],
     setup(props, { emit }){
         const store = useStore();

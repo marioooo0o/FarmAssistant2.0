@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
@@ -27,9 +30,14 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         if (!$token = auth()->attempt($request->only('email', 'password'))) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
         }
-        return $this->createNewToken($token);
+        $cookie = cookie('jwt', $token, 60 * 24);
+        return response([
+            'message' => 'success',
+            'user' => auth()->user()
+        ])->withCookie($cookie);
+        // return $this->createNewToken($token);
     }
     /**
      * Register a User.
@@ -40,7 +48,7 @@ class AuthController extends Controller
     {
         $user = $userRepo->create(array_merge(
             $request->only('name', 'email'),
-            ['password' => bcrypt($request->password)]
+            ['password' => Hash::make($request->password)]
         ));
 
         return response()->json([
@@ -56,8 +64,9 @@ class AuthController extends Controller
      */
     public function logout()
     {
+        $cookie = Cookie::forget('jwt');
         auth()->logout();
-        return response()->json(['message' => 'User successfully signed out']);
+        return response()->json(['message' => 'User successfully signed out'])->withCookie($cookie);
     }
     /**
      * Refresh a token.

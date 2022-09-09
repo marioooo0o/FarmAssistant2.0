@@ -29,6 +29,7 @@ Route::middleware(['api'])->group(function () {
         Route::post('/register', 'register');
         Route::post('/refresh', 'refresh');
         Route::get('/user-profile', 'userProfile');
+        Route::get('/logout', 'logout');
     });
     Route::controller(FarmController::class)->group(function () {
         Route::post('/farms', 'store');
