@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Crop extends Model
 {
@@ -33,5 +34,10 @@ class Crop extends Model
     public function plantProtectionProducts()
     {
         return $this->belongsToMany(PlantProtectionProduct::class)->withTimestamps();
+    }
+
+    public function getCropAttribute($value)
+    {
+        return Storage::url('crops/' . $value);
     }
 }

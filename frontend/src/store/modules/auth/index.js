@@ -8,6 +8,7 @@ export default{
         return {
             userId: null,
             userEmail: '',
+            isAuth: false,
         }
     },
     getters,

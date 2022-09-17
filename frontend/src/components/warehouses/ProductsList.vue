@@ -62,7 +62,6 @@ export default {
                 case 1:
                     props.fieldsList.sort((a,b)=> a.area > b.area ? 1: -1);
             }
-            console.log('wybrany header', headerId);
             activeHeaderIndex.value = headerId;
         }
         return {

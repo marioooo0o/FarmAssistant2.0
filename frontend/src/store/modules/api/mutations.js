@@ -9,5 +9,10 @@ export default {
                 state.response.status = null;
                 state.response.message = "";
             }, 2000);
+    },
+    closeResponse(state){
+        state.response.hasResponse = false;
+        state.response.status = null;
+        state.response.message = "";
     }
 }

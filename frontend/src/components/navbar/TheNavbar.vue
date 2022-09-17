@@ -1,5 +1,5 @@
 <template>
-    <nav class="flex items-center bg-fa-primary p-3 flex-wrap fixed top-0 w-full lg:shadow-2xl shadow-green-300">
+    <nav class="flex items-center bg-fa-primary p-3 flex-wrap fixed top-0 w-full lg:shadow-2xl shadow-green-300 z-10">
         <a href="" class="p-2 mr-4 inline-flex">
             <div class="flex items-center">
                 <img src="../../assets/logoWithoutText.png" alt="Logo" height="60px" width="60px" class="w-10">

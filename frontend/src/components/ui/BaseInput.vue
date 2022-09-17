@@ -6,6 +6,13 @@
         :disabled="disabled" :class="[{'cursor-not-allowed': disabled}, isInvalid]"
         :type="type" :value="modelValue" />
 
+    <input v-else-if="id === 'postalCode'" class="bg-input-bg border rounded-[10px] text-lg h-8 text-gray-500 text-center focus:text-black " :id="id"
+        @input="$emit('update:modelValue', $event.target.value)" :required="required" type="text" 
+        :disabled="disabled" :class="[{'cursor-not-allowed': disabled},
+                                      isInvalid]"
+        :value="modelValue" pattern="^\d{2}-\d{3}$"
+        :step="step" />
+
     <input v-else class="bg-input-bg border rounded-[10px] text-lg h-8 text-gray-500 text-center focus:text-black " :id="id"
         @input="$emit('update:modelValue', $event.target.value)" :required="required" :type="type" 
         :disabled="disabled" :class="[{'cursor-not-allowed': disabled},

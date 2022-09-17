@@ -2,6 +2,7 @@ import { createStore } from "vuex";
 
 import authModule from './modules/auth/index.js';
 import responseModule from './modules/api/index.js';
+import farmsModule from './modules/farms/index.js' 
 import fieldsModule from './modules/fields/index.js';
 import warehousesModule from './modules/warehouses/index.js';
 const store = createStore({
@@ -23,6 +24,7 @@ const store = createStore({
     modules: {
         auth: authModule,
         response: responseModule,
+        farm: farmsModule,
         fields: fieldsModule,
         warehouses: warehousesModule,
     },

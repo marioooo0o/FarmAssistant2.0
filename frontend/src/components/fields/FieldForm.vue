@@ -1,7 +1,7 @@
 <template>
     <form @submit.prevent="submitForm">
         <base-form-control>
-            <base-label id="fieldName" label="Nazwa Pola:" required v-model="fieldName" type="text" name="fieldName" :error="errors['fieldName']" />
+            <base-label id="fieldName" label="Nazwa Pola:" required v-model.trim="fieldName" type="text" name="fieldName" :error="errors['fieldName']" />
         </base-form-control>
         <base-form-control>
             <base-label id="fieldArea" label="Powierzchnia:" required v-model="fieldArea" type="number" unit="ha" disabled />
@@ -17,7 +17,7 @@
                 :searchData="parcels" :actualData="fieldParcels"
                 searchKey="parcel_number"
                 :error="errors['fieldParcels']"
-                @show-parcel-form="$emit('show-parcel-form', $event)"
+                @show-parcel-form="showParcelForm"
                 @update-parcel-list="updateParcelList" />
         </base-form-control>
     </form>
@@ -25,8 +25,10 @@
 <script>
 import { ref, reactive, computed, watch, provide } from 'vue';
 import { useStore } from 'vuex';
+import { useRouter, useRoute } from 'vue-router';
 import SearchFormControl from '../ui/SearchFormControl.vue';
 import ParcelSearchInput from './ParcelSearchInput.vue';
+import router from '../../router';
 export default {
     components: { 
         SearchFormControl, 
@@ -45,11 +47,16 @@ export default {
         saveIsClicked:{
             type: Boolean,
             default: false,
+        },
+        typeForm:{
+            type: String,
+            required: true,
         }
     },
-    emits: ['show-parcel-form', 'submit-form'],
+    emits: ['show-parcel-form', 'submit-form', 'set-field-attr'],
     setup(props, {emit}){
         const store = useStore();
+        const router = useRouter();
 
         const fieldName = ref(props.field.field_name ? props.field.field_name : "");
         const requiredFieldNameLength = ref(5);
@@ -70,7 +77,6 @@ export default {
         const fieldCrop = ref(props.field.crop ? props.field.crop : null);
 
         function updateCrop(crop){
-            console.log('crop wynois', crop);
             fieldCrop.value = crop
         }
 
@@ -82,8 +88,17 @@ export default {
             return store.getters['fields/allParcels'];
         });
 
+        function showParcelForm($event){
+            const formData = {
+                field_name: fieldName.value,
+                crop: fieldCrop.value,
+                cadastral_parcels: fieldParcels.value,
+            }
+            emit('set-field-attr', formData);
+            emit('show-parcel-form', $event)
+        }
+
         function updateParcelList(parcelList){
-            console.log('updateParcelList', parcelList);
             fieldParcels.value = parcelList;
         }
         const errors = reactive({
@@ -94,11 +109,8 @@ export default {
 
         const saveFirstClicked = ref(false);
         watch(fieldName, (newValue)=>{
-            console.log('wbiło47?', newValue, saveFirstClicked.value);
             if(saveFirstClicked.value){
                 errors.fieldName = [];
-                console.log('newValue', newValue);
-                console.log('errors', errors.fieldName);
             if(newValue === null){
                 errors.fieldName.push('Nazwa pola jest wymagana!');
             }
@@ -120,13 +132,11 @@ export default {
             errors.fieldName = [];
             errors.fieldCrop = [];
             errors.fieldParcels = [];
-            if(fieldName.value && fieldCrop.value && fieldParcels.value){
-                console.log('validacja pomyślna');
+            if(fieldName.value && fieldCrop.value && fieldParcels.value.length !== 0){
                 return true;
             }
             
             if(!fieldName.value){
-                console.log('brak fieldname');
                 errors.fieldName.push('Nazwa pola jest wymagana');
             } 
 
@@ -139,22 +149,73 @@ export default {
             return false;
         }
         provide('errors', errors);
-        function submitForm(){
+        async function submitForm(){
             if(!saveFirstClicked.value) saveFirstClicked.value = true;
-            console.log('submit wciśnięty');
             if(checkForm()){
                 const formData = {
-                    id: 13,
-                    farm_id: 6,
                     field_name: fieldName.value,
-                    fieldArea: 47,
                     crop: fieldCrop.value.name,
-                    cadastral_parcels: fieldParcels.value,
-                    created_at: "2022-08-26T09:39:47.000000Z",
-                    updated_at: "2022-08-26T09:48:37.000000Z"
-                };
-                console.log('formData', formData);
-                emit('submit-form', formData);
+                    cadastral_parcels: []
+                }
+                fieldParcels.value.forEach(element => {
+                    const p = {
+                        parcel_number: element.parcel_number,
+                        area: element.pivot.area
+                    }
+                    formData.cadastral_parcels.push(p);
+                });
+
+                store.commit('toggleLoading');
+                let response = null;
+                if(props.typeForm === 'add'){
+                    response = await store.dispatch('fields/addNewField', formData)
+                }
+                else{
+                    response = null
+                }
+                if(response.status === 201){
+                    store.commit('response/setResponse', {
+                        status: response.success,
+                        message: response.message
+                    }, {root: true});
+                    emit('submit-form', response);
+                }
+                else if(response.status === 422){
+                    errors.fieldName = [];
+                    errors.fieldParcels = [];
+                    errors.fieldCrop = [];
+                    for(let e in response.errors){
+                        switch(e){
+                            case 'field_name':{
+                                errors.fieldName.push(...response.errors[e]);
+                                break;
+                            }
+                            case 'cadastral_parcels': {
+                                errors.fieldParcels.push(...response.errors[e]);
+                                break;
+                            }
+                            case 'crop':{
+                                errors.fieldCrop.push(...response.errors[e]);
+                                break;
+                            }
+                        }
+                    }
+                }
+                else if(response.status === 401){
+                    store.commit('response/setResponse', {
+                        status: false,
+                        message: response.statusText
+                    }, {root: true});
+                    store.commit('auth/setUnauth', {root: true});
+                    router.replace('/login');
+                }
+                else{
+                    store.commit('response/setResponse', {
+                        status: false,
+                        message: response.statusText
+                    }, {root: true});
+                }
+                store.commit('toggleLoading');
             }
             
         }
@@ -178,6 +239,7 @@ export default {
             fieldParcels,
             parcels,
             updateParcelList,
+            showParcelForm,
             submitForm,
             errors
         }

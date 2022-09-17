@@ -63,7 +63,6 @@ export default {
         });
 
         function getSelectedValue(id){
-            console.log('selected w base search', id);
             emit('selected-value', id);
             inputSearchQuery.value = "";
             inputSearchResults.value = null;

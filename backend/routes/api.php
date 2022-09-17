@@ -38,6 +38,7 @@ Route::middleware(['api'])->group(function () {
         Route::delete('/farms/{id}', 'destroy');
     });
     Route::controller(FieldController::class)->group(function () {
+        Route::get('/farms/{farm_id}/fields', 'index');
         Route::post('/farms/{farm_id}/fields', 'store');
         Route::get('/farms/{farm_id}/fields/{id}', 'show');
         Route::post('/farms/{farm_id}/fields/{id}', 'update');

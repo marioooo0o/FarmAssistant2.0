@@ -8,7 +8,7 @@
                 <li v-for="parcel in field.cadastral_parcels" :key="field.cadastral_parcels.id">Działka {{parcel.parcel_number}}</li>
             </ul>
         </div>
-        <div class="flex justify-center items-center"><img :src="field.crop.src" :alt=field.crop.name height="50px" width="50px" class="w-5"></div>
+        <div class="flex justify-center items-center"><img v-if="field.crop.image_path" :src="field.crop.image_path" :alt=field.crop.name height="50px" width="50px" class="w-5"></div>
     </div>
 </template>
 <script>

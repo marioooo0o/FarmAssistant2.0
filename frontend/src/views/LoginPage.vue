@@ -1,5 +1,6 @@
 <template>
-    <div class="grid grid-cols-2 h-full w-full">
+    <spinner v-if="isLoading" />
+    <div v-else class="grid grid-cols-2 h-full w-full">
         <AuthHeader border="right" />
         <main class="flex flex-col items-center justify-center">
             <form class="flex flex-col items-center gap-3 w-full" @submit.prevent="submitForm">
@@ -17,20 +18,30 @@
             </RouterLink>
         </main>
     </div>
+    <ResponseModal v-if="responseObj.hasResponse" :success=responseObj.status :message=responseObj.message />
 </template>
 <script>
-import { ref, reactive, watch } from "vue";
+import { ref, reactive, computed, watch } from "vue";
 import AuthHeader from "@/components/auth/AuthHeader.vue";
 import LabelInput from "@/components/ui/LabelInput.vue";
 import BaseButton from "@/components/ui/BaseButton.vue";
+import { useStore } from 'vuex';
+import router from "../router";
+import ResponseModal from "../components/ui/ResponseModal.vue";
 
 export default {
     components: {
-        AuthHeader,
-        LabelInput,
-        BaseButton,
-    },
+    AuthHeader,
+    LabelInput,
+    BaseButton,
+    ResponseModal
+},
     setup(props, { emit }){
+        const store = useStore();
+        const isLoading = computed(() => {
+            return store.getters.isLoading;
+        });
+
         const email = ref("");
         const password = ref("");
 
@@ -75,22 +86,52 @@ export default {
             return false;
         }
 
-        function submitForm(){
+        async function submitForm(){
             if(!saveFirstClicked.value) saveFirstClicked.value = true;
             if(checkForm()){
+                store.commit('toggleLoading');
                 const formData = {
                     email: email.value,
                     password: password.value,
                 }
-                console.log('formData', formData);
-                
+                const response = await store.dispatch('auth/login', formData)
+                store.commit('toggleLoading');
+                if(response.status === 200){
+                    router.push({name: 'dashboard'});
+                }
+                else if(response.status === 401){
+                    errors.email.push("Email lub hasło są niepoprawne");
+                    errors.password.push("Email lub hasło są niepoprawne");
+                }
+                else if(response.status === 422){
+                    for (let e in response.errors){
+                        switch(e){
+                            case "email":{
+                                errors.email.push(...response.errors[e]);
+                                break;
+                            }
+                            case "password":{
+                                errors.password.push(...response.errors[e]);
+                                break;
+                            }
+                        }
+                    }
+                }                
             }
         }
+
+        const responseObj = computed(() => {
+                return store.getters['response/getResponse'];
+            });
+
+
         return {
+            isLoading,
             email,
             password,
             errors,  
-            submitForm    
+            submitForm,
+            responseObj    
         }
     }
 };

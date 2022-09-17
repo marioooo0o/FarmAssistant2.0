@@ -46,7 +46,7 @@ export default {
     
         const isLoading = computed(() => {
             return store.getters.isLoading;
-        })
+        });
 
         const email = ref('');
         const password = ref('');
@@ -145,7 +145,6 @@ export default {
                 if(response.status === 201){
                     router.push({name: 'login'});
                 }
-                console.log('response', response);
             }
 
         }

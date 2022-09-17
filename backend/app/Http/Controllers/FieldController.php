@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreFieldRequest;
 use App\Http\Requests\UpdateFieldRequest;
+use App\Http\Resources\FieldCollection;
 use App\Http\Resources\FieldResource;
 use App\Models\Field;
 use App\Services\FarmService;
 use App\Services\FieldService;
+use App\Support\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class FieldController extends Controller
 {
@@ -30,9 +34,26 @@ class FieldController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($farmId)
     {
-        //
+        $farm = $this->farmService->find($farmId);
+        if (auth()->user()->id == $farm->user_id) {
+            $farmFields = $this->fieldService->getAllFarmFields($farm);
+            if ($farmFields) {
+                return response()->json([
+                    "success" => true,
+                    "message" => "Fields retrieved successfully.",
+                    'fields' =>  $farmFields,
+                ], Response::HTTP_OK);
+            } else {
+                return response()->json([
+                    "success" => false,
+                    "message" => $farmFields,
+                ], 400);
+            }
+        } else {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
     }
 
     /**

@@ -50,7 +50,7 @@ export default {
         const saveFirstClicked = ref(false);
 
         watch(selectedProduct, (newValue) => {
-             if(saveFirstClicked.value){
+            if(saveFirstClicked.value){
                 errors.productName = [];
                 if(newValue === null){
                     errors.productName.push("Nazwa produktu jest wymagana");

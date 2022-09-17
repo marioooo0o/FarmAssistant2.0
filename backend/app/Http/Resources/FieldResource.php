@@ -14,6 +14,7 @@ class FieldResource extends JsonResource
      */
     public function toArray($request)
     {
+        // return parent::toArray($request);
         return [
             'id' => $this->id,
             'farm_id' => $this->farm_id,

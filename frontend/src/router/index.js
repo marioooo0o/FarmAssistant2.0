@@ -11,6 +11,8 @@ import CropsPage from '../views/CropsPage.vue';
 import ProfilePage from '../views/ProfilePage.vue';
 import PlantProtectionProductPage from '../views/PlantProtectionProductPage.vue'
 
+import store from '../store/index.js';
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -32,39 +34,54 @@ const router = createRouter({
     {
       path: '/dashboard',
       name: 'dashboard',
-      component: Dashboard
+      component: Dashboard,
+      meta: { requiresAuth: true }
     },
     {
       path: '/zabiegi-ochrony-roslin',
       name: 'practises',
-      component: PractisesPage
+      component: PractisesPage,
+      meta: { requiresAuth: true }
     },
     {
       path: '/grunty',
       name: 'fields',
-      component: FieldsPage
+      component: FieldsPage,
+      meta: { requiresAuth: true }
     },
     {
       path: '/magazyn',
       name: 'warehouse',
-      component: WarehousePage
+      component: WarehousePage,
+      meta: { requiresAuth: true }
     },
     {
       path: '/uprawy',
       name: 'crops',
-      component: CropsPage
+      component: CropsPage,
+      meta: { requiresAuth: true }
     },
     {
       path: '/profil',
       name: 'profile',
-      component: ProfilePage
+      component: ProfilePage,
+      meta: { requiresAuth: true }
     },
     {
       path: '/srodek-ochrony-roslin/:id',
       name: 'ProductDetails',
       component: PlantProtectionProductPage,
+      meta: { requiresAuth: true }
     }
   ]
+});
+
+router.beforeEach((to, _, next) => {
+  if (to.meta.requiresAuth && !store.getters['auth/isAuthenticated']) {
+    next('/login');
+  }else {
+    next();
+  }
 })
 
 export default router

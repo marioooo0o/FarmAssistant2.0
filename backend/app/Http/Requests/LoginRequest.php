@@ -28,4 +28,18 @@ class LoginRequest extends FormRequest
             'password' => 'required|string|min:6',
         ];
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'email.required' => 'Email jest wymagany',
+            'password.required' => 'Hasło jest wymagane',
+            'password.min' => 'Hasło musi zawierać minimum :min znaków',
+        ];
+    }
 }

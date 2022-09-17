@@ -22,15 +22,12 @@
                 </div>
                 <div class="flex flex-col">
                     <div>Uprawy:</div>
-                    <div><img v-if="field.crop" :src="field.crop.src" :alt="field.crop.name" height="50px" width="50px" class="w-5" />
+                    <div><img v-if="field.crop.image_path" :src="field.crop.image_path" :alt="field.crop.name" height="50px" width="50px" class="w-5" />
                     </div>
                 </div>
             </div>
         </div>
     </base-description-card>
-
-
-
 </template>
 <script>
 export default {

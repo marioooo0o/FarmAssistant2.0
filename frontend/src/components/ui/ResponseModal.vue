@@ -1,9 +1,10 @@
 <template>
     <transition name="card-outer">
-        <div class="absolute w-full bg-black bg-opacity-30 h-screen top-0 left-0 flex justify-center">
+        <div class="absolute w-full bg-black bg-opacity-30 h-screen top-0 left-0 flex justify-center z-10">
             <transition name="card-inner">
                 <div class="bg-white self-start m-auto p-12 rounded-lg box-border border-solid border-2 shadow relative flex
-                flex-col items-center justify-center gap-2">
+                flex-col items-center justify-center gap-2"
+                ref="target">
                     <div class="border-4 rounded-full w-24 h-24 flex justify-center items-center" :class="borderColor">
                         <i v-if="success" class="fa-solid fa-check text-fa-primary text-7xl"></i>
                         <i v-else class="fa-solid fa-xmark text-red-500 text-7xl"></i>
@@ -16,7 +17,9 @@
     </transition>
 </template>
 <script>
-import { computed } from 'vue';
+import { useStore } from 'vuex';
+import { ref, computed } from 'vue';
+import { onClickOutside } from '@vueuse/core'
 export default {
     props:{
         success: {
@@ -29,16 +32,23 @@ export default {
         }
     },
     setup(props) {
+        const store = useStore();
         const title = computed(() => {
             return props.success ? "Sukces!" : "Error!"
         });
         const borderColor = computed(() => {
             return props.success ? "border-fa-primary" : "border-red-500";
         });
+        
+        const target = ref(null)
+        onClickOutside(target, function(){
+            store.commit('response/closeResponse', {root: true});
+        });
 
         return {
             title,
-            borderColor
+            borderColor,
+            target
         }
 
     }

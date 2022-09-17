@@ -13,6 +13,7 @@ use App\Repositories\UserRepository;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class FieldService
 {
@@ -27,6 +28,22 @@ class FieldService
         $this->farmRepository = $farmRepository;
         $this->fieldRepository = $fieldRepository;
         $this->cadastralParcelRepository = $cadastralParceldRepository;
+    }
+
+    public function getAllFarmFields($farm)
+    {
+        try {
+            $fields = $farm->fields()->with('cadastralParcels')->with('crop')->paginate(5)->toArray();
+            $fields['data'] = array_map(function ($field) {
+                if ($field['crop']['image_path']) {
+                    $field['crop']['image_path'] = Storage::url($field['crop']['image_path']);
+                }
+                return $field;
+            }, $fields['data']);
+            return collect($fields);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function create($fieldAtributes, Farm $farm)

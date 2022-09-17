@@ -1,7 +1,7 @@
 <template>
     <base-description-card
     mainIcons
-    @cancel-clicked="$emit('show-edit-field')"
+    @cancel-clicked="$emit('show-add-edit-field')"
     @close-description-card="$emit('close-edit-card')"
     @save-clicked="submitForm">
         <div class="flex flex-col items-center font-semibold tracking-wider">
@@ -30,9 +30,9 @@ export default {
         required: Boolean,
         parcel:{
             type: Object,
-        }
+        },
     },
-    emits: ['close-edit-card', 'show-edit-field', 'save-parcel'],
+    emits: ['close-edit-card', 'show-add-edit-field', 'save-parcel'],
     setup(props, {emit}) {
         
         //powierzchnia działki ewidencyjnej należącej do pola
@@ -80,14 +80,12 @@ export default {
         }
 
         function submitForm(){
-            console.log('wbiło do submit');
             if(!saveFirstClicked.value) saveFirstClicked.value = true;
             if(checkForm()){
                 const formData = {
                 area: parseFloat(parcelAreaInField.value),
                 parcel_area: parseFloat(parcelArea.value)
                 };
-                console.log('dane z form', formData);
                 emit('save-parcel', formData);
             }
             

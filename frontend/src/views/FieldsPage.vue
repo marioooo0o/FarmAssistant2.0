@@ -1,5 +1,8 @@
 <template>
-    <Navbar />
+    <spinner v-if="isLoading"/>
+    <ResponseModal v-if="responseObj.hasResponse" :success=responseObj.status :message=responseObj.message />
+    
+    <Navbar v-if="isFieldPage"/>
     <FieldList
         :fieldsList="fieldsList" 
         @show-description-page=showDescriptionPage
@@ -8,10 +11,11 @@
         :field="activeField"
         @close-description-card="showFieldListPage" 
         @show-edit-page="showEditPage" />
-    <AddField v-if="activeComponent == 'createField'"
+    <AddField v-else-if="activeComponent == 'createField'"
         :field="activeField"
         @close-create-card="showFieldListPage"
         @show-parcel-form="showEditParcel"
+        @set-field-attr="updateFieldAttr"
         />
     <EditField v-else-if="activeComponent === 'editField'"
         :field="activeField"
@@ -21,28 +25,52 @@
     <EditParcel v-else-if="activeComponent === 'editParcel'"
         :parcel="activeParcel"
         @close-edit-card="showFieldListPage"
-        @show-edit-field="showEditPage"
+        @show-add-edit-field="showCreateOrEditPage"
         @save-parcel="updateParcelArea" />
+    
 
 </template>
 <script>
+import { ref, computed, provide, watch, onBeforeMount, onMounted } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter, useRoute } from 'vue-router'
 import Navbar from '../components/navbar/TheNavbar.vue';
 import FieldList from '../components/fields/FieldList.vue';
 import FieldDescription from '../components/fields/FieldDescription.vue';
 import EditField from '../components/fields/EditField.vue';
 import EditParcel from '../components/fields/EditParcel.vue';
-import { ref, computed, provide, watch } from 'vue';
-import { useStore } from 'vuex'
+
 import AddField from '../components/fields/AddField.vue';
+import ResponseModal from '../components/ui/ResponseModal.vue';
 export default {
-    components: { Navbar, FieldList, FieldDescription, EditField, EditParcel, AddField },
+    components: { Navbar, FieldList, FieldDescription, EditField, EditParcel, AddField, ResponseModal },
     setup() {
-        const store = useStore();
+        const store = useStore(); 
+        const route = useRoute();
+        const router = useRouter();
+
+        const isLoading = computed(() => {
+            return store.getters.isLoading;
+        });
+
         const activeComponent = ref('fieldList');
+        const lastCreateOrEdit = ref(null);
 
         const fieldId = ref(null);
+        onBeforeMount(async() => {
+                store.commit('toggleLoading');
+                await store.dispatch('fields/loadFields');
+                store.commit('toggleLoading');
+            
+        });
         const fieldsList = computed(()=>{
-            return store.getters['fields/userFields'];
+            if(route.name === 'dashboard'){
+                return store.getters['fields/userFields'].slice(0,5);
+            }
+            else if(route.name === 'fields'){
+                return store.getters['fields/userFields'];
+            }
+            
         })
 
         const activeField = ref({
@@ -51,11 +79,8 @@ export default {
                 crop: null,
                 cadastral_parcels: [],
             });
-        // const activeField = computed(function(){
-        //     return fieldsList.value.find((field) => field.id === fieldId.value)
-        // });
+
         watch(fieldId, (newValue)=> {
-            console.log('new Vlaue', newValue);
             if(newValue){
                 activeField.value = fieldsList.value.find((field) => field.id === newValue)
             }else{
@@ -67,6 +92,12 @@ export default {
             }
             }
         });
+
+        function updateFieldAttr(formData){
+            activeField.value.field_name = formData.field_name;
+            activeField.value.crop = formData.crop;
+            activeField.value.cadastral_parcels = formData.cadastral_parcels;
+        }
         function showFieldListPage(){
             activeField.value = {
                 field_name: "",
@@ -85,10 +116,21 @@ export default {
         function showCreatePage(){
             fieldId.value = null;
             activeComponent.value = 'createField';
+            lastCreateOrEdit.value = 'create';
         }
 
         function showEditPage(){
             activeComponent.value = 'editField';
+            lastCreateOrEdit.value = 'edit';
+        }
+
+        function showCreateOrEditPage(){
+            if(lastCreateOrEdit.value == 'create'){
+                showCreatePage();
+            }
+            else{
+                showEditPage();
+            }
         }
 
         const activeParcel = ref(null);
@@ -121,7 +163,16 @@ export default {
         }
 
         provide('activeComponent', activeComponent);
+
+        const isFieldPage = computed(() => {
+            return route.name === 'fields' ? true : false;
+        });
+
+        const responseObj = computed(() => {
+                return store.getters['response/getResponse'];
+            });
         return {
+            isLoading,
             fieldId,
             activeComponent,
             fieldsList,
@@ -130,9 +181,13 @@ export default {
             showDescriptionPage,
             showCreatePage,
             showEditPage,
+            showCreateOrEditPage,
             updateParcelArea,
             showEditParcel,
-            activeParcel
+            updateFieldAttr,
+            activeParcel,
+            isFieldPage,
+            responseObj
         }
     }
 }

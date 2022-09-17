@@ -36,10 +36,10 @@ class AuthController extends Controller
         }
         $cookie = cookie('jwt', $token, 60 * 24);
         return response([
-            'message' => 'success',
-            'user' => auth()->user()
+            'success' => true,
+            'message' => 'User successfully login',
+            'user' => new UserResource(auth()->user())
         ])->withCookie($cookie);
-        // return $this->createNewToken($token);
     }
     /**
      * Register a User.

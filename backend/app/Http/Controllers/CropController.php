@@ -42,7 +42,8 @@ class CropController extends Controller
         $crop = new Crop();
         $crop->name = $request->name;
         if ($request->file('crop')) {
-            $crop->image_path = $request->file('crop')->store('crops');
+            $imageFullName = $request->file('crop')->getClientOriginalName();
+            $crop->image_path = $request->file('crop')->storeAs('crops', $imageFullName);
         }
         $crop->save();
         return response()->json([

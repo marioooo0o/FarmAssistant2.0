@@ -8,6 +8,7 @@
             <FieldForm 
                 :field="field"
                 :saveIsClicked="saveIsClicked"
+                typeForm="edit"
                 @show-parcel-form="$emit('show-parcel-form', $event)"
                 @submit-form="submitForm"/>
         </div>
@@ -38,12 +39,10 @@ export default {
 
         function saveClicked(){
             saveIsClicked.value = true;
-            console.log('submit w edit');
         }
 
         function submitForm(formData){
             saveIsClicked.value = false;
-            console.log('formData', formData);
         }
         return{
             field,

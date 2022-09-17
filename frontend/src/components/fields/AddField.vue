@@ -1,5 +1,5 @@
 <template>
-    <base-description-card mainIcons 
+        <base-description-card mainIcons
         @close-description-card="$emit('close-create-card')"
         @cancel-clicked="$emit('close-create-card')"
         @save-clicked="saveClicked">
@@ -8,14 +8,16 @@
             <FieldForm
                 :field="field"
                 :saveIsClicked="saveIsClicked"
+                typeForm="add"
                 @show-parcel-form="$emit('show-parcel-form', $event)"
+                @set-field-attr="$emit('set-field-attr', $event)"
                 @submit-form="submitForm"
                 />
         </div>
-    </base-description-card>
+        </base-description-card>
 </template>
 <script>
-import { ref } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { useStore } from 'vuex';
 import FieldForm from './FieldForm.vue';
 export default {
@@ -28,9 +30,16 @@ export default {
             required: true
         }
     },
-    emits: ['close-create-card', 'show-parcel-form'],
-    setup(props) {
+    emits: ['close-create-card', 'show-parcel-form', 'set-field-attr'],
+    setup(props, {emit}) {
         const store = useStore();
+
+        onBeforeMount(async() => {
+                store.commit('toggleLoading');
+                await store.dispatch('fields/loadCrops');
+                await store.dispatch('fields/loadCadastralParcels'); 
+                store.commit('toggleLoading');
+        });
         const saveIsClicked = ref(false);
 
         function saveClicked(){
@@ -38,13 +47,14 @@ export default {
             setTimeout(() => {
                 saveIsClicked.value = false;
             }, 2000);
-            console.log('submit w create');
         }
 
-        function submitForm(formData){
-            saveIsClicked.value = false;
-            store.commit('fields/setField', formData);
-            console.log('formData', formData);
+        async function submitForm(formData){
+            saveIsClicked.value = false;   
+            if(formData.status === 201){
+                emit('close-create-card');
+            }
+            // store.commit('fields/setField', formData);
         }
 
         return {
