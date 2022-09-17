@@ -2,7 +2,6 @@ import axios from "axios";
 
 export default {
     async addNewFarm(context, payload){
-        const url = "http://127.0.0.1:8000/api/farms";
         const data = {
             name: payload.name,
             street: payload.street,
@@ -12,14 +11,7 @@ export default {
         }
 
         const response = await axios
-        .post(url, data, {
-            withCredentials: true,
-            headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                validateStatus: status => status >= 200 && status <300 || status === 422
-        })
+        .post('farms', data)
         .then(function(res){
                 if(res.status === 422){
                     const response = {

@@ -6,17 +6,11 @@ export default {
             return;
         }
         const farmId = context.rootGetters['farm/userFarm'].id;
-        const url = `http://127.0.0.1:8000/api/farms/${farmId}/fields`;
 
         const response = await axios
-        .get(url, {
-            withCredentials: true,
-            headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-        })
+        .get(`farms/${farmId}/fields`)
         .then(function(res){
+            console.log('res data', res);
                 if(res.status === 200){
                     const fields = [];
                     res.data.fields.data.forEach(element => {
@@ -32,7 +26,13 @@ export default {
                     });
                     context.commit('setFields', fields);
                     context.commit('setFetchTimestamp');
-                    context.commit('setNextPaginationPageUrl', res.data.fields.next_page_url);
+                    if(res.data.fields.next_page_url){
+                        const nextPageUrlArray = res.data.fields.next_page_url.split('/').slice(4);
+                        context.commit('setNextPaginationPageUrl', `${nextPageUrlArray[0]}/${nextPageUrlArray[1]}/${nextPageUrlArray[2]}`);
+                    }
+                    else {
+                        context.commit('setNextPaginationPageUrl', null);
+                    }
                     const response = {
                         status: res.status,
                         statusText: res.statusText,
@@ -55,7 +55,9 @@ export default {
     },
 
     async loadNextFields(context, payload){
-        const url = context.getters['getNextPaginationPageUrl']
+        const farmId = context.rootGetters['farm/userFarm'].id;
+        const url = context.getters['getNextPaginationPageUrl'];
+        
         if(url){
             const response = await axios
             .get(url, {
@@ -81,7 +83,13 @@ export default {
                     });
                     context.commit('addFields', fields);
                     context.commit('setFetchTimestamp');
-                    context.commit('setNextPaginationPageUrl', res.data.fields.next_page_url);
+                    if(res.data.fields.next_page_url){
+                        const nextPageUrlArray = res.data.fields.next_page_url.split('/').slice(4);
+                        context.commit('setNextPaginationPageUrl', `${nextPageUrlArray[0]}/${nextPageUrlArray[1]}/${nextPageUrlArray[2]}`);
+                    }
+                    else {
+                        context.commit('setNextPaginationPageUrl', null);
+                    }
                     const response = {
                         status: res.status,
                         statusText: res.statusText,
@@ -112,15 +120,8 @@ export default {
     },
     async loadCrops(context, payload){
         if(context.getters['allCrops'].length === 0){
-            const url = `http://127.0.0.1:8000/api/crops`;
             await axios
-            .get(url, {
-                withCredentials: true,
-                headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-            })
+            .get('crops')
             .then(function(res){
                     if(res.status === 200){
                         const crops = [];
@@ -146,15 +147,8 @@ export default {
     },
     async loadCadastralParcels(context, payload){
         if(context.getters['allParcels'].length === 0){
-            const url = 'http://127.0.0.1:8000/api/cadastral-parcels';
             await axios
-            .get(url, {
-                withCredentials: true,
-                headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-            })
+            .get('cadastral-parcels')
             .then(function(res){
                     if(res.status === 200){
                         const parcels = [];
@@ -184,17 +178,9 @@ export default {
     },
     async addNewField(context, payload){
         const farmId = context.rootGetters['farm/userFarm'].id;
-        const url = `http://127.0.0.1:8000/api/farms/${farmId}/fields`;
 
         const response = await axios 
-        .post(url, payload, {
-                withCredentials: true,
-                headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json'
-                },
-                validateStatus: status => status >= 200 && status <300 || status === 422
-        })
+        .post(`farms/${farmId}/fields`, payload)
         .then(function(res){
                     if(res.status === 201){
                         const field = {

@@ -2,19 +2,13 @@ import axios from 'axios';
 
 export default {
     async register(context, payload){
-        const url = "http://127.0.0.1:8000/api/register";
         const data = {
             email: payload.email,
             password: payload.password,
             password_confirmation: payload.password_confirmation,
         }
         const response = await axios
-            .post(url, data, {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                validateStatus: status => status >= 200 && status <300 || status === 422
-            })
+            .post('register', data)
             .then(function(res){
                 if(res.status === 422){
                     const response = {
@@ -49,20 +43,12 @@ export default {
     },
 
     async login(context, payload){
-        const url = "http://127.0.0.1:8000/api/login";
         const data = {
             email: payload.email,
             password: payload.password
         }
         const response = await axios
-        .post(url, data, {
-            withCredentials: true,
-            headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                validateStatus: status => status >= 200 && status <300 || status === 422
-        })
+        .post('login', data)
         .then(function(res){
                 if(res.status === 200){
                     context.commit('setAuth');
