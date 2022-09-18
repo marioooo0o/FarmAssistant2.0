@@ -8,6 +8,10 @@ export default {
     addField(state, payload){
         state.userFields.push(payload);
     },
+    editField(state, payload){
+        const index = state.userFields.findIndex((field) => field.id === payload.id)
+        state.userFields[index] = payload;
+    },
     setFetchTimestamp(state){
         state.lastFetch = new Date().getTime();
     },

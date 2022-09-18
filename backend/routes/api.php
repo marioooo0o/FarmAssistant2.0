@@ -34,14 +34,14 @@ Route::middleware(['api'])->group(function () {
     Route::controller(FarmController::class)->group(function () {
         Route::post('/farms', 'store');
         Route::get('/farms/{id}', 'show');
-        Route::post('/farms/{id}', 'update');
+        Route::put('/farms/{id}', 'update');
         Route::delete('/farms/{id}', 'destroy');
     });
     Route::controller(FieldController::class)->group(function () {
         Route::get('/farms/{farm_id}/fields', 'index');
         Route::post('/farms/{farm_id}/fields', 'store');
         Route::get('/farms/{farm_id}/fields/{id}', 'show');
-        Route::post('/farms/{farm_id}/fields/{id}', 'update');
+        Route::put('/farms/{farm_id}/fields/{id}', 'update');
         Route::delete('/farms/{farm_id}/fields/{id}', 'destroy');
     });
     Route::controller(CadastralParcelController::class)->group(function () {

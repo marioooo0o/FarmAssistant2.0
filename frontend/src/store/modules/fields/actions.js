@@ -10,7 +10,6 @@ export default {
         const response = await axios
         .get(`farms/${farmId}/fields`)
         .then(function(res){
-            console.log('res data', res);
                 if(res.status === 200){
                     const fields = [];
                     res.data.fields.data.forEach(element => {
@@ -232,6 +231,63 @@ export default {
             }
         })
         return response;
-    }
+    },
+
+    async editField(context, payload){
+        const farmId = context.rootGetters['farm/userFarm'].id;
+        const fieldId = payload.field_id;
+        const url = `farms/${farmId}/fields/${fieldId}`;
+        const response = await axios
+        .put(url, payload)
+        .then((res) => {
+            if(res.status === 200) {
+                const field = {
+                    id: res.data.field.id,
+                    farm_id: res.data.field.farm_id,
+                    field_name: res.data.field.field_name,
+                    field_area: res.data.field.field_area,
+                    cadastral_parcels: res.data.field.cadastral_parcels,
+                    crop: res.data.field.crop,
+                }
+                context.commit('editField', field);
+                const response = {
+                    status: res.status,
+                    statusText: res.statusText,
+                }
+                return response;
+            }
+            else if(res.status == 422){
+                const response = {
+                            status: res.status,
+                            statusText: res.statusText,
+                            errors: res.data.errors
+                        }
+                return response;
+            }
+            else {
+                const response = {
+                            status: res.status,
+                            statusText: res.statusText,
+                        }
+                return response;
+            }
+        })
+        .catch(function (err){
+            const response = {
+                status: err.response.status,
+                statusText: err.response.statusText,
+            }
+            if(err.response.status === 401){
+                    return response;
+            }else{
+                    context.commit('response/setResponse', {
+                        status: false,
+                        message: err.response.statusText,
+                    }, {root: true});
+                    return response;
+            }
+        });
+        return response;
+    },
     
 }

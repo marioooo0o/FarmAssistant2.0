@@ -23,7 +23,7 @@
     </form>
 </template>
 <script>
-import { ref, reactive, computed, watch, provide } from 'vue';
+import { ref, reactive, computed, watch, provide, onBeforeMount } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter, useRoute } from 'vue-router';
 import SearchFormControl from '../ui/SearchFormControl.vue';
@@ -57,6 +57,13 @@ export default {
     setup(props, {emit}){
         const store = useStore();
         const router = useRouter();
+
+        onBeforeMount(async() => {
+                store.commit('toggleLoading');
+                await store.dispatch('fields/loadCrops');
+                await store.dispatch('fields/loadCadastralParcels'); 
+                store.commit('toggleLoading');
+        });
 
         const fieldName = ref(props.field.field_name ? props.field.field_name : "");
         const requiredFieldNameLength = ref(5);
@@ -171,12 +178,20 @@ export default {
                     response = await store.dispatch('fields/addNewField', formData)
                 }
                 else{
-                    response = null
+                    formData['field_id'] = props.field.id;
+                    response = await store.dispatch('fields/editField', formData)
                 }
                 if(response.status === 201){
                     store.commit('response/setResponse', {
                         status: response.success,
                         message: response.message
+                    }, {root: true});
+                    emit('submit-form', response);
+                }
+                else if(response.status === 200){
+                    store.commit('response/setResponse', {
+                        status: true,
+                        message: response.statusText
                     }, {root: true});
                     emit('submit-form', response);
                 }

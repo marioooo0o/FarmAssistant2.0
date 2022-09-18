@@ -10,9 +10,7 @@ use App\Models\Field;
 use App\Services\FarmService;
 use App\Services\FieldService;
 use App\Support\Collection;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class FieldController extends Controller
 {
@@ -49,7 +47,7 @@ class FieldController extends Controller
                 return response()->json([
                     "success" => false,
                     "message" => $farmFields,
-                ], 400);
+                ], Response::HTTP_BAD_REQUEST);
             }
         } else {
             return response()->json(['error' => 'Unauthorized'], 401);
@@ -73,7 +71,7 @@ class FieldController extends Controller
                     "success" => true,
                     "message" => "Field created successfully.",
                     'field' => new FieldResource($field)
-                ], 201);
+                ], Response::HTTP_OK);
             } else {
                 return response()->json([
                     "success" => false,
@@ -99,9 +97,9 @@ class FieldController extends Controller
                 "success" => true,
                 "message" => "Field retrieved successfully.",
                 'field' => new FieldResource($field)
-            ]);
+            ], Response::HTTP_OK);
         } else {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
         }
     }
 
@@ -123,15 +121,15 @@ class FieldController extends Controller
                     "success" => true,
                     "message" => "Field updated successfully.",
                     'field' => new FieldResource($field)
-                ]);
+                ], Response::HTTP_OK);
             } else {
                 return response()->json([
                     "success" => false,
                     "message" => $field,
-                ], 400);
+                ], Response::HTTP_BAD_REQUEST);
             }
         } else {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
         }
     }
 
@@ -150,15 +148,15 @@ class FieldController extends Controller
                 return response()->json([
                     "success" => true,
                     "message" => "Field deleted successfully."
-                ], 200);
+                ], Response::HTTP_OK);
             } else {
                 return response()->json([
                     "success" => false,
                     "message" => $field,
-                ], 400);
+                ], Response::HTTP_BAD_REQUEST);
             }
         } else {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
         }
     }
 }

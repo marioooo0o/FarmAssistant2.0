@@ -38,6 +38,7 @@ export default {
     props: {
         fieldsList:{
             type:Object,
+            required: true
         }
     },
     emits:['show-description-page','show-edit-page', 'show-create-page'],

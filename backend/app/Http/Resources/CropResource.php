@@ -19,7 +19,7 @@ class CropResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'src' => $this->image_path ? Storage::url($this->image_path) : $this->image_path,
+            'image_path' => $this->image_path ? Storage::url($this->image_path) : $this->image_path,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

@@ -32,7 +32,7 @@ export default {
         }
     },
     emits: ['close-edit-card', 'show-parcel-form', 'show-description-page'],
-    setup(props) {
+    setup(props, { emit }) {
         const field = ref(props.field);
         
         const saveIsClicked = ref(false);
@@ -43,6 +43,9 @@ export default {
 
         function submitForm(formData){
             saveIsClicked.value = false;
+            if(formData.status === 200){
+                emit('close-edit-card');
+            }
         }
         return{
             field,
