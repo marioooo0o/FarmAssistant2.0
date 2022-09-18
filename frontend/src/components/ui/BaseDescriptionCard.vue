@@ -1,6 +1,6 @@
 <template>
     <transition name="card-outer">
-        <div class="absolute w-full bg-black bg-opacity-30 h-screen top-0 left-0 flex justify-center z-10">
+        <div class="fixed  bg-black bg-opacity-30 inset-0 flex justify-center z-10">
             <transition name="card-inner">
                 <div class="bg-white self-start m-auto p-12 rounded-lg box-border border-solid border-2 border-fa-primary shadow relative"
                     ref="target">

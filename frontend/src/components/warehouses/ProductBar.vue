@@ -1,6 +1,6 @@
 <template>
     <div class="bg-white p-1 w-full rounded-full tooltip">
-        <div class="h-4 rounded-full relative border-b-2" :class="barClass"></div>
+        <div class="h-4 rounded-full relative border-b-2" :class="barColor" :style="{width: barWidth }"></div>
         <span class="tooltiptext">{{quantity}} l</span>
     </div>
 </template>
@@ -25,8 +25,9 @@ export default {
         });
 
         const barWidth = computed(() => {
-            if(width.value > 1) return 'w-full';
-            else return `w-[${width.value*100}%]`;
+            if(width.value > 1) return '100%';
+            else{
+            } return `${width.value*100}%`;
         });
 
         const barClass = computed(() => {
@@ -35,7 +36,7 @@ export default {
         
         return {
             barColor,
-            barClass,
+            barWidth
         }
 
     }

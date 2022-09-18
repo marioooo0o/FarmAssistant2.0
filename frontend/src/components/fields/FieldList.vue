@@ -50,38 +50,87 @@ export default {
         const headers = [
             {
                 id: 0,
-                name: 'Nazwa pola'
+                name: 'Nazwa pola',
+                type: 'string',
             },
             {
                 id: 1,
-                name: 'Powierzchnia'
+                name: 'Powierzchnia',
+                type: 'number'
             },
             {
                 id: 2,
-                name: 'Działki'
+                name: 'Działki',
+                type: 'array'
             },
             {
                 id: 3,
-                name: 'Uprawa'
+                name: 'Uprawa',
+                type: 'string',
             },
         ];
 
         const activeHeaderIndex = ref(3);
+        const prevIndex = ref(null);
+        const isAsc = ref(true);
 
         function sortHeader(headerId){
+            activeHeaderIndex.value = headerId;
+            console.log('hederid', headerId, 'acthi', activeHeaderIndex.value, 'prevIndex', prevIndex.value);
+            if(activeHeaderIndex.value === prevIndex.value){
+                isAsc.value = !isAsc.value;
+            }else{
+                isAsc.value = true;
+            }
+            console.log('isAsc', isAsc.value);
             switch(headerId){
                 case 0:
-                    if(activeHeaderIndex === headerId){
-                        props.fieldsList.sort((a, b) => a.name < b.name ? 1 : -1);
+                    if(isAsc.value){
+                        props.fieldsList.sort((a, b) => {
+                        let fa = a.field_name.toLowerCase(),
+                            fb = b.field_name.toLowerCase();
+                        if(fa < fb){
+                            return -1;
+                        }
+                        if(fa > fb){
+                            return 1;
+                        }
+
+                        return 0;
+                        });
                     }
                     else{
-                        props.fieldsList.sort((a, b) => a.name > b.name ? 1 : -1);
+                        props.fieldsList.sort((a, b) => {
+                        let fa = a.field_name.toLowerCase(),
+                            fb = b.field_name.toLowerCase();
+                        if(fa < fb){
+                            return 1;
+                        }
+                        if(fa > fb){
+                            return -1;
+                        }
+
+                        return 0;
+                        });
                     }
                     break;
                 case 1:
-                    props.fieldsList.sort((a,b)=> a.area > b.area ? 1: -1);
+                    if(isAsc.value){
+                        props.fieldsList.sort((a, b) => {
+                            return a.field_area - b.field_area;
+                        });
+                    }
+                    else{
+                        props.fieldsList.sort((a, b) => {
+                            return b.field_area - a.field_area;
+                        });
+                    }
+                    break;
+                
             }
-            activeHeaderIndex.value = headerId;
+            prevIndex.value = activeHeaderIndex.value;
+            
+            
         }
         const descriptionIsShowed = ref(false);
         const selectedField = reactive({
