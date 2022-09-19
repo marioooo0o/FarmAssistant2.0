@@ -1,6 +1,5 @@
 <template>
-    <spinner v-if="isLoading" />
-    <div v-else class="grid grid-cols-2 h-full w-full">
+    <div class="grid grid-cols-2 h-full w-full">
         <AuthHeader border="right" />
         <main class="flex flex-col items-center justify-center">
             <form class="flex flex-col items-center gap-3 w-full" @submit.prevent="submitForm">
@@ -18,7 +17,6 @@
             </RouterLink>
         </main>
     </div>
-    <ResponseModal v-if="responseObj.hasResponse" :success=responseObj.status :message=responseObj.message />
 </template>
 <script>
 import { ref, reactive, computed, watch } from "vue";
@@ -38,9 +36,6 @@ export default {
 },
     setup(props, { emit }){
         const store = useStore();
-        const isLoading = computed(() => {
-            return store.getters.isLoading;
-        });
 
         const email = ref("");
         const password = ref("");
@@ -120,18 +115,11 @@ export default {
             }
         }
 
-        const responseObj = computed(() => {
-                return store.getters['response/getResponse'];
-            });
-
-
         return {
-            isLoading,
             email,
             password,
             errors,  
-            submitForm,
-            responseObj    
+            submitForm,    
         }
     }
 };

@@ -1,7 +1,4 @@
 <template>
-    <spinner v-if="isLoading"/>
-    <ResponseModal v-if="responseObj.hasResponse" :success=responseObj.status :message=responseObj.message />
-    
     <Navbar v-if="isFieldPage"/>
     <FieldList
         :fieldsList="fieldsList" 
@@ -49,10 +46,6 @@ export default {
         const route = useRoute();
         const router = useRouter();
 
-        const isLoading = computed(() => {
-            return store.getters.isLoading;
-        });
-
         const activeComponent = ref('fieldList');
         const lastCreateOrEdit = ref(null);
 
@@ -71,7 +64,7 @@ export default {
                 return store.getters['fields/userFields'];
             }
             
-        })
+        });
 
         const activeField = ref({
                 field_name: "",
@@ -168,11 +161,7 @@ export default {
             return route.name === 'fields' ? true : false;
         });
 
-        const responseObj = computed(() => {
-                return store.getters['response/getResponse'];
-            });
         return {
-            isLoading,
             fieldId,
             activeComponent,
             fieldsList,
@@ -187,7 +176,6 @@ export default {
             updateFieldAttr,
             activeParcel,
             isFieldPage,
-            responseObj
         }
     }
 }
