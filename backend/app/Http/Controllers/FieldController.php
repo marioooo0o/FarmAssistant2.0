@@ -71,12 +71,12 @@ class FieldController extends Controller
                     "success" => true,
                     "message" => "Field created successfully.",
                     'field' => new FieldResource($field)
-                ], Response::HTTP_OK);
+                ], Response::HTTP_CREATED);
             } else {
                 return response()->json([
                     "success" => false,
                     "message" => $field,
-                ], 400);
+                ], Response::HTTP_BAD_REQUEST);
             }
         } else {
             return response()->json(['error' => 'Unauthorized'], 401);

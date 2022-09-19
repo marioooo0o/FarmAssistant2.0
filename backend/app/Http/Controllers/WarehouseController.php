@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\Warehouse as ResourcesWarehouse;
 use App\Http\Resources\WarehouseResource;
 use App\Models\Farm;
@@ -10,6 +12,7 @@ use App\Services\WarehouseService;
 use App\Models\User;
 use App\Services\FarmService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class WarehouseController extends Controller
 {
@@ -44,7 +47,7 @@ class WarehouseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $farmId)
+    public function store(StoreProductRequest $request, $farmId)
     {
         $data = $request->only('ppp_id', 'quantity');
         $farm = $this->farmService->find($farmId);
@@ -56,15 +59,15 @@ class WarehouseController extends Controller
                     "success" => true,
                     "message" => "Product added successfully.",
                     'warehouse' => new WarehouseResource($warehouse),
-                ]);
+                ], Response::HTTP_CREATED);
             } else {
                 return response()->json([
                     "success" => false,
                     "message" => $warehouse,
-                ], 400);
+                ], Response::HTTP_BAD_REQUEST);
             }
         } else {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
         }
     }
 
@@ -95,7 +98,7 @@ class WarehouseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $farmId, $id)
+    public function update(UpdateProductRequest $request, $farmId, $id)
     {
         $data = $request->only('quantity');
         $farm = $this->farmService->find($farmId);
@@ -107,15 +110,15 @@ class WarehouseController extends Controller
                     "success" => true,
                     "message" => "Product updated successfully.",
                     'warehouse' => new WarehouseResource($warehouse),
-                ]);
+                ], Response::HTTP_OK);
             } else {
                 return response()->json([
                     "success" => false,
                     "message" => $warehouse,
-                ], 400);
+                ], Response::HTTP_BAD_REQUEST);
             }
         } else {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
         }
     }
 

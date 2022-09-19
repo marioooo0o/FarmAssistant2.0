@@ -57,7 +57,7 @@ Route::middleware(['api'])->group(function () {
     Route::controller(WarehouseController::class)->group(function () {
         Route::post('/farms/{farm_id}/warehouses/products', 'store');
         Route::get('/warehouses/{id}', 'show');
-        Route::post('/farms/{farm_id}/warehouses/products/{id}', 'update');
+        Route::put('/farms/{farm_id}/warehouses/products/{id}', 'update');
         Route::delete('/farms/{farm_id}/warehouses/products/{id}', 'destroy');
     });
 });
