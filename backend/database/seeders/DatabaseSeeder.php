@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CropSeeder::class,
             PlantProtectionProductSeeder::class,
+            CadastralParcelSeeder::class,
         ]);
     }
 }
