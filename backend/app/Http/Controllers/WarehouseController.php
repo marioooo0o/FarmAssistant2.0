@@ -2,30 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\Magazine as ResourcesMagazine;
-use App\Http\Resources\MagazineResource;
+use App\Http\Resources\Warehouse as ResourcesWarehouse;
+use App\Http\Resources\WarehouseResource;
 use App\Models\Farm;
-use App\Models\Magazine;
-use App\Services\MagazineService;
+use App\Models\Warehouse;
+use App\Services\WarehouseService;
 use App\Models\User;
 use App\Services\FarmService;
 use Illuminate\Http\Request;
 
-class MagazineController extends Controller
+class WarehouseController extends Controller
 {
     private FarmService $farmService;
-    private MagazineService $magazineService;
+    private WarehouseService $warehouseService;
 
 
     /**
-     * Create a new MagazineController instance.
+     * Create a new WarehouseController instance.
      *
      * @return void
      */
-    public function __construct(FarmService $farmService, MagazineService $magazineService)
+    public function __construct(FarmService $farmService, WarehouseService $warehouseService)
     {
         $this->farmService = $farmService;
-        $this->magazineService = $magazineService;
+        $this->warehouseService = $warehouseService;
         $this->middleware('auth:api');
     }
     /**
@@ -49,18 +49,18 @@ class MagazineController extends Controller
         $data = $request->only('ppp_id', 'quantity');
         $farm = $this->farmService->find($farmId);
         if (auth()->user()->id == $farm->user_id) {
-            $userMagazine = $farm->magazine;
-            $magazine = $this->magazineService->create($data, $userMagazine);
-            if ($magazine instanceof Magazine) {
+            $userWarehouse = $farm->warehouse;
+            $warehouse = $this->warehouseService->create($data, $userWarehouse);
+            if ($warehouse instanceof Warehouse) {
                 return response()->json([
                     "success" => true,
                     "message" => "Product added successfully.",
-                    'magazine' => new MagazineResource($magazine),
+                    'warehouse' => new WarehouseResource($warehouse),
                 ]);
             } else {
                 return response()->json([
                     "success" => false,
-                    "message" => $magazine,
+                    "message" => $warehouse,
                 ], 400);
             }
         } else {
@@ -76,12 +76,12 @@ class MagazineController extends Controller
      */
     public function show($id)
     {
-        $magazine = $this->magazineService->find($id);
-        if (auth()->user()->id == $magazine->farm->user_id) {
+        $warehouse = $this->warehouseService->find($id);
+        if (auth()->user()->id == $warehouse->farm->user_id) {
             return response()->json([
                 "success" => true,
-                "message" => "Magazine retrieved successfully.",
-                'magazine' => new MagazineResource($magazine)
+                "message" => "Warehouse retrieved successfully.",
+                'warehouse' => new WarehouseResource($warehouse)
             ]);
         } else {
             return response()->json(['error' => 'Unauthorized'], 401);
@@ -100,18 +100,18 @@ class MagazineController extends Controller
         $data = $request->only('quantity');
         $farm = $this->farmService->find($farmId);
         if (auth()->user()->id == $farm->user_id) {
-            $userMagazine = $farm->magazine;
-            $magazine = $this->magazineService->update($data, $userMagazine, $id);
-            if ($magazine instanceof Magazine) {
+            $userWarehouse = $farm->warehouse;
+            $warehouse = $this->warehouseService->update($data, $userWarehouse, $id);
+            if ($warehouse instanceof Warehouse) {
                 return response()->json([
                     "success" => true,
                     "message" => "Product updated successfully.",
-                    'magazine' => new MagazineResource($magazine),
+                    'warehouse' => new WarehouseResource($warehouse),
                 ]);
             } else {
                 return response()->json([
                     "success" => false,
-                    "message" => $magazine,
+                    "message" => $warehouse,
                 ], 400);
             }
         } else {
@@ -129,9 +129,9 @@ class MagazineController extends Controller
     {
         $farm = $this->farmService->find($farmId);
         if (auth()->user()->id == $farm->user_id) {
-            $userMagazine = $farm->magazine;
-            $magazine = $this->magazineService->delete($userMagazine, $id);
-            if ($magazine) {
+            $userWarehouse = $farm->warehouse;
+            $warehouse = $this->warehouseService->delete($userWarehouse, $id);
+            if ($warehouse) {
                 return response()->json([
                     "success" => true,
                     "message" => "Field deleted successfully."
@@ -139,7 +139,7 @@ class MagazineController extends Controller
             } else {
                 return response()->json([
                     "success" => false,
-                    "message" => $magazine,
+                    "message" => $warehouse,
                 ], 400);
             }
         } else {

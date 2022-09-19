@@ -2,26 +2,26 @@
 
 namespace App\Services;
 
-use App\Models\Magazine;
+use App\Models\Warehouse;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
-class MagazineService
+class WarehouseService
 {
-    public function create($data, Magazine $magazine)
+    public function create($data, Warehouse $warehouse)
     {
         $success = false;
         DB::beginTransaction();
 
         try {
-            $hasProduct = $magazine->plantProtectionProducts()->where('plant_protection_product_id', $data['ppp_id'])->exists();
+            $hasProduct = $warehouse->plantProtectionProducts()->where('plant_protection_product_id', $data['ppp_id'])->exists();
             $pivotData = array('quantity' => $data['quantity']);
             if (!$hasProduct) {
-                $magazine->plantProtectionProducts()->attach($data['ppp_id'], $pivotData);
+                $warehouse->plantProtectionProducts()->attach($data['ppp_id'], $pivotData);
             } else {
-                $magazine->plantProtectionProducts()->updateExistingPivot($data['ppp_id'], $pivotData);
+                $warehouse->plantProtectionProducts()->updateExistingPivot($data['ppp_id'], $pivotData);
             }
-            if ($magazine->save()) {
+            if ($warehouse->save()) {
                 $success = true;
             }
         } catch (Exception $e) {
@@ -31,29 +31,29 @@ class MagazineService
 
         if ($success) {
             DB::commit();
-            return $magazine;
+            return $warehouse;
         } else {
             DB::rollback();
             return "Something goes wrong";
         }
     }
 
-    public function find($magazineId)
+    public function find($warehouseId)
     {
-        return Magazine::findOrFail($magazineId);
+        return Warehouse::findOrFail($warehouseId);
     }
 
-    public function update($data, Magazine $magazine, $productId)
+    public function update($data, Warehouse $warehouse, $productId)
     {
         $success = false;
         DB::beginTransaction();
         try {
-            $hasProduct = $magazine->plantProtectionProducts()->where('plant_protection_product_id', $productId)->exists();
+            $hasProduct = $warehouse->plantProtectionProducts()->where('plant_protection_product_id', $productId)->exists();
             $pivotData = array('quantity' => $data['quantity']);
             if ($hasProduct) {
-                $magazine->plantProtectionProducts()->updateExistingPivot($productId, $pivotData);
+                $warehouse->plantProtectionProducts()->updateExistingPivot($productId, $pivotData);
             }
-            if ($magazine->save()) {
+            if ($warehouse->save()) {
                 $success = true;
             }
         } catch (Exception $e) {
@@ -63,21 +63,21 @@ class MagazineService
 
         if ($success) {
             DB::commit();
-            return $magazine;
+            return $warehouse;
         } else {
             DB::rollback();
             return "Something goes wrong";
         }
     }
 
-    public function delete(Magazine $magazine, $productId)
+    public function delete(Warehouse $warehouse, $productId)
     {
         $success = false;
         DB::beginTransaction();
         try {
-            $hasProduct = $magazine->plantProtectionProducts()->where('plant_protection_product_id', $productId)->exists();
+            $hasProduct = $warehouse->plantProtectionProducts()->where('plant_protection_product_id', $productId)->exists();
             if ($hasProduct) {
-                $product = $magazine->plantProtectionProducts()->detach($productId);
+                $product = $warehouse->plantProtectionProducts()->detach($productId);
                 if ($product) {
                     $success = true;
                 }

@@ -37,6 +37,7 @@ export default {
                 }
             })
             .catch(function (err){
+                console.log('err reg', err);
                 alert(err);
             })
         return response;

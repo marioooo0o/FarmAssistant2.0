@@ -34,10 +34,10 @@ class Farm extends Model
     }
 
     /**
-     * Get the magazine associated with the farm.
+     * Get the warehouse associated with the farm.
      */
-    public function magazine()
+    public function warehouse()
     {
-        return $this->hasOne(Magazine::class);
+        return $this->hasOne(Warehouse::class);
     }
 }

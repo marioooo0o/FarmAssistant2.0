@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Magazine extends Model
+class Warehouse extends Model
 {
     use HasFactory;
 
     protected $fillable = [];
     /**
-     * Get the farm that owns the magazine.
+     * Get the farm that owns the warehouse.
      */
     public function farm()
     {

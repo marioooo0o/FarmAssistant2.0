@@ -13,15 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('magazine_plant_protection_product', function (Blueprint $table) {
+        Schema::create('warehouse_plant_protection_product', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('magazine_id');
+            $table->unsignedBigInteger('warehouse_id');
             $table->unsignedBigInteger('plant_protection_product_id');
             $table->float('quantity');
             $table->timestamps();
-            $table->foreign('magazine_id')
+            $table->foreign('warehouse_id')
                 ->references('id')
-                ->on('magazines')
+                ->on('warehouses')
                 ->onDelete('cascade');
             $table->foreign('plant_protection_product_id', 'ppp_id')
                 ->references('id')
@@ -37,6 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('magazine_plant_protection_product');
+        Schema::dropIfExists('warehouse_plant_protection_product');
     }
 };

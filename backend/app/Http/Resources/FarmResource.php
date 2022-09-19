@@ -24,7 +24,7 @@ class FarmResource extends JsonResource
             'postal_code' => $this->postal_code,
             'city' => $this->city,
             'area' => $this->area,
-            'fields' => FieldResource::collection($this->fields),
+            'warehouse' => $this->warehouse,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

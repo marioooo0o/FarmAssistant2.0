@@ -56,5 +56,17 @@ export default {
                     return response;
             })
         return response;
+    },
+
+    async loadFarm(context, payload){
+        const response = await axios
+        .get(`farms/${payload.farmId}`)
+        .then(function(res){
+            console.log('res farm', res);
+        })
+        .catch(function (err){
+            console.log('err farm', err);
+        })
+
     }
 }
