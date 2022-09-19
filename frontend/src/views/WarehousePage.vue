@@ -10,7 +10,7 @@
         @close-edit-card="showProductsListPage" />
 </template>
 <script>
-import { ref, computed } from 'vue';
+import { ref, computed, onBeforeMount } from 'vue';
 import { useStore } from 'vuex';
 import Navbar from '../components/navbar/TheNavbar.vue'
 import ProductsList from '../components/warehouses/ProductsList.vue';
@@ -30,6 +30,13 @@ export default {
                 quantity: null
             }
         });
+
+        onBeforeMount(async() => {
+            store.commit('toggleLoading');
+            await store.dispatch('warehouses/loadWarehouse');
+            store.commit('toggleLoading');
+        })
+
         const productsList = computed(() => {
             return store.getters['warehouses/warehouseProducts']
         });

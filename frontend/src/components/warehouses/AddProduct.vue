@@ -19,19 +19,26 @@
     </base-description-card>
 </template>
 <script>
-import { ref, reactive, computed, watch } from 'vue';
+import { ref, reactive, computed, watch, onBeforeMount } from 'vue';
 import { useStore } from 'vuex';
+import { useRouter} from 'vue-router';
 import SearchFormControl from '../ui/SearchFormControl.vue';
 export default {
     components: {
         SearchFormControl
     },
-    emits: ['close-add-card', 'submit-form'],
+    emits: ['close-add-card'],
     setup(props, { emit }){
         const store = useStore();
+        const router = useRouter();
 
         const selectedProduct = ref(null);
 
+        onBeforeMount(async() => {
+                store.commit('toggleLoading');
+                await store.dispatch('warehouses/loadAllProducts'); 
+                store.commit('toggleLoading');
+        });
         const allProducts = computed(() => {
             return store.getters['warehouses/allPlantProtectionProducts'];
         });
@@ -82,14 +89,37 @@ export default {
             return false;
         }
 
-        function submitForm(){
+        async function submitForm(){
             if(!saveFirstClicked.value) saveFirstClicked.value = true;
             if(checkForm()){
                 const formData = {
                     id: selectedProduct.value.id,
                     quantity: productQuantity.value,
                 }
-                emit('submit-form', formData);
+                store.commit('toggleLoading');
+                const response = await store.dispatch('warehouses/addProduct', formData);
+                if(response.status === 201){
+                    emit('close-add-card');
+                }
+                else if(response.status === 422){
+                    errors.productName = [];
+                    errors.productQuantity = [];
+                    for(let e in response.errors){
+                        switch(e){
+                            case 'ppp_id':
+                                errors.productName.push(...response.errors[e]);
+                                break;
+                            case 'quantity':
+                                errors.productQuantity.push(...response.errors[e]);
+                                break;
+                        }
+                    }
+                }
+                else if(response.status === 401){
+                    store.commit('auth/setUnauth', {root: true});
+                    router.replace('/login');
+                }
+                store.commit('toggleLoading');
             }
         }
         return {

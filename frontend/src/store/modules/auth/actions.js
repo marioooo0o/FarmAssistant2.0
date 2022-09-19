@@ -37,7 +37,6 @@ export default {
                 }
             })
             .catch(function (err){
-                console.log('err reg', err);
                 alert(err);
             })
         return response;
@@ -51,6 +50,7 @@ export default {
         const response = await axios
         .post('login', data)
         .then(function(res){
+            console.log(res);
                 if(res.status === 200){
                     context.commit('setAuth');
                     context.commit('setUser',{
@@ -66,6 +66,13 @@ export default {
                             postalCode: res.data.user.farm.postal_code,
                             cityName: res.data.user.farm.city,
                             farmArea: res.data.user.farm.area,
+                        }, {root: true})
+                    }
+                    const warehouse = res.data.user.warehouse;
+                    if(warehouse){
+                        context.commit('warehouses/setWarehouse', {
+                            id: warehouse.id,
+                            farmId: warehouse.farm_id
                         }, {root: true})
                     }
                     const response = {
