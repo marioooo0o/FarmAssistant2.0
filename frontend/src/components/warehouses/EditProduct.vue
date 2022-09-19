@@ -19,6 +19,8 @@
 </template>
 <script>
 import { ref, reactive, watch, provide } from 'vue'; 
+import { useStore } from 'vuex';
+import { useRouter} from 'vue-router';
 export default {
     props: {
         product: {
@@ -28,6 +30,9 @@ export default {
     },
     emits: ['close-edit-card', 'submit-form'],
     setup(props, { emit }) {
+        const store = useStore();
+        const router = useRouter();
+
         const productName = ref(props.product.name ? props.product.name : "");
         const productQuantity = ref(props.product.pivot.quantity ? props.product.pivot.quantity : "");
 
@@ -57,14 +62,33 @@ export default {
 
         provide('errors', errors);
 
-        function submitForm(){
+        async function submitForm(){
             if(!saveFirstClicked.value) saveFirstClicked.value = true;
             if(checkForm()){
                 const formData = {
-                    id: props.product.id,
+                    productId: props.product.id,
                     quantity: productQuantity.value,
                 }
-                emit('submit-form', formData);
+                store.commit('toggleLoading');
+                const response = await store.dispatch('warehouses/editProduct', formData);
+                if(response.status === 200){
+                    emit('close-edit-card');
+                }
+                else if(response.status === 422){
+                    errors.productQuantity = [];
+                    for(let e in response.errors){
+                        switch(e){
+                            case 'quantity':
+                                errors.productQuantity.push(...response.errors[e]);
+                                break;
+                        }
+                    }
+                }
+                else if(response.status === 401){
+                    store.commit('auth/setUnauth', {root: true});
+                    router.replace('/login');
+                }
+                store.commit('toggleLoading');
             }
         }
         return{

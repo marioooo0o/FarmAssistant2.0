@@ -23,6 +23,6 @@ class Warehouse extends Model
      */
     public function plantProtectionProducts()
     {
-        return $this->belongsToMany(PlantProtectionProduct::class)->withPivot('quantity')->withTimestamps();
+        return $this->belongsToMany(PlantProtectionProduct::class)->withPivot('quantity')->withTimestamps()->orderBy('quantity');
     }
 }

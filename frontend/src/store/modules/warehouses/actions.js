@@ -94,5 +94,59 @@ export default {
             }
         })
         return response;
+    },
+    async editProduct(context, payload){
+        const farmId = context.rootGetters['farm/userFarm'].id;
+        const productId = payload.productId;
+
+        const response = await axios
+        .put(`farms/${farmId}/warehouses/products/${productId}`, {
+            ppp_id: payload.productId,
+            quantity: payload.quantity,
+        })
+        .then(function(res){
+            if(res.status === 200){
+                context.commit('setProducts', {
+                    products: res.data.warehouse.products
+                });
+                context.commit('response/setResponse', {
+                        status: true,
+                        message: res.data.message,
+                }, {root: true});
+
+                return {
+                    status: res.status,
+                    statusText: res.statusText,
+                }
+            }
+            else if(res.status === 422){
+                const response = {
+                    status: res.status,
+                    statusText: res.statusText,
+                    errors: res.data.errors
+                }
+                return response;
+            }
+        })
+        .catch(function(err){
+            const response = {
+                status: err.response.status,
+                statusText: err.response.statusText,
+            }
+            if(err.response.status === 401){
+                context.commit('response/setResponse', {
+                    status: false,
+                    message: err.response.statusText,
+                }, {root: true});
+                return response;
+            }else{
+                context.commit('response/setResponse', {
+                    status: false,
+                    message: err.response.statusText,
+                }, {root: true});
+                return response;
+            }
+        })
+        return response;
     }
 }
