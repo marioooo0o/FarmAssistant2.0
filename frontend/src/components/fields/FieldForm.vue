@@ -59,8 +59,14 @@ export default {
 
         onBeforeMount(async() => {
                 store.commit('toggleLoading');
-                await store.dispatch('fields/loadCrops');
-                await store.dispatch('fields/loadCadastralParcels'); 
+                const resCrops = await store.dispatch('fields/loadCrops');
+                if(resCrops && resCrops.status === 401){
+                    router.replace('/login');
+                }
+                const resPracels = await store.dispatch('fields/loadCadastralParcels'); 
+                if(resPracels && resPracels.status === 401){
+                    router.replace('/login');
+                }
                 store.commit('toggleLoading');
         });
 
@@ -216,18 +222,7 @@ export default {
                     }
                 }
                 else if(response.status === 401){
-                    store.commit('response/setResponse', {
-                        status: false,
-                        message: response.statusText
-                    }, {root: true});
-                    store.commit('auth/setUnauth', {root: true});
                     router.replace('/login');
-                }
-                else{
-                    store.commit('response/setResponse', {
-                        status: false,
-                        message: response.statusText
-                    }, {root: true});
                 }
                 store.commit('toggleLoading');
             }

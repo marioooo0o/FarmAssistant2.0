@@ -2,24 +2,42 @@ import axios from "axios";
 
 export default {
     async loadWarehouse(context, payload){
-        
+        if(!context.getters.shouldUpdateWarehouse){
+            return;
+        }
         const warehouseId = context.getters.userMagazine.id;
         console.log(`warehouses/${warehouseId}`);
-        const response = await axios
+        await axios
         .get(`warehouses/${warehouseId}`)
         .then(function (res){
             if(res.status === 200){
                 context.commit('setProducts', {
                     products: res.data.warehouse.products
                 });
+                context.commit('setFetchTimestampWarehouse');
             }
         })
         .catch(function (err){
-            console.log(err);
+            const response = {
+                status: err.response.status,
+                statusText: err.response.statusText,
+            }
+            if(err.response.status === 401){
+                localStorage.removeItem('isAuth');
+            }
+            context.commit('response/setResponse', {
+                status: false,
+                message: err.response.statusText,
+            }, {root: true});
+            return response;
         })
 
     },
     async loadAllProducts(context, payload){
+        if(!context.getters.shouldUpdatePlantProtectionProduct){
+            return;
+        }
+
         const response = await axios
         .get('plant-protection-products')
         .then(function (res){
@@ -32,12 +50,23 @@ export default {
                 context.commit('response/setResponse', {
                         status: true,
                         message: res.data.message,
-                    }, {root: true});
+                }, {root: true});
+                context.commit('setFetchTimestampPlantProtectionProduct');
             }
-            console.log('res', res);
         })
         .catch(function (err){
-            console.log(err);
+            const response = {
+                status: err.response.status,
+                statusText: err.response.statusText,
+            }
+            if(err.response.status === 401){
+                localStorage.removeItem('isAuth');
+            }
+            context.commit('response/setResponse', {
+                status: false,
+                message: err.response.statusText,
+            }, {root: true});
+            return response;
         });
 
         return response;
@@ -80,18 +109,13 @@ export default {
                 statusText: err.response.statusText,
             }
             if(err.response.status === 401){
-                context.commit('response/setResponse', {
-                    status: false,
-                    message: err.response.statusText,
-                }, {root: true});
-                return response;
-            }else{
-                context.commit('response/setResponse', {
-                    status: false,
-                    message: err.response.statusText,
-                }, {root: true});
-                return response;
+                localStorage.removeItem('isAuth');
             }
+            context.commit('response/setResponse', {
+                status: false,
+                message: err.response.statusText,
+            }, {root: true});
+            return response;
         })
         return response;
     },
@@ -134,19 +158,25 @@ export default {
                 statusText: err.response.statusText,
             }
             if(err.response.status === 401){
-                context.commit('response/setResponse', {
-                    status: false,
-                    message: err.response.statusText,
-                }, {root: true});
-                return response;
-            }else{
-                context.commit('response/setResponse', {
-                    status: false,
-                    message: err.response.statusText,
-                }, {root: true});
-                return response;
+                localStorage.removeItem('isAuth');
             }
+            context.commit('response/setResponse', {
+                status: false,
+                message: err.response.statusText,
+            }, {root: true});
+            return response;
         })
         return response;
+    },
+
+    async getPlantProtectionProduct(context, payload){
+        await axios
+        .get(`plant-protection-products/${payload.productId}`)
+        .then(function(res){
+            console.log(res);
+        })
+        .catch(function(err){
+            console.log('err', err);
+        })
     }
 }

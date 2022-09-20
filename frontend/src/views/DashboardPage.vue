@@ -20,6 +20,16 @@ export default {
     setup(props){
         const store = useStore();
 
+        onBeforeMount(async() => {
+                store.commit('toggleLoading');
+                const response = await store.dispatch('auth/loadUserProfile');
+                if(response && response.status === 401){
+                    router.replace('/login');
+                }
+                store.commit('toggleLoading');
+            
+        });
+
         const hasFarm = computed(() => {
             return store.getters['farm/hasFarm'];
         });

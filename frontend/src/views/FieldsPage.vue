@@ -52,7 +52,14 @@ export default {
         const fieldId = ref(null);
         onBeforeMount(async() => {
                 store.commit('toggleLoading');
-                await store.dispatch('fields/loadFields');
+                const responseUserProfile = await store.dispatch('auth/loadUserProfile');
+                if(responseUserProfile && responseUserProfile.status === 401){
+                    router.replace('/login');
+                }
+                const responseFields = await store.dispatch('fields/loadFields');
+                if(responseFields && responseFields.status === 401){
+                    router.replace('/login');
+                }
                 store.commit('toggleLoading');
             
         });

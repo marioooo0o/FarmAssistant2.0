@@ -85,7 +85,6 @@ export default {
                     }
                 }
                 else if(response.status === 401){
-                    store.commit('auth/setUnauth', {root: true});
                     router.replace('/login');
                 }
                 store.commit('toggleLoading');

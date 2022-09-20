@@ -9,4 +9,10 @@ export default {
     setAllPlantProtecionProducts(state, payload){
         state.allPlantProtectionProducts = payload.allPlantProtectionProducts;
     },
+    setFetchTimestampWarehouse(state){
+        state.lastFetch.lastFetchWarehouse = new Date().getTime();
+    },
+    setFetchTimestampPlantProtectionProduct(state){
+        state.lastFetch.lastFetchPlantProtectionProduct = new Date().getTime();
+    },
 }

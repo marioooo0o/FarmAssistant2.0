@@ -87,7 +87,11 @@ class AuthController extends Controller
      */
     public function userProfile()
     {
-        return response()->json(auth()->user());
+        return response([
+            'success' => true,
+            'message' => 'User successfully login',
+            'user' => new UserResource(auth()->user())
+        ], Response::HTTP_OK);
     }
     /**
      * Get the token array structure.

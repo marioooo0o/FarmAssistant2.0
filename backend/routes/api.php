@@ -53,6 +53,7 @@ Route::middleware(['api'])->group(function () {
     });
     Route::controller(PlantProtectionProductController::class)->group(function () {
         Route::get('/plant-protection-products', 'index');
+        Route::get('/plant-protection-products/{id}', 'show');
     });
     Route::controller(WarehouseController::class)->group(function () {
         Route::post('/farms/{farm_id}/warehouses/products', 'store');

@@ -1,11 +1,11 @@
 <template>
     <Navbar />
     <base-card> 
-        <div class="flex flex-col lg:flex-row p-8 gap-8">
+   <div class="flex flex-col lg:flex-row p-8 gap-8">
             <div class="px-2 py-4 min-w-[400px] self-top">
                 <img src="@/assets/produkt.png" height="550" width="693" alt="Produkt">
             </div>
-            <div class="px-4 py-4">
+                 <div class="px-4 py-4">
                  <h1 class="text-4xl font-semibold tracking-wider pb-3">{{ product.name }}</h1> 
                 <hr class="border-fa-primary w-1/2 pb-3">
                 <p class=" tracking-wide">Virtus lab jest najlepszą firmą na świecie, a Filipiaka jebać prądem. 
@@ -43,14 +43,14 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> 
     </base-card>
 
 </template>
 <script>
 import { ref, watch, computed } from 'vue'
 import { useStore } from 'vuex';
-import { useRoute } from 'vue-router'
+import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 import Navbar from '../components/navbar/TheNavbar.vue';
 export default {
     components: {
@@ -59,6 +59,10 @@ export default {
     setup(props) {
         const route = useRoute();
         const store = useStore();
+        onBeforeRouteUpdate((to, from) => {
+            console.log('siema zmiena');
+            console.log('to', to, 'from', from);
+        })
         
         const product = computed(() =>{
             return store.getters['warehouses/allPlantProtectionProducts'].find(product => product.id === parseInt(route.params.id));

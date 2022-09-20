@@ -47,7 +47,7 @@ export default {
             },
         ];
 
-        const activeHeaderIndex = ref(0);
+        const activeHeaderIndex = ref(1);
         
         function sortHeader(headerId){
             switch(headerId){

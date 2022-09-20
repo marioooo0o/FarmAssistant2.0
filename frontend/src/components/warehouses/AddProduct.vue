@@ -34,11 +34,6 @@ export default {
 
         const selectedProduct = ref(null);
 
-        onBeforeMount(async() => {
-                store.commit('toggleLoading');
-                await store.dispatch('warehouses/loadAllProducts'); 
-                store.commit('toggleLoading');
-        });
         const allProducts = computed(() => {
             return store.getters['warehouses/allPlantProtectionProducts'];
         });
@@ -116,7 +111,6 @@ export default {
                     }
                 }
                 else if(response.status === 401){
-                    store.commit('auth/setUnauth', {root: true});
                     router.replace('/login');
                 }
                 store.commit('toggleLoading');

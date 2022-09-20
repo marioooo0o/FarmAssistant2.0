@@ -157,7 +157,10 @@ export default {
             }
             try{
                 store.commit('toggleLoading');
-                await store.dispatch('fields/loadNextFields'); 
+                const response = await store.dispatch('fields/loadNextFields'); 
+                if(response && response.status === 401){
+                    router.replace('/login');
+                }
                 store.commit('toggleLoading');
             }
             catch(e){

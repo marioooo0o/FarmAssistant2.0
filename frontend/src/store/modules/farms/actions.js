@@ -49,11 +49,14 @@ export default {
                         status: err.response.status,
                         statusText: err.response.statusText,
                 }
+                if(err.response.status === 401){
+                    localStorage.removeItem('isAuth');
+                }
                 context.commit('response/setResponse', {
                         status: false,
                         message: err.response.statusText,
                     }, {root: true});
-                    return response;
+                return response;
             })
         return response;
     },

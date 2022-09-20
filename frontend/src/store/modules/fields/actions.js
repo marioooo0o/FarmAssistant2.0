@@ -101,6 +101,9 @@ export default {
                             status: err.response.status,
                             statusText: err.response.statusText,
                     }
+                    if(response.status === 401){
+                        localStorage.removeItem('isAuth');
+                    }
                     context.commit('response/setResponse', {
                             status: false,
                             message: err.response.statusText,
@@ -136,11 +139,18 @@ export default {
                     }
             })
             .catch(function (err){
-                    context.commit('response/setResponse', {
-                            status: false,
-                            message: err.response.statusText,
-                        }, {root: true});
-                        return response;
+                const response ={
+                        status: err.response.status,
+                        statusText: err.response.statusText,
+                }
+                if(response.status === 401){
+                    localStorage.removeItem('isAuth');
+                }
+                context.commit('response/setResponse', {
+                        status: false,
+                        message: err.response.statusText,
+                }, {root: true});
+                return response;
             })
         }
     },
@@ -167,11 +177,18 @@ export default {
                     }
             })
             .catch(function (err){
-                    context.commit('response/setResponse', {
-                            status: false,
-                            message: err.response.statusText,
-                        }, {root: true});
-                        return response;
+                const response ={
+                        status: err.response.status,
+                        statusText: err.response.statusText,
+                }
+                if(response.status === 401){
+                    localStorage.removeItem('isAuth');
+                }
+                context.commit('response/setResponse', {
+                        status: false,
+                        message: err.response.statusText,
+                    }, {root: true});
+                return response;
             })
         }
     },
@@ -221,14 +238,13 @@ export default {
                 statusText: err.response.statusText,
             }
             if(err.response.status === 401){
-                    return response;
-            }else{
-                    context.commit('response/setResponse', {
-                        status: false,
-                        message: err.response.statusText,
-                    }, {root: true});
-                    return response;
+                localStorage.removeItem('isAuth');
             }
+                context.commit('response/setResponse', {
+                    status: false,
+                    message: err.response.statusText,
+                }, {root: true});
+                return response;
         })
         return response;
     },
@@ -278,14 +294,13 @@ export default {
                 statusText: err.response.statusText,
             }
             if(err.response.status === 401){
-                    return response;
-            }else{
-                    context.commit('response/setResponse', {
-                        status: false,
-                        message: err.response.statusText,
-                    }, {root: true});
-                    return response;
+                localStorage.removeItem('isAuth');
             }
+            context.commit('response/setResponse', {
+                status: false,
+                message: err.response.statusText,
+            }, {root: true});
+            return response;
         });
         return response;
     },

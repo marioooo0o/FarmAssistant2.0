@@ -50,9 +50,8 @@ export default {
         const response = await axios
         .post('login', data)
         .then(function(res){
-            console.log(res);
                 if(res.status === 200){
-                    context.commit('setAuth');
+                    localStorage.setItem('isAuth', true);
                     context.commit('setUser',{
                         userId: res.data.user.id,
                         userEmail: res.data.user.email
@@ -107,6 +106,58 @@ export default {
                 }
                 
             })
-            return response;
+        return response;
+    },
+
+    async loadUserProfile(context, payload){
+        if(!context.rootGetters['farm/hasFarm']){
+            await axios
+            .get('user-profile')
+            .then(function(res){
+                if(res.status == 200){
+                    context.commit('setUser',{
+                        userId: res.data.user.id,
+                        userEmail: res.data.user.email
+                    });
+                }
+                if(res.data.user.farm){
+                        context.commit('farm/setFarm',{
+                            farmId: res.data.user.farm.id,
+                            farmName: res.data.user.farm.name,
+                            streetName: res.data.user.farm.street,
+                            streetNumber: res.data.user.farm.street_number,
+                            postalCode: res.data.user.farm.postal_code,
+                            cityName: res.data.user.farm.city,
+                            farmArea: res.data.user.farm.area,
+                        }, {root: true})
+                }
+                const warehouse = res.data.user.warehouse;
+                if(warehouse){
+                    context.commit('warehouses/setWarehouse', {
+                        id: warehouse.id,
+                        farmId: warehouse.farm_id
+                    }, {root: true})
+                }
+                const response = {
+                        status: res.status,
+                        statusText: res.statusText,
+                }
+                return response;
+            })
+            .catch(function(err){
+                const response ={
+                        status: err.response.status,
+                        statusText: err.response.statusText,
+                    }
+                if(err.response.status === 401){
+                    localStorage.removeItem('isAuth');
+                }
+                context.commit('response/setResponse', {
+                    status: false,
+                    message: err.response.statusText,
+                }, {root: true});
+                return response;
+            });
+        }
     }
 }

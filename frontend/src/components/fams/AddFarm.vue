@@ -26,9 +26,11 @@
 <script>
 import { ref, reactive, watch } from 'vue';
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 export default {
     setup(props){
         const store = useStore();
+        const router = useRouter();
 
         const farmName = ref('');
         const streetName = ref('');
@@ -157,6 +159,9 @@ export default {
                             }
                         }
                     }
+                }
+                else if(response.status === 401){
+                    router.replace('/login')
                 }
             }
         }

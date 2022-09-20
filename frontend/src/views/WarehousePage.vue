@@ -33,7 +33,18 @@ export default {
 
         onBeforeMount(async() => {
             store.commit('toggleLoading');
-            await store.dispatch('warehouses/loadWarehouse');
+            const responseUserProfile = await store.dispatch('auth/loadUserProfile');
+            if(responseUserProfile && responseUserProfile.status === 401){
+                    router.replace('/login');
+            }
+            const responseWarehouse = await store.dispatch('warehouses/loadWarehouse');
+            if(responseWarehouse && responseWarehouse.status === 401){
+                    router.replace('/login');
+            }
+            const responseAllProducts = await store.dispatch('warehouses/loadAllProducts');
+            if(responseAllProducts && responseAllProducts.status === 401){
+                    router.replace('/login');
+            } 
             store.commit('toggleLoading');
         })
 

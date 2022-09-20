@@ -11,6 +11,10 @@ export default {
                 farmId: null,
                 products: []
             },
+            lastFetch:{
+                lastFetchWarehouse: null,
+                lastFetchPlantProtectionProduct: null
+            },
             allPlantProtectionProducts: []
         }
     },
