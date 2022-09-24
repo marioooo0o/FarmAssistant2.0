@@ -50,6 +50,7 @@ export default {
                     }, {root: true});
                     return response;
         })
+
         return response;
     },
 
@@ -131,7 +132,7 @@ export default {
                             const crop = {
                                 id: element.id,
                                 name: element.name,
-                                src: element.src,
+                                src: element.image_path,
                             };
                             crops.push(crop);
                         });
@@ -194,7 +195,6 @@ export default {
     },
     async addNewField(context, payload){
         const farmId = context.rootGetters['farm/userFarm'].id;
-
         const response = await axios 
         .post(`farms/${farmId}/fields`, payload)
         .then(function(res){
@@ -204,7 +204,7 @@ export default {
                             farm_id: res.data.field.farm_id,
                             field_name: res.data.field.field_name,
                             field_area: res.data.field.field_area,
-                            cadastral_parcels: res.data.field.cadastral_parcel,
+                            cadastral_parcels: res.data.field.cadastral_parcels,
                             crop: res.data.field.crop,
                         }
                         context.commit('addField',  field);

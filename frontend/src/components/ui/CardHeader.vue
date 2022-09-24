@@ -7,8 +7,11 @@
         </span>
         <div class="text-xl grid justify-center items-center m-1" :class="gridCols">
             <div v-for="header in headers" :key="header.id"
-                class="flex justify-center items-center cursor-pointer hover:text-fa-secondary "
-                :class="[activeHeaderIndex == header.id ? underlineClass : '']" @click="$emit('selectedHeader', header.id)">
+                class="flex justify-center items-center"
+                :class="[
+                    header.hoverIsAvaliable ? 'hover:text-fa-secondary cursor-pointer ' : '',
+                    (activeHeaderIndex == header.id &&  header.hoverIsAvaliable)? underlineClass : ''
+                    ]" @click="$emit('selectedHeader', header.id)">
                 {{ header.name }}</div>
 
         </div>

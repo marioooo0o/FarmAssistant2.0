@@ -15,7 +15,7 @@
         <ul v-if="selectedValues && !isArray" class="flex justify-end mr-4">
             <li>
                 <span class="flex items-center justify-center gap-4 my-2">
-                    <img v-if="selectedValues.image_path" :src="selectedValues.image_path" :alt="selectedValues.name" class="w-6">
+                    <img v-if="selectedValues.src" :src="selectedValues.src" :alt="selectedValues.name" class="w-6">
                     {{ selectedValues.name}}
                     <i class="fa-regular fa-trash-can text-2xl cursor-pointer ml-3 hover:text-red-500"
                         @click="handleDeleteItem(selectedValues.id)">

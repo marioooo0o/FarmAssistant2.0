@@ -5,8 +5,8 @@
                 :headers="headers" :activeHeaderIndex="activeHeaderIndex"
                 @add-new="$emit('show-create-page')" 
                 @selected-header="sortHeader" />
-            <div class="m-3" v-if="fieldsList.length !== 0">
-                <FieldListItem v-for="field in fieldsList" :key="field.id" :field="field"
+            <div class="m-3" v-if="sortedList.length !== 0">
+                <FieldListItem v-for="field in sortedList" :key="field.id" :field="field"
                     @click="$emit('show-description-page', field.id)" />
             </div>
             <div class="m-3 text-lg" v-else>
@@ -17,9 +17,10 @@
     </BaseCard>
 </template>
 <script>
-import { ref, provide, reactive } from 'vue'
+import { ref, provide, reactive, computed, onBeforeMount } from 'vue'
 import { useStore } from 'vuex';
 import { useRouter, useRoute } from 'vue-router'
+import { mySort, sortAlphabetically, sortDescending } from '@/mylibs/sort.js';
 import BaseCard from '../ui/BaseCard.vue'
 import BaseButton from '../ui/BaseButton.vue'
 import CardHeader from '../ui/CardHeader.vue'
@@ -52,11 +53,13 @@ export default {
                 id: 0,
                 name: 'Nazwa pola',
                 type: 'string',
+                hoverIsAvaliable: true,
             },
             {
                 id: 1,
                 name: 'Powierzchnia',
-                type: 'number'
+                type: 'number',
+                hoverIsAvaliable: true,
             },
             {
                 id: 2,
@@ -67,70 +70,58 @@ export default {
                 id: 3,
                 name: 'Uprawa',
                 type: 'string',
+                hoverIsAvaliable: true,
             },
         ];
+
+        const fieldsListFromProp = computed(() => {
+            return props.fieldsList.length > 0 ? props.fieldsList : [];
+        });
+        const sortedList = computed(() => {
+            switch(selectedHeader.value){
+                case 0:
+                    if(isAsc.value){
+                        return mySort(fieldsListFromProp.value, (field) => field.field_name, sortAlphabetically);
+                    }
+                    else{
+                        return mySort(fieldsListFromProp.value, (field) => field.field_name, sortDescending);
+                    }
+                    break;
+                case 1:
+                    if(isAsc.value){
+                        return mySort(fieldsListFromProp.value, (field) => field.field_area, sortAlphabetically);
+                    }
+                    else{
+                        return mySort(fieldsListFromProp.value, (field) => field.field_area, sortDescending);
+                    }
+                    break;
+                case 3:
+                    if(isAsc.value){
+                        return mySort(fieldsListFromProp.value, (field) => field.crop.name, sortAlphabetically);
+                    }
+                    else{
+                        return mySort(fieldsListFromProp.value, (field) => field.crop.name, sortDescending);
+                    }
+                    break;
+                default:
+                    return fieldsListFromProp.value;
+            }
+        });
 
         const activeHeaderIndex = ref(3);
         const prevIndex = ref(null);
         const isAsc = ref(true);
 
+        const selectedHeader = ref(null);
         function sortHeader(headerId){
+            selectedHeader.value = headerId;
             activeHeaderIndex.value = headerId;
-            console.log('hederid', headerId, 'acthi', activeHeaderIndex.value, 'prevIndex', prevIndex.value);
             if(activeHeaderIndex.value === prevIndex.value){
                 isAsc.value = !isAsc.value;
             }else{
                 isAsc.value = true;
             }
-            console.log('isAsc', isAsc.value);
-            switch(headerId){
-                case 0:
-                    if(isAsc.value){
-                        props.fieldsList.sort((a, b) => {
-                        let fa = a.field_name.toLowerCase(),
-                            fb = b.field_name.toLowerCase();
-                        if(fa < fb){
-                            return -1;
-                        }
-                        if(fa > fb){
-                            return 1;
-                        }
-
-                        return 0;
-                        });
-                    }
-                    else{
-                        props.fieldsList.sort((a, b) => {
-                        let fa = a.field_name.toLowerCase(),
-                            fb = b.field_name.toLowerCase();
-                        if(fa < fb){
-                            return 1;
-                        }
-                        if(fa > fb){
-                            return -1;
-                        }
-
-                        return 0;
-                        });
-                    }
-                    break;
-                case 1:
-                    if(isAsc.value){
-                        props.fieldsList.sort((a, b) => {
-                            return a.field_area - b.field_area;
-                        });
-                    }
-                    else{
-                        props.fieldsList.sort((a, b) => {
-                            return b.field_area - a.field_area;
-                        });
-                    }
-                    break;
-                
-            }
             prevIndex.value = activeHeaderIndex.value;
-            
-            
         }
         const descriptionIsShowed = ref(false);
         const selectedField = reactive({
@@ -142,7 +133,7 @@ export default {
         });
         function toggleToShow(id){
             descriptionIsShowed.value = true;
-            Object.assign(selectedField, fieldsList.find((field) => field.id === id))
+            Object.assign(selectedField, sortedList.value.find((field) => field.id === id))
         }
 
         function closeDescriptionCard(){
@@ -176,7 +167,8 @@ export default {
             descriptionIsShowed,
             selectedField,
             closeDescriptionCard,
-            handleLoadMore
+            handleLoadMore,
+            sortedList
         }
     },
 }

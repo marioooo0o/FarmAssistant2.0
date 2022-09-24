@@ -144,13 +144,11 @@ export default {
         }
 
         return {
-            isLoading,
             email,
             password,
             passwordConfirmation,
             errors,
             submitForm,
-            responseObj
         }
     }
 };
