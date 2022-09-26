@@ -74,7 +74,7 @@ export default {
         const requiredFieldNameLength = ref(5);
             
 
-        const fieldParcels = ref(props.field.cadastral_parcels? props.field.cadastral_parcels : null);
+        const fieldParcels = ref(props.field.cadastral_parcels ? props.field.cadastral_parcels : []);
 
         const fieldArea = computed(()=>{
             if(fieldParcels.value){
@@ -189,14 +189,14 @@ export default {
                 if(response.status === 201){
                     store.commit('response/setResponse', {
                         status: response.success,
-                        message: response.message
+                        message: 'Nowe pole dodane pomyślnie!'
                     }, {root: true});
                     emit('submit-form', response);
                 }
                 else if(response.status === 200){
                     store.commit('response/setResponse', {
                         status: true,
-                        message: response.statusText
+                        message: 'Pole edytowane pomyślnie!'
                     }, {root: true});
                     emit('submit-form', response);
                 }

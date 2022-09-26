@@ -67,9 +67,7 @@ export default {
         }
         
         function handleDeleteItem(id){
-            selectedValues.value.splice(selectedValues.value.findIndex((result) => result.id === id),1);
-            //  = selectedValues.value.filter((value) => value.id !== id);
-            // selectedValues.value = selectedValues.value.filter((value) => value.id !== id);
+            selectedValues.value = selectedValues.value.filter((value) => value.id !== id);
             emit('update-parcel-list', selectedValues.value);
         }
 

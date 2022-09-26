@@ -9,7 +9,12 @@
             </ul>
         </div>
         <div class="flex justify-center items-center">
-            <img v-if="field.crop.image_path" :src="field.crop.image_path" :alt=field.crop.name height="50px" width="50px" class="w-5">
+            <div v-if="field.crop.image_path" class="flex-col">
+                <div class="flex justify-center">
+                    <img :src="field.crop.image_path" :alt=field.crop.name height="50px" width="50px" class="w-5"/>
+                </div>
+                <span>{{field.crop.name}}</span>
+            </div>
             <span v-else>{{field.crop.name}}</span>
         </div>
     </div>

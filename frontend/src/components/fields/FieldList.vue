@@ -108,7 +108,7 @@ export default {
             }
         });
 
-        const activeHeaderIndex = ref(3);
+        const activeHeaderIndex = ref(null);
         const prevIndex = ref(null);
         const isAsc = ref(true);
 

@@ -38,8 +38,7 @@ export default {
             required: true
         },
         activeHeaderIndex: {
-            type: Number,
-            required: true
+            type: [Number],
         }
     },
     emits: ['addNew', 'selectedHeader'],

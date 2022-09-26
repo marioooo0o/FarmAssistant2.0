@@ -67,6 +67,7 @@ export default {
                     selectedValues.value = props.searchData.find((result) => result.id === id);
                 }
             }
+            console.log('wybrane: ', selectedValues.value);
             emit('update-search-list', selectedValues.value);
             
         }

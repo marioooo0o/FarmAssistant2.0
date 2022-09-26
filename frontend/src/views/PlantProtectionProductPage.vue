@@ -50,7 +50,7 @@
 <script>
 import { ref, watch, computed } from 'vue'
 import { useStore } from 'vuex';
-import { onBeforeRouteUpdate, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 import Navbar from '../components/navbar/TheNavbar.vue';
 export default {
     components: {
@@ -59,10 +59,6 @@ export default {
     setup(props) {
         const route = useRoute();
         const store = useStore();
-        onBeforeRouteUpdate((to, from) => {
-            console.log('siema zmiena');
-            console.log('to', to, 'from', from);
-        })
         
         const product = computed(() =>{
             return store.getters['warehouses/allPlantProtectionProducts'].find(product => product.id === parseInt(route.params.id));

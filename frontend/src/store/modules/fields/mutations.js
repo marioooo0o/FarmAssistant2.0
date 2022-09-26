@@ -15,6 +15,9 @@ export default {
     setFetchTimestamp(state){
         state.lastFetch = new Date().getTime();
     },
+    clearFetchTimestamp(state){
+        state.lastFetch = null;
+    },
     setNextPaginationPageUrl(state, payload){
         state.nextPaginationPageUrl = payload;
     },

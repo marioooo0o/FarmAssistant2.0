@@ -32,6 +32,8 @@
     </base-description-card>
 </template>
 <script>
+import { useStore } from 'vuex';
+import { useRouter, useRoute } from 'vue-router';
 export default {
     props:{
         field:{
@@ -41,11 +43,28 @@ export default {
     },
     emits: ['close-description-card', 'show-edit-page'],
     setup(props, { emit }) {
+        const store = useStore();
+        const router = useRouter();
+
         function handleEditClicked() {
             console.log('edit clicked');
         };
-        function handleDeleteClicked() {
-            console.log('delete clicked');
+        async function handleDeleteClicked() {
+            store.commit('toggleLoading');
+            const response = await store.dispatch('fields/deleteField', {
+                fieldId: props.field.id
+            });
+            if(response.status == 200) {
+                store.commit('response/setResponse', {
+                    status: true,
+                    message: 'Pole usunięte pomyślnie!'
+                }, { root: true });
+                emit('close-description-card');
+            }
+            else if(response.status == 401){
+                router.replace('/login');
+            }
+            store.commit('toggleLoading');
         };
         function handleCloseCard(){
             emit('close-description-card');

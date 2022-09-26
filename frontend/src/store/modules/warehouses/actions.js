@@ -6,7 +6,6 @@ export default {
             return;
         }
         const warehouseId = context.getters.userMagazine.id;
-        console.log(`warehouses/${warehouseId}`);
         await axios
         .get(`warehouses/${warehouseId}`)
         .then(function (res){
@@ -43,7 +42,6 @@ export default {
         .then(function (res){
             if(res.status === 200){
                 const products = res.data.plant_protection_products;
-                console.log('prod', products);
                 context.commit('setAllPlantProtecionProducts', {
                     allPlantProtectionProducts: products,
                 });

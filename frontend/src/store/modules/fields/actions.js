@@ -304,5 +304,48 @@ export default {
         });
         return response;
     },
+
+    async deleteField(context, payload){
+        const farmId = context.rootGetters['farm/userFarm'].id;
+        const fieldId = payload.fieldId;
+        const url = `farms/${farmId}/fields/${fieldId}`;
+        const response = await axios
+        .delete(url)
+        .then(async function(res){
+            if(res.status === 200) {
+                const response = {
+                    status: res.status,
+                    statusText: res.statusText,
+                }
+                context.commit('clearFetchTimestamp');
+                await context.dispatch('loadFields');
+
+                return response;
+            }
+            else {
+                const response = {
+                            status: res.status,
+                            statusText: res.statusText,
+                        }
+                return response;
+            }
+        })
+        .catch(function (err){
+            const response = {
+                status: err.response.status,
+                statusText: err.response.statusText,
+            }
+            if(err.response.status === 401){
+                localStorage.removeItem('isAuth');
+            }
+            context.commit('response/setResponse', {
+                status: false,
+                message: err.response.statusText,
+            }, {root: true});
+            return response;
+        });
+
+        return response;
+    },
     
 }
