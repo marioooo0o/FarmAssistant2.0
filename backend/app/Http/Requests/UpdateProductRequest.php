@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Farm;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateProductRequest extends FormRequest
@@ -13,7 +15,8 @@ class UpdateProductRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        $farmId = $this->route()->parameter('farm_id');
+        return Gate::allows('update-product-in-magazine', Farm::findOrFail($farmId));
     }
 
     /**

@@ -47,7 +47,7 @@ export default {
                 });
                 context.commit('response/setResponse', {
                         status: true,
-                        message: res.data.message,
+                        message: 'Środki ochrony roślin pobrane!',
                 }, {root: true});
                 context.commit('setFetchTimestampPlantProtectionProduct');
             }
@@ -133,7 +133,7 @@ export default {
                 });
                 context.commit('response/setResponse', {
                         status: true,
-                        message: res.data.message,
+                        message: 'Produkt edytowany pomyślnie!',
                 }, {root: true});
 
                 return {
