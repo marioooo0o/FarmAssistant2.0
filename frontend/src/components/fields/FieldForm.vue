@@ -4,7 +4,7 @@
             <base-label id="fieldName" label="Nazwa Pola:" required v-model.trim="fieldName" type="text" name="fieldName" :error="errors['fieldName']" />
         </base-form-control>
         <base-form-control>
-            <base-label id="fieldArea" label="Powierzchnia:" required v-model="fieldArea" type="number" unit="ha" disabled />
+            <base-label id="fieldArea" label="Powierzchnia:" required v-model="fieldArea" type="number" disabled />
         </base-form-control>
         <base-form-control>
             <SearchFormControl search id="fieldCrop" label="Uprawa:" required placeholder="wyszukaj uprawę:" name="crop"

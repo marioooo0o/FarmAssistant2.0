@@ -5,9 +5,9 @@
                 <img alt="Logo FarmAssistant" class="w-96" height="439" src="@/assets/logo.png" width="550" />
             </h1>
             <blockquote class="italic font-light text-xl leading-15 tracking-most-widest text-center mt-16">
-                “Całe życie byłem pojebany Jeszcze zrobić na tym sos pojebane!”
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis sed, laboriosam rerum ipsa nulla molestias.
                 <br />
-                ~ Młody Jeżyk 47
+                ~ Lorem ipsum dolor
             </blockquote>
         </div>
     </header>

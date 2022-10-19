@@ -12,6 +12,7 @@
 <script>
 import { ref, computed, onBeforeMount } from 'vue';
 import { useStore } from 'vuex';
+import { useRouter, useRoute } from 'vue-router'
 import Navbar from '../components/navbar/TheNavbar.vue'
 import ProductsList from '../components/warehouses/ProductsList.vue';
 import EditProduct from '../components/warehouses/EditProduct.vue';
@@ -20,6 +21,9 @@ export default {
     components: { Navbar, ProductsList, EditProduct, AddProduct },
     setup(props) {
         const store = useStore();
+        const route = useRoute();
+        const router = useRouter();
+        
         const activeComponent = ref('productsList');
 
         const productId = ref(null);
@@ -49,7 +53,7 @@ export default {
         })
 
         const productsList = computed(() => {
-            return store.getters['warehouses/warehouseProducts']
+            return store.getters['warehouses/warehouseProducts'];
         });
 
         function showProductsListPage(){

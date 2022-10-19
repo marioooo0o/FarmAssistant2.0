@@ -8,8 +8,7 @@
                  <div class="px-4 py-4">
                  <h1 class="text-4xl font-semibold tracking-wider pb-3">{{ product.name }}</h1> 
                 <hr class="border-fa-primary w-1/2 pb-3">
-                <p class=" tracking-wide">Virtus lab jest najlepszą firmą na świecie, a Filipiaka jebać prądem. 
-                    Pozdrawiam serdecznie, jebać kapusi smacznej kawusi. Kolejną rzeczą jaką chcę powiedzieć o tym cudownym środku jest jego niezamowite oddziaływanie na środowisko. Jedynie łyżeczka tego środka i wszystkie ryby w Odrze wypierdala w kosmos. Sposób użycia to wciąganie nosem albo wcieranie w dziąsło.</p>
+                <p class=" tracking-wide">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quam, dignissimos? Blanditiis tempora distinctio explicabo accusantium quae, et iure officiis nostrum quos! Minima veritatis nihil itaque?</p>
                 <div class="flex justify-center font-extrabold tracking-wider text-lg py-3">Dawkowanie:<span class="text-fa-primary ml-3">50 ml / 1 ha</span> </div>
                 <h2 class="text-lg font-extrabold tracking-wider pb-3">Szczegółowe informacje:</h2>
                 <hr class="border-fa-primary w-1/2 pb-3">

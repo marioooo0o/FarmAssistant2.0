@@ -10,7 +10,11 @@
             <form class="flex flex-col justify-center items-center" @submit.prevent="submitForm">
                 <base-form-control>
                     <base-label id="parcelArea" label="Powierzchnia działki na wybranym polu :" required 
-                    v-model="parcelAreaInField" type="number" unit="ha" min="0" step="0.01" :error="errors['parcelAreaInField']"/>
+                    v-model="parcelAreaInField" type="number" min="0" step="0.01" :error="errors['parcelAreaInField']" />
+                </base-form-control>
+                <base-form-control>
+                    <base-label id="parcelArea" label="Powierzchnia działki na wybranym polu :" required 
+                    v-model="parcelAreaInField" type="number" min="0" step="0.01" unit="ha" :error="errors['parcelAreaInField']" />
                 </base-form-control>
             </form>
         </div>
@@ -70,13 +74,17 @@ export default {
 
         function checkForm(){
             errors.parcelAreaInField = [];
-            if(parcelAreaInField.value && parcelAreaInField.value !== "0"){
+            if(parcelAreaInField.value && parcelAreaInField.value > 0){
                 return true;
             }
-            else{
+            else if (!parcelAreaInField.value || parcelAreaInField.value === 0){
                 errors.parcelAreaInField.push('Powierzchnia działki jest wymagana');
-                return false;
             }
+            else if (parcelAreaInField.value < 0) {
+                errors.parcelAreaInField.push('Powierzchnia działki musi być większa od 0');
+            }
+            return false;
+            
         }
 
         function submitForm(){

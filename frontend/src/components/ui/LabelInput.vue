@@ -32,7 +32,9 @@
             :placeholder="placeholder"
             :min="min"
             :step="step"
-            :error="error" />
+            :error="error"
+            :unit="unit"
+            />
             <ul v-if="hasError" class="col-start-2 text-red-500 text-sm">
                 <li v-for="e in error" :key="e">{{e}}</li>
             </ul>
@@ -93,6 +95,9 @@ export default {
             type: String,
         },
         error: Array,
+        unit:{
+            type: String
+        }
     },
     setup(props, { emit }) {
         

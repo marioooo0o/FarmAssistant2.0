@@ -3,6 +3,9 @@ import { createApp } from 'vue';
 import router from './router'
 import store from './store/index.js';
 
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+
 import App from './App.vue';
 import BaseButton from './components/ui/BaseButton.vue';
 import BaseCard from './components/ui/BaseCard.vue';
@@ -20,6 +23,8 @@ const app = createApp(App)
 
 app.use(router);
 app.use(store);
+
+app.use(ElementPlus)
 
 app.config.unwrapInjectedRef = true;
 

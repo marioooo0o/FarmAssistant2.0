@@ -3,7 +3,8 @@ export default {
         return state.warehouse;
     },
     warehouseProducts(state){
-        return state.warehouse.products;
+        console.log(state.warehouse.products.filter((product) => product.pivot.quantity > 0));
+        return state.warehouse.products.filter((product) => product.pivot.quantity > 0);
     },
     allPlantProtectionProducts(state){
         return state.allPlantProtectionProducts;

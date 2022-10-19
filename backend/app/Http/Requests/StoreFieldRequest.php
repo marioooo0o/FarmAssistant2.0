@@ -27,7 +27,7 @@ class StoreFieldRequest extends FormRequest
             'field_name' => 'required|string|max:100',
             'cadastral_parcels' => 'required|array',
             'cadastral_parcels.*.parcel_number' => 'required|integer|min:1|',
-            'cadastral_parcels.*.area' => 'required|numeric',
+            'cadastral_parcels.*.area' => 'required|numeric|min:0',
             'crop' => 'required|exists:crops,name'
         ];
     }

@@ -1,8 +1,12 @@
 <template>
-    <div class="bg-white p-1 w-full rounded-full tooltip">
+    <el-tooltip :content="quantity" placement="bottom" effect="dark">
+      <div class="bg-white p-1 w-full rounded-full">
         <div class="h-4 rounded-full relative border-b-2" :class="barColor" :style="{width: barWidth }"></div>
-        <span class="tooltiptext">{{quantity}} l</span>
-    </div>
+      </div>
+    </el-tooltip>
+    
+    
+
 </template>
 <script>
 import { ref, computed } from 'vue';
@@ -34,9 +38,13 @@ export default {
             return `${barWidth.value} ${barColor.value}`;
         });
         
+        const quantity = computed(() => {
+          return `${props.quantity} l`;
+        });
         return {
             barColor,
-            barWidth
+            barWidth,
+            quantity
         }
 
     }
