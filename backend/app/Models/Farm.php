@@ -40,4 +40,8 @@ class Farm extends Model
     {
         return $this->hasOne(Warehouse::class);
     }
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d H:00',
+    ];
 }

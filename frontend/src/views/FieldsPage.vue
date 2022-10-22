@@ -11,6 +11,7 @@
     <AddField v-else-if="activeComponent == 'createField'"
         :field="activeField"
         @close-create-card="showFieldListPage"
+        @saved-successfully="saveField"
         @show-parcel-form="showEditParcel"
         @set-field-attr="updateFieldAttr"
         />
@@ -161,6 +162,20 @@ export default {
             activeParcel.value = parcel;
             activeComponent.value = 'editParcel';
         }
+        function saveField(){
+            console.log('wykonuje się', activeParcel.value);
+            activeParcel.value = null;
+            activeField.value = {
+                field_name: "",
+                field_area: null,
+                crop: null,
+                cadastral_parcels: [],
+            }
+            fieldId.value = null;
+            
+            activeComponent.value = 'fieldList';
+            console.log('wykonuje się', activeParcel.value);
+        }
 
         provide('activeComponent', activeComponent);
 
@@ -182,6 +197,7 @@ export default {
             showEditParcel,
             updateFieldAttr,
             activeParcel,
+            saveField,
             isFieldPage,
         }
     }

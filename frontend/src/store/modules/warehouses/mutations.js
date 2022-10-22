@@ -4,7 +4,10 @@ export default {
         state.warehouse.farmId = payload.farmId;
     },
     setProducts(state, payload){
-        state.warehouse.products = payload.products;
+        state.warehouse.products = payload;
+    },
+    addProducts(state, payload){
+        state.warehouse.products = state.warehouse.products.concat(payload);
     },
     setAllPlantProtecionProducts(state, payload){
         state.allPlantProtectionProducts = payload.allPlantProtectionProducts;
@@ -14,5 +17,8 @@ export default {
     },
     setFetchTimestampPlantProtectionProduct(state){
         state.lastFetch.lastFetchPlantProtectionProduct = new Date().getTime();
+    },
+    setNextPaginationPageUrl(state, payload){
+        state.nextPaginationPageUrl = payload;
     },
 }

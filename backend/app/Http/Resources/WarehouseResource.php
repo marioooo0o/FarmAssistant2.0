@@ -17,7 +17,7 @@ class WarehouseResource extends JsonResource
         return [
             'id' => $this->id,
             'farm_id' => $this->farm_id,
-            'products' => PlantProtectionProductResource::collection($this->plantProtectionProducts),
+            'products' => PlantProtectionProductResource::collection($this->plantProtectionProducts()->paginate(5)),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

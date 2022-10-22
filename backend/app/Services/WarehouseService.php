@@ -43,6 +43,11 @@ class WarehouseService
         return Warehouse::findOrFail($warehouseId);
     }
 
+    public function getAllWarehouseProducts($warehouse)
+    {
+        return $warehouse->plantProtectionProducts()->where('quantity', '>', 0)->paginate(5);
+    }
+
     public function update($data, Warehouse $warehouse, $productId)
     {
         $success = false;

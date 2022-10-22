@@ -81,11 +81,13 @@ class WarehouseController extends Controller
     {
         $warehouse = $this->warehouseService->find($id);
         if (auth()->user()->id == $warehouse->farm->user_id) {
+            $warehouseWithProducts = $this->warehouseService->getAllWarehouseProducts($warehouse);
             return response()->json([
                 "success" => true,
                 "message" => "Warehouse retrieved successfully.",
-                'warehouse' => new WarehouseResource($warehouse)
-            ]);
+                // 'warehouse' => new WarehouseResource($warehouse)
+                'warehouse' => $warehouseWithProducts
+            ], Response::HTTP_OK);
         } else {
             return response()->json(['error' => 'Unauthorized'], 401);
         }

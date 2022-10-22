@@ -8,10 +8,10 @@
             <h1 class="text-2xl">Działka {{parcel.name}}</h1>
             <span class="my-2 text-lg">Działka ma całkowitą powierzchnię: {{parcelArea}} ha</span>
             <form class="flex flex-col justify-center items-center" @submit.prevent="submitForm">
-                <base-form-control>
+                <!-- <base-form-control>
                     <base-label id="parcelArea" label="Powierzchnia działki na wybranym polu :" required 
                     v-model="parcelAreaInField" type="number" min="0" step="0.01" :error="errors['parcelAreaInField']" />
-                </base-form-control>
+                </base-form-control> -->
                 <base-form-control>
                     <base-label id="parcelArea" label="Powierzchnia działki na wybranym polu :" required 
                     v-model="parcelAreaInField" type="number" min="0" step="0.01" unit="ha" :error="errors['parcelAreaInField']" />

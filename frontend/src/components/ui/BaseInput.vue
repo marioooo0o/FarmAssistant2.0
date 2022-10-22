@@ -14,30 +14,23 @@
         :step="step" />
 
     <div v-else-if="unit">
-        <input
-            class="bg-input-bg border rounded-[10px] text-lg h-8 text-gray-500 text-center focus:text-black" :id="id"
-            @input="$emit('update:modelValue', $event.target.value)" :required="required" :type="type" :disabled="disabled"
-            :class="[{'cursor-not-allowed': disabled}, isInvalid]" :value="modelValue" :placeholder="placeholder" :min="min"
-            :step="step" />
-        <span>{{unit}}</span>
-        <el-input v-model="input" 
-            class="bg-input-bg border rounded-[10px] text-lg h-8 text-gray-500 text-center focus:text-black"
-            :class="[{'cursor-not-allowed': disabled}, isInvalid]"
-            :placeholder="placeholder">
-        </el-input>
-        <!-- <el-input v-model="input" :placeholder="placeholder">
+        <el-input v-model="input" class="focus:!border-red-600" :required="required" :type="type" :disabled="disabled" :min="min"
+            :step="step" :class="[{'cursor-not-allowed': disabled}, isInvalid]"
+            :style="{
+                borderColor: isInvalid
+            }">
             <template #suffix>
                 <el-icon class="el-input__icon">
-                    ha
+                    {{unit}}
                 </el-icon>
             </template>
-        </el-input> -->
+        </el-input>
     </div>
-    <input v-else-if="unit" class="bg-input-bg border rounded-[10px] text-lg h-8 text-gray-500 text-center focus:text-black " :id="id"
+    <!-- <input v-else-if="unit" class="bg-input-bg border rounded-[10px] text-lg h-8 text-gray-500 text-center focus:text-black " :id="id"
         @input="$emit('update:modelValue', $event.target.value)" :required="required" :type="type" :disabled="disabled"
-        :class="[{'cursor-not-allowed': disabled},
-        isInvalid]" :value="modelValue" :placeholder="placeholder" :min="min"
-        :step="step" />
+        :class="[{'cursor-not-allowed': disabled}, isInvalid]"
+        :value="modelValue" :placeholder="placeholder" :min="min"
+        :step="step" /> -->
     <input v-else class="bg-input-bg border rounded-[10px] text-lg h-8 text-gray-500 text-center focus:text-black " :id="id"
         @input="$emit('update:modelValue', $event.target.value)" :required="required" :type="type" 
         :disabled="disabled" :class="[{'cursor-not-allowed': disabled}, isInvalid]"
@@ -46,7 +39,7 @@
         :step="step" />
 </template>
 <script>
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 export default {
     props: {
         id: "",
@@ -73,17 +66,43 @@ export default {
         error: Array,
         unit: String,
     },
-    setup(props, {emit}) {
-        
+    setup(props, {emit, attrs}) {
+        const input = ref(attrs.value ? attrs.value : '');
         const isInvalid = computed(() => {
             return (typeof props.error !== 'undefined' && props.error.length > 0) ? 'border-red-500 focus:outline-red-500' : 'border-fa-primary focus:outline-fa-primary'
         })
         return {
+            input,
             isInvalid
         }
     }
     
 };
 </script>
+<style>
+.el-input{
+    --el-input-focus-border-color: green
+}
+.el-input__wrapper{
+    background-color: rgb(237 237 237 / var(--tw-bg-opacity)) !important;
+    border-radius: 10px !important;
+    border: 1px ;
+}
+.el-input__inner {
+    background-color: rgb(237 237 237 / var(--tw-bg-opacity)) !important;
+    height: 2rem;
+    font-size: 1.125rem !important;
+    line-height: 1.75rem;
+    --tw-text-opacity: 1;
+    color: rgb(107 114 128 / var(--tw-text-opacity));
+    text-align: center;
+    
+}
+.el-input__inner:focus{
+    --tw-text-opacity: 1;
+    color: rgb(0 0 0 / var(--tw-text-opacity));
+
+}
+</style>
 
 

@@ -3,11 +3,13 @@ export default {
         return state.warehouse;
     },
     warehouseProducts(state){
-        console.log(state.warehouse.products.filter((product) => product.pivot.quantity > 0));
         return state.warehouse.products.filter((product) => product.pivot.quantity > 0);
     },
     allPlantProtectionProducts(state){
         return state.allPlantProtectionProducts;
+    },
+    getNextPaginationPageUrl(state){
+        return state.nextPaginationPageUrl;
     },
     shouldUpdateWarehouse(state){
         const lastFetch = state.lastFetch.lastFetchWarehouse;

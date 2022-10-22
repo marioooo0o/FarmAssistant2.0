@@ -39,10 +39,6 @@
                 <li v-for="e in error" :key="e">{{e}}</li>
             </ul>
     </div>
-    <!-- 
-         <span v-if="unit" class="ml-1">{{unit}}</span> 
-     -->
-
 </template>
 <script>
 import { computed } from 'vue';
@@ -100,7 +96,6 @@ export default {
         }
     },
     setup(props, { emit }) {
-        
         
         const hasError = computed(()=>{
             return (typeof props.error !== 'undefined' && props.error.length > 0) ? true : false

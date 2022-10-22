@@ -15,7 +15,8 @@ export default {
                 lastFetchWarehouse: null,
                 lastFetchPlantProtectionProduct: null
             },
-            allPlantProtectionProducts: []
+            allPlantProtectionProducts: [],
+            nextPaginationPageUrl: '',
         }
     },
     mutations,

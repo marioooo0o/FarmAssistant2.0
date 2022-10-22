@@ -30,7 +30,7 @@ export default {
             required: true
         }
     },
-    emits: ['close-create-card', 'show-parcel-form', 'set-field-attr'],
+    emits: ['close-create-card', 'show-parcel-form', 'set-field-attr', 'saved-successfully'],
     setup(props, {emit}) {
         const store = useStore();
 
@@ -46,7 +46,7 @@ export default {
         async function submitForm(formData){
             saveIsClicked.value = false;   
             if(formData.status === 201){
-                emit('close-create-card');
+                emit('saved-successfully');
             }
         }
 
