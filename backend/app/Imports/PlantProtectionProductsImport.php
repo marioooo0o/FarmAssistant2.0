@@ -64,27 +64,5 @@ class PlantProtectionProductsImport implements ToModel, WithHeadingRow
         } catch (Exception $e) {
             throw $e;
         }
-
-
-
-        // return new PlantProtectionProduct([
-        //     'name' => $row['nazwa'],
-        //     'permit_number' => $row['nrzezw'],
-        //     'permit_deadline' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['terminzezw'])->format('Y-m-d'),
-        //     'sale_deadline' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['termindosprzedazy'])->format('Y-m-d'),
-        //     'term_for_use' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['termindostosowania'])->format('Y-m-d'),
-        //     'type' => $row['rodzaj'],
-        //     'active_substance' => $row['substancja_czynna'],
-        //     'plant' => $row['uprawa'],
-        //     'pest' => $row['agrofag'],
-        //     'dose' => $row['dawka'],
-        //     'recommended_dose' => $row['zalecana'],
-        //     'maximum_dose' => $row['maksymalna'],
-        //     'unit' => $row['jednostka'],
-        //     'deadline' => $row['termin'],
-        //     'group_name' => $row['nazwa_grupy'],
-        //     'small_area' => $row['maloobszarowe'],
-        //     'application' => $row['zastosowanieuzytkownik'],
-        // ]);
     }
 }
