@@ -35,6 +35,7 @@ export default {
                     };
                     products.push(product);
                 });
+                console.log('products', products);
                 context.commit('setProducts', products);
                 context.commit('setFetchTimestampWarehouse');
                 if(res.data.warehouse.next_page_url){
@@ -187,9 +188,8 @@ export default {
         })
         .then(function(res){
             if(res.status === 201){
-                context.commit('setProducts', {
-                    products: res.data.warehouse.products
-                });
+                console.log('res', res);
+                context.commit('setProducts', res.data.warehouse.products);
                 context.commit('response/setResponse', {
                         status: true,
                         message: res.data.message,
