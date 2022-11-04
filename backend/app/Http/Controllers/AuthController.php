@@ -12,18 +12,10 @@ use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
-    }
     /**
      * Get a JWT via given credentials.
      *
@@ -31,7 +23,9 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request)
     {
+
         if (!$token = auth()->attempt($request->only('email', 'password'))) {
+            // if (!$token = JWTAuth::attempt($request->only('email', 'password'))) {
             return response()->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
         }
         $cookie = cookie('jwt', $token, 60 * 24);
