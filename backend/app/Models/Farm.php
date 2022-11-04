@@ -41,6 +41,14 @@ class Farm extends Model
         return $this->hasOne(Warehouse::class);
     }
 
+    /**
+     * Get the practises for the farm.
+     */
+    public function practises()
+    {
+        return $this->hasMany(Practise::class);
+    }
+
     protected $casts = [
         'created_at' => 'datetime:Y-m-d H:00',
     ];

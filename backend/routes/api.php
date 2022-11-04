@@ -10,6 +10,7 @@ use App\Http\Controllers\FarmController;
 use App\Http\Controllers\FieldController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\PlantProtectionProductController;
+use App\Http\Controllers\PractiseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,11 +23,10 @@ use App\Http\Controllers\PlantProtectionProductController;
 |
 */
 
-Route::get('/', [ExcelCSVController::class, 'importExcelCSV']);
-Route::middleware(['api'])->group(function () {
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::middleware(['auth:api'])->group(function () {
     Route::controller(AuthController::class)->group(function () {
-        Route::post('/login', 'login');
-        Route::post('/register', 'register');
         Route::post('/refresh', 'refresh');
         Route::get('/user-profile', 'userProfile');
         Route::get('/logout', 'logout');
@@ -61,6 +61,9 @@ Route::middleware(['api'])->group(function () {
         Route::put('/farms/{farm_id}/warehouses/products/{id}', 'update');
         Route::delete('/farms/{farm_id}/warehouses/products/{id}', 'destroy');
     });
+    Route::apiResource('farms/{farm_id}/practises', PractiseController::class)->except([
+        'index', 'update', 'destroy'
+    ]);;
 });
 
 Route::post('/crops', [CropController::class, 'store']);
