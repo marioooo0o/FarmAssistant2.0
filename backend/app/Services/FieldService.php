@@ -48,31 +48,6 @@ class FieldService
 
     public function create($fieldAtributes, Farm $farm)
     {
-        // $success = false;
-        // DB::beginTransaction();
-
-        // try {
-        //     $crop = Crop::where('name', $fieldAtributes['crop'])->firstOrFail();
-        //     //create field
-        //     $newField = new Field();
-        //     $newField->farm_id = $farm->id;
-        //     $newField->crop_id = $crop->id;
-        //     $newField->field_name = $fieldAtributes['field_name'];
-        //     if ($newField->save()) {
-        //         $success = true;
-        //     }
-        // } catch (Exception $e) {
-        //     DB::rollback();
-        //     return $e->getMessage();
-        // }
-
-        // if ($success) {
-        //     DB::commit();
-        //     return $newField;
-        // } else {
-        //     DB::rollback();
-        //     return "Something goes wrong";
-        // }
         $success = false;
         DB::beginTransaction();
 
@@ -105,7 +80,7 @@ class FieldService
             }
         } catch (Exception $e) {
             DB::rollback();
-            return $e->getMessage();
+            throw $e;
         }
 
         if ($success) {

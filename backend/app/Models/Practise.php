@@ -33,4 +33,12 @@ class Practise extends Model
     {
         return $this->belongsToMany(PlantProtectionProduct::class)->withPivot('quantity')->withTimestamps();
     }
+
+    /**
+     * Get the farm that owns the practise.
+     */
+    public function farm()
+    {
+        return $this->belongsTo(Farm::class);
+    }
 }

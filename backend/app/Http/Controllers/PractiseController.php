@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePractise;
+use App\Http\Resources\PractiseResource;
 use App\Models\Practise;
 use App\Services\FarmService;
 use Illuminate\Http\Request;
@@ -25,9 +26,26 @@ class PractiseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($farmId)
     {
-        //
+        $farm = $this->farmService->find($farmId);
+        if (auth()->user()->id == $farm->user_id) {
+            $farmPractises = $this->practiseService->getAllFarmPractises($farm);
+            if ($farmPractises) {
+                return response()->json([
+                    "success" => true,
+                    "message" => "Fields retrieved successfully.",
+                    'practises' => $farmPractises
+                ], Response::HTTP_OK);
+            } else {
+                return response()->json([
+                    "success" => false,
+                    "message" => $farmPractises,
+                ], Response::HTTP_BAD_REQUEST);
+            }
+        } else {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
     }
 
     /**
@@ -45,7 +63,7 @@ class PractiseController extends Controller
             return response()->json([
                 "success" => true,
                 "message" => "Practise created successfully.",
-                'field' => $practise
+                'practise' => $practise
             ], Response::HTTP_CREATED);
         } else {
             return response()->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
@@ -58,9 +76,18 @@ class PractiseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($farmId, $practiseId)
     {
-        //
+        $practise = $this->practiseService->find($practiseId);
+        if (auth()->user()->id == $practise->farm->user_id) {
+            return response()->json([
+                "success" => true,
+                "message" => "Practise retrieved successfully.",
+                'practise' => new PractiseResource($practise)
+            ], Response::HTTP_OK);
+        } else {
+            return response()->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
+        }
     }
 
     /**
@@ -70,9 +97,21 @@ class PractiseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StorePractise $request, $farmId, $id)
     {
-        //
+        $data = $request->only('fields', 'products', 'water', 'start_date', 'name');
+        $farm = $this->farmService->find($farmId);
+        $practise = $this->practiseService->find($id);
+        if (auth()->user()->id == $farm->user_id) {
+            $practise = $this->practiseService->update($data, $farm, $practise);
+            return response()->json([
+                "success" => true,
+                "message" => "Practise updated successfully.",
+                'practise' => $practise
+            ], Response::HTTP_OK);
+        } else {
+            return response()->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
+        }
     }
 
     /**
