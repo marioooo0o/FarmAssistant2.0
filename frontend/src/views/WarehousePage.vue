@@ -38,6 +38,7 @@ export default {
         onBeforeMount(async() => {
             store.commit('toggleLoading');
             const responseUserProfile = await store.dispatch('auth/loadUserProfile');
+            console.log('resuserprofile warehouse', responseUserProfile);
             if(responseUserProfile && responseUserProfile.status === 401){
                     router.replace('/login');
             }

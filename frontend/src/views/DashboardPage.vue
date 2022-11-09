@@ -2,27 +2,30 @@
     <Navbar />
         <div v-if="hasFarm" class="grid grid-cols-2 h-full w-full">
             <FieldsPage />
-            <PractiseList />
+            <PractisesPage />
         </div>
         <AddFarm v-else  />
 </template>
 <script>
 import { ref, computed, onBeforeMount } from 'vue';
 import { useStore } from 'vuex';
+import { useRouter, useRoute } from 'vue-router'
 import Navbar from '../components/navbar/TheNavbar.vue'
 import AddFarm from '../components/fams/AddFarm.vue'
 import ResponseModal from '../components/ui/ResponseModal.vue';
-import FieldList from '../components/fields/FieldList.vue';
-import PractiseList from '../components/practises/PractiseList.vue';
 import FieldsPage from './FieldsPage.vue';
+import PractisesPage from './PractisesPage.vue';
 export default {
-    components: { Navbar, AddFarm, ResponseModal, FieldList, PractiseList, FieldsPage },
+    components: { Navbar, AddFarm, ResponseModal, FieldsPage, PractisesPage },
     setup(props){
         const store = useStore();
+        const route = useRoute();
+        const router = useRouter();
 
         onBeforeMount(async() => {
                 store.commit('toggleLoading');
                 const response = await store.dispatch('auth/loadUserProfile');
+                console.log('resuserprofile dashboard', response);
                 if(response && response.status === 401){
                     router.replace('/login');
                 }

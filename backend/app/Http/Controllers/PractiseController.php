@@ -30,19 +30,20 @@ class PractiseController extends Controller
     {
         $farm = $this->farmService->find($farmId);
         if (auth()->user()->id == $farm->user_id) {
-            $farmPractises = $this->practiseService->getAllFarmPractises($farm);
-            if ($farmPractises) {
-                return response()->json([
-                    "success" => true,
-                    "message" => "Fields retrieved successfully.",
-                    'practises' => $farmPractises
-                ], Response::HTTP_OK);
-            } else {
-                return response()->json([
-                    "success" => false,
-                    "message" => $farmPractises,
-                ], Response::HTTP_BAD_REQUEST);
-            }
+            return PractiseResource::collection(Practise::with('fields')->where('farm_id', $farmId)->paginate(5));
+            // $farmPractises = $this->practiseService->getAllFarmPractises($farm);
+            // if ($farmPractises) {
+            //     return response()->json([
+            //         "success" => true,
+            //         "message" => "Fields retrieved successfully.",
+            //         'practises' => $farmPractises
+            //     ], Response::HTTP_OK);
+            // } else {
+            //     return response()->json([
+            //         "success" => false,
+            //         "message" => $farmPractises,
+            //     ], Response::HTTP_BAD_REQUEST);
+            // }
         } else {
             return response()->json(['error' => 'Unauthorized'], 401);
         }

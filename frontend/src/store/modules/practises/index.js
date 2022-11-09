@@ -4,14 +4,11 @@ import getters from './getters.js';
 
 export default {
     namespaced: true,
-    state(){
+    state() {
         return {
             lastFetch: null,
-            allCrops: [],
-            allParcels: [],
-            userFields: [],
+            userPractises: [],
             nextPaginationPageUrl: '',
-        
         }
     },
     mutations,

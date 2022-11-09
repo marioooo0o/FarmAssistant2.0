@@ -88,9 +88,16 @@ export default {
                     }
                     return response;
                 }
+                else {
+                    const response = {
+                        status: res.status,
+                        statusText: res.statusText,
+                    }
+                    return response;
+                }
                 
             })
-            .catch(function (err){
+        .catch(function (err){
                 const response ={
                         status: err.response.status,
                         statusText: err.response.statusText,
@@ -111,7 +118,7 @@ export default {
 
     async loadUserProfile(context, payload){
         if(!context.rootGetters['farm/hasFarm']){
-            await axios
+        const response =  await axios
             .get('user-profile')
             .then(function(res){
                 if(res.status == 200){
@@ -158,6 +165,8 @@ export default {
                 }, {root: true});
                 return response;
             });
+        return response;
         }
+        
     }
 }

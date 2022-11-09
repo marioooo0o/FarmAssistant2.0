@@ -3,6 +3,7 @@ import { createApp } from 'vue';
 import router from './router'
 import store from './store/index.js';
 
+import { VueQueryPlugin } from "vue-query";
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 
@@ -24,7 +25,8 @@ const app = createApp(App)
 app.use(router);
 app.use(store);
 
-app.use(ElementPlus)
+app.use(ElementPlus);
+app.use(VueQueryPlugin);
 
 app.config.unwrapInjectedRef = true;
 
