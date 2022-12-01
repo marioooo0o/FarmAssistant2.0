@@ -151,4 +151,19 @@ class WarehouseController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
     }
+
+    public function getAllWarehouseProducts($id){
+        $warehouse = $this->warehouseService->find($id);
+        if (auth()->user()->id == $warehouse->farm->user_id) {
+            $warehouseWithProducts = $this->warehouseService->getAllWarehouseProducts($warehouse, false);
+            return response()->json([
+                "success" => true,
+                "message" => "Warehouse retrieved successfully.",
+                // 'warehouse' => new WarehouseResource($warehouse)
+                'warehouse' => $warehouseWithProducts
+            ], Response::HTTP_OK);
+        } else {
+            return response()->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
+        }
+    }
 }

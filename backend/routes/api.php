@@ -43,6 +43,7 @@ Route::middleware(['auth:api'])->group(function () {
         Route::get('/farms/{farm_id}/fields/{id}', 'show');
         Route::put('/farms/{farm_id}/fields/{id}', 'update');
         Route::delete('/farms/{farm_id}/fields/{id}', 'destroy');
+        Route::get('/farms/{farm_id}/allFields', 'getAllFarmFields');
     });
     Route::controller(CadastralParcelController::class)->group(function () {
         Route::get('/cadastral-parcels', 'index');
@@ -58,6 +59,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::controller(WarehouseController::class)->group(function () {
         Route::post('/farms/{farm_id}/warehouses/products', 'store');
         Route::get('/warehouses/{id}', 'show');
+        Route::get('/warehouses/{id}/allProducts', 'getAllWarehouseProducts');
         Route::put('/farms/{farm_id}/warehouses/products/{id}', 'update');
         Route::delete('/farms/{farm_id}/warehouses/products/{id}', 'destroy');
     });

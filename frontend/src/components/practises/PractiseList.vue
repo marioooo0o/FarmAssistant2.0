@@ -12,13 +12,15 @@
             <div class="m-3 text-lg" v-else>
                 Nie posiadasz żadnych zabiegów
             </div>
-            <BaseButton :class="'m-3 text-lg'">Załaduj więcej</BaseButton>
+            <BaseButton :class="'m-3 text-lg'" @click="handleLoadMore">Załaduj więcej</BaseButton>
         </div>
     </BaseCard>
 </template>
 <script>
 import { ref, provide, reactive, computed } from 'vue'
 import {PlusCircleIcon} from '@heroicons/vue/outline'
+import { useStore } from 'vuex';
+import { useRouter, useRoute } from 'vue-router'
 import { mySort, sortAlphabetically, sortDescending } from '@/mylibs/sort.js';
 import BaseCard from '../ui/BaseCard.vue'
 import BaseButton from '../ui/BaseButton.vue'
@@ -40,6 +42,10 @@ export default {
     },
     emits: ['show-description-page', 'show-edit-page', 'show-create-page'],
     setup(props){
+        const store = useStore(); 
+        const route = useRoute();
+        const router = useRouter();
+
         const headers = [
             {
                 id: 0,
@@ -108,11 +114,29 @@ export default {
             prevIndex.value = activeHeaderIndex.value;
         }
 
+        async function handleLoadMore(){
+            if(route.name !== 'practises'){
+                router.push('/zabiegi-ochrony-roslin')
+            }
+            try{
+                store.commit('toggleLoading');
+                const response = await store.dispatch('practises/loadNextPractises'); 
+                if(response && response.status === 401){
+                    router.replace('/login');
+                }
+                store.commit('toggleLoading');
+            }
+            catch(e){
+                alert(e)
+            }
+        }
+
         return {
             headers,
             sortedList,
             sortHeader,
             activeHeaderIndex,
+            handleLoadMore,
         }
     }
 }

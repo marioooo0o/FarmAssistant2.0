@@ -10,6 +10,8 @@ export default {
             allCrops: [],
             allParcels: [],
             userFields: [],
+            allUserFields: [],
+            lastFetchAllUserFields: null,
             nextPaginationPageUrl: '',
         
         }

@@ -34,6 +34,7 @@
             :step="step"
             :error="error"
             :unit="unit"
+            :date="date"
             />
             <ul v-if="hasError" class="col-start-2 text-red-500 text-sm">
                 <li v-for="e in error" :key="e">{{e}}</li>
@@ -93,7 +94,8 @@ export default {
         error: Array,
         unit:{
             type: String
-        }
+        },
+        date: Boolean,
     },
     setup(props, { emit }) {
         

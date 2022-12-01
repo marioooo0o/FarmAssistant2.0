@@ -4,22 +4,32 @@
         :practisesList="practisesList"
         @show-description-page=showDescriptionPage
         @show-create-page="showCreatePage" />
-    <PractiseDescription v-if="activeComponent == 'descriptionPractise'"
+    <AddPractise v-if="activeComponent == 'createPractise'"
         :practise="activePractise"
-        @close-description-card="showProductListPage" />
-    <AddPractise v-else-if="activeComponent == 'createPractise'"
-        @close-add-card="showProductListPage"/>
+        @close-add-card="showProductListPage"
+        @saved-successfully=""
+        @show-product-quantity-form="showEditQuantity"
+        @set-practise-attr="updatePractiseAttr"/>
+    <EditProductQuantity v-else-if="activeComponent == 'editProductQuantity'"
+        :product="activeProduct"
+        @show-add-practise="showCreatePage"
+        @close-edit-card="showProductListPage"
+        @update-products-quantity="updateQuantity"/>
+    <!-- <PractiseDescription v-if="activeComponent == 'descriptionPractise'"
+        :practise="activePractise"
+        @close-description-card="showProductListPage" /> -->
 </template>
 <script>
-import { ref, computed, provide, watch, onBeforeMount, onMounted } from 'vue';
+import { ref, computed, provide, watch, onBeforeMount } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter, useRoute } from 'vue-router'
 import Navbar from '../components/navbar/TheNavbar.vue';
 import PractiseList from '../components/practises/PractiseList.vue';
 import PractiseDescription from '../components/practises/PractiseDescription.vue';
 import AddPractise from '../components/practises/AddPractise.vue';
+import EditProductQuantity from '../components/practises/EditProductQuantity.vue';
 export default {
-    components: { Navbar, PractiseList, PractiseDescription, AddPractise },
+    components: { Navbar, PractiseList, PractiseDescription, AddPractise, EditProductQuantity },
     setup(props) {
         const store = useStore();
         const route = useRoute();
@@ -60,6 +70,11 @@ export default {
             plant_protection_products: []
         });
 
+        const activeProduct = ref({
+            id: null,
+            name: ""
+        });
+
         watch(practiseId, (newValue) => {
             if (newValue) {
                 activePractise.value = practisesList.value.find((practise) => practise.id === newValue)
@@ -74,6 +89,15 @@ export default {
                 }
             }
         });
+
+        function updatePractiseAttr(formData){
+            console.log('form data w page', formData);
+            activePractise.value.name = formData.practiseName,
+            activePractise.value.start = formData.practiseDate,
+            activePractise.value.water = formData.practiseWater,
+            activePractise.value.fields = formData.practiseFields.value,
+            activePractise.value.plant_protection_products = formData.practiseProducts;
+        }
         function showProductListPage() {
             activePractise.value = {
                 name: "",
@@ -97,6 +121,37 @@ export default {
             lastCreateOrEdit.value = 'create';
         }
 
+        function showEditQuantity(product){
+            activeProduct.value = product;
+            activeComponent.value = 'editProductQuantity'
+        }
+
+        function updateQuantity(formData){
+            const productData = {
+                id: formData.id,
+                name: formData.name,
+                quantity: formData.quantity,
+                unit: formData.unit,
+                pivot:{
+                    quantity: formData.pivot.quantity
+                }
+            }
+            console.log('formik', formData);
+            activeProduct.value = productData;
+            const productInPractise = activePractise.value.plant_protection_products.find((product) => product.id === activeProduct.value.id);
+            console.log('product in practise', productInPractise);
+            
+            if(productInPractise){
+                const index = activePractise.value.plant_protection_products.findIndex((product) => product.id === activeProduct.value.id)
+                activePractise.value.plant_protection_products[index].quantity = productData.quantity;
+            }else{
+                activePractise.value.plant_protection_products.push(productData);
+            }
+
+            showCreatePage();
+            // productInPractise = activePractise.value.plant_protection_products
+        }
+
         provide('activeComponent', activeComponent);
 
         const isPractisePage = computed(() => {
@@ -108,9 +163,13 @@ export default {
             activeComponent,
             practisesList,
             activePractise,
+            activeProduct,
+            updatePractiseAttr,
             showProductListPage,
             showDescriptionPage,
             showCreatePage,
+            showEditQuantity,
+            updateQuantity,
             isPractisePage,
         }
     }

@@ -71,15 +71,15 @@ class AuthController extends Controller
         auth()->logout();
         return response()->json(['message' => 'User successfully signed out'])->withCookie($cookie);
     }
-    /**
-     * Refresh a token.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function refresh()
-    {
-        return $this->createNewToken(auth()->refresh());
-    }
+    // /**
+    //  * Refresh a token.
+    //  *
+    //  * @return \Illuminate\Http\JsonResponse
+    //  */
+    // public function refresh()
+    // {
+    //     return $this->createNewToken(auth()->refresh());
+    // }
     /**
      * Get the authenticated User.
      *
@@ -93,20 +93,20 @@ class AuthController extends Controller
             'user' => new UserResource(auth()->user())
         ], Response::HTTP_OK);
     }
-    /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function createNewToken($token)
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
-            'user' => auth()->user()
-        ]);
-    }
+    // /**
+    //  * Get the token array structure.
+    //  *
+    //  * @param  string $token
+    //  *
+    //  * @return \Illuminate\Http\JsonResponse
+    //  */
+    // protected function createNewToken($token)
+    // {
+    //     return response()->json([
+    //         'access_token' => $token,
+    //         'token_type' => 'bearer',
+    //         'expires_in' => auth()->factory()->getTTL() * 60,
+    //         'user' => auth()->user()
+    //     ]);
+    // }
 }

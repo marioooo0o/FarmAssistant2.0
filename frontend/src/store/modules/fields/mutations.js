@@ -27,4 +27,10 @@ export default {
     setCadastralParcels(state, payload){
         state.allParcels = payload;
     },
+    setAllUserFields(state, payload){
+        state.allUserFields = payload;
+    },
+    setFetchTimestampAllUserFields(state){
+        state.lastFetchAllUserFields = new Date().getTime();
+    }
 }

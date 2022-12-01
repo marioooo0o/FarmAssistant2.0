@@ -6,7 +6,7 @@ export default {
             return;
         }
         const warehouseId = context.getters.userMagazine.id;
-        await axios
+        const response = await axios
         .get(`warehouses/${warehouseId}`)
         .then(function (res){
             if(res.status === 200){
@@ -35,7 +35,6 @@ export default {
                     };
                     products.push(product);
                 });
-                console.log('products', products);
                 context.commit('setProducts', products);
                 context.commit('setFetchTimestampWarehouse');
                 if(res.data.warehouse.next_page_url){
@@ -45,6 +44,11 @@ export default {
                 else {
                         context.commit('setNextPaginationPageUrl', null);
                 }
+                const response = {
+                    status: res.status,
+                    statusText: res.statusText,
+                }
+                return response;
             }
         })
         .catch(function (err){
@@ -61,6 +65,8 @@ export default {
             }, {root: true});
             return response;
         })
+
+        return response;
 
     },
 
@@ -142,9 +148,9 @@ export default {
         }
     },
     async loadAllProducts(context, payload){
-        if(!context.getters.shouldUpdatePlantProtectionProduct){
-            return;
-        }
+        // if(!context.getters.shouldUpdatePlantProtectionProduct){
+        //     return;
+        // }
 
         const response = await axios
         .get('plant-protection-products')
@@ -188,7 +194,6 @@ export default {
         })
         .then(function(res){
             if(res.status === 201){
-                console.log('res', res);
                 context.commit('setProducts', res.data.warehouse.products);
                 context.commit('response/setResponse', {
                         status: true,
@@ -284,5 +289,69 @@ export default {
         .catch(function(err){
             console.log('err', err);
         })
+    },
+
+    async loadAllWarehouseProducts(context, payload){
+        if(!context.getters.shouldUpdateWarehouseProducts){
+            return;
+        }
+        const warehouseId = context.getters.userMagazine.id;
+        const response = await axios
+        .get(`warehouses/${warehouseId}/allProducts`)
+        .then(function (res){
+            if(res.status == 200){
+                const products = [];
+                res.data.warehouse.forEach(element => {
+                    const product = {
+                        id: element.id,
+                        name: element.name,
+                        permit_number: element.permit_number,
+                        permit_deadline: element.permit_deadline,
+                        sale_deadline: element.sale_deadline,
+                        term_for_use: element.term_for_use,
+                        type: element.type,
+                        active_substance: element.active_substance,
+                        plant:  element.plant,
+                        pest:   element.pest,
+                        dose:   element.dose,
+                        recommended_dose: element.recommended_dose,
+                        maximum_dose: element.maximum_dose,
+                        unit: element.unit,
+                        deadline: element.deadline,
+                        group_name: element.group_name,
+                        small_area: element.small_area,
+                        application: element.application,
+                        pivot: element.pivot,
+                    };
+                    products.push(product);
+                });
+                context.commit('setAllWarehouseProducts', products)
+                context.commit('setFetchTimestampAllWarehouseProducts');
+                context.commit('response/setResponse', {
+                    status: true,
+                    message: "Produkty z magazynu pobrane pomyślnie.",
+                }, {root: true});
+
+                return {
+                    status: res.status,
+                    statusText: res.statusText,
+                }
+            }
+        })
+        .catch(function (err){
+            const response = {
+                status: err.response.status,
+                statusText: err.response.statusText,
+            }
+            if(err.response.status === 401){
+                localStorage.removeItem('isAuth');
+            }
+            context.commit('response/setResponse', {
+                status: false,
+                message: err.response.statusText,
+            }, {root: true});
+            return response;
+        })
+        return response;
     }
 }

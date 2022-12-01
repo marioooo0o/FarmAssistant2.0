@@ -159,4 +159,18 @@ class FieldController extends Controller
             return response()->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
         }
     }
+
+    public function getAllFarmFields($id){
+        $farm = $this->farmService->find($id);
+        if (auth()->user()->id == $farm->user_id) {
+            $farmFields = $this->fieldService->getAllFarmFields($farm, false);
+            return response()->json([
+                "success" => true,
+                "message" => "Warehouse retrieved successfully.",
+                'fields' => FieldResource::collection($farmFields)
+            ], Response::HTTP_OK);
+        } else {
+            return response()->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
+        }
+    }
 }

@@ -4,10 +4,10 @@
             <h1>
                 <img alt="Logo FarmAssistant" class="w-96" height="439" src="@/assets/logo.png" width="550" />
             </h1>
-            <blockquote class="italic font-light text-xl leading-15 tracking-most-widest text-center mt-16">
+            <blockquote class="italic font-light text-white font-bold text-l leading-15 tracking-most-widest text-center mt-16">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis sed, laboriosam rerum ipsa nulla molestias.
                 <br />
-                ~ Lorem ipsum dolor
+                ~ link do schronisaka piesków
             </blockquote>
         </div>
     </header>

@@ -143,7 +143,7 @@ export default {
         provide('descriptionIsShowed', descriptionIsShowed);
 
         async function handleLoadMore(){
-            if(route.name !== 'grunty'){
+            if(route.name !== 'fields'){
                 router.push('/grunty');
             }
             try{

@@ -8,6 +8,9 @@ export default {
     allPlantProtectionProducts(state){
         return state.allPlantProtectionProducts;
     },
+    allWarehouseProducts(state){
+        return state.allWarehouseProducts;
+    },
     getNextPaginationPageUrl(state){
         return state.nextPaginationPageUrl;
     },
@@ -21,6 +24,14 @@ export default {
     },
     shouldUpdatePlantProtectionProduct(state){
         const lastFetch = state.lastFetch.lastFetchPlantProtectionProduct;
+        if(!lastFetch){
+            return true;
+        }
+        const currentTimeStamp = new Date().getTime();
+        return (currentTimeStamp - lastFetch) / 1000 > 60*5;
+    },
+    shouldUpdateWarehouseProducts(state){
+        const lastFetch = state.lastFetch.lastFetchAllWarehouseProducts;
         if(!lastFetch){
             return true;
         }

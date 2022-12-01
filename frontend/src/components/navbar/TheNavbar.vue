@@ -4,7 +4,7 @@
             <div class="flex items-center">
                 <img src="../../assets/logoWithoutText.png" alt="Logo" height="60px" width="60px" class="w-10">
                 <span class="text-3xl text-white tracking-most-widest ml-3">
-                    FarmAssistant
+                    <router-link to="/dashboard">FarmAssistant</router-link> 
                 </span>
             </div>
         </a>

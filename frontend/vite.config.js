@@ -12,6 +12,8 @@ export default defineConfig({
     }
   },
   server: {
-    port: 4747
+    host: "farm.com",
   },
+  base: 'http://farm.com:8000/'
 })
+

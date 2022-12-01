@@ -30,20 +30,26 @@ class FieldService
         $this->cadastralParcelRepository = $cadastralParceldRepository;
     }
 
-    public function getAllFarmFields($farm)
+    public function getAllFarmFields($farm, $withPagination = true)
     {
-        try {
-            $fields = $farm->fields()->with('cadastralParcels')->with('crop')->paginate(5)->toArray();
-            $fields['data'] = array_map(function ($field) {
-                if ($field['crop']['image_path']) {
-                    $field['crop']['image_path'] = Storage::url($field['crop']['image_path']);
-                }
-                return $field;
-            }, $fields['data']);
-            return collect($fields);
-        } catch (Exception $e) {
-            return $e->getMessage();
+        if($withPagination){
+            try {
+                $fields = $farm->fields()->with('cadastralParcels')->with('crop')->paginate(5)->toArray();
+                $fields['data'] = array_map(function ($field) {
+                    if ($field['crop']['image_path']) {
+                        $field['crop']['image_path'] = Storage::url($field['crop']['image_path']);
+                    }
+                    return $field;
+                }, $fields['data']);
+                return collect($fields);
+            } catch (Exception $e) {
+                throw $e;
+            }
         }
+        else{
+            return $farm->fields()->with('crop')->get();
+        }
+        
     }
 
     public function create($fieldAtributes, Farm $farm)

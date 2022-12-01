@@ -34,4 +34,19 @@ class StorePractise extends FormRequest
             'products.*.quantity' => 'required|numeric|min:0',
         ];
     }
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'name.required' => 'Nazwa pola jest wymagana',
+            'water.required' => 'Woda jest wymagana',
+            'start_date.required' => 'Termin zabiegu jest wymagany',
+            'fields.required' => 'Pola są wymagane',
+            'products.required' => 'Środki są wymagane',
+        ];
+    }
 }

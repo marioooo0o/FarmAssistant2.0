@@ -4,7 +4,9 @@
             <h1 class="flex justify-center items-center text-3xl">{{practise.name}}
                 <span class="flex justify-center items-center ml-4 gap-2">
                     <i class="fa-regular fa-pen-to-square text-2xl cursor-pointer text-fa-primary hover:text-fa-secondary"
-                        @click="$emit('show-edit-page')"></i>
+                        @click="handleEditClicked()"></i>
+                    <!-- <i class="fa-regular fa-pen-to-square text-2xl cursor-pointer text-fa-primary hover:text-fa-secondary"
+                        @click="$emit('show-edit-page')"></i> -->
                     <i class="fa-regular fa-trash-can text-2xl cursor-pointer text-fa-primary hover:text-red-500"
                         @click="handleDeleteClicked()"></i>
                 </span>
@@ -64,7 +66,7 @@ export default {
             return Object.values(map);
         });
         function handleEditClicked() {
-            console.log('edit clicked');
+            console.log('edit clicked', props.practise);
         };
         async function handleDeleteClicked() {
             console.log('delete practise clicked');

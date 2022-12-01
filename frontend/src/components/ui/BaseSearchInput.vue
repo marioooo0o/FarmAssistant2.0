@@ -5,7 +5,7 @@
             :required="required" :type="type" :selectedInSearch="modelValue" :placeholder="placeholder"
             v-model="inputSearchQuery" @input="handleInput" />
         <ul v-if="inputSearchResults && isVisible" class="bg-input-bg border rounded-b-[10px]" ref="target">
-            <li v-for="result in inputSearchResults" class="cursor-pointer hover:bg-yellow-200">
+            <li v-for="result in inputSearchResults" :key="result.id" class="cursor-pointer hover:bg-yellow-200">
                 <span class="flex items-center justify-center gap-4 my-2" @click="getSelectedValue(result.id)"><img
                         v-if="result.src" :src="result.src" :alt="result[searchKey]" class="w-6">{{ result[searchKey]}}</span>
             </li>

@@ -84,7 +84,6 @@ export default {
                 errors.parcelAreaInField.push('Powierzchnia działki musi być większa od 0');
             }
             return false;
-            
         }
 
         function submitForm(){
@@ -95,8 +94,7 @@ export default {
                 parcel_area: parseFloat(parcelArea.value)
                 };
                 emit('save-parcel', formData);
-            }
-            
+            } 
         }
         return {
             parcelArea,

@@ -9,11 +9,13 @@ export default {
             warehouse: {
                 id: null,
                 farmId: null,
-                products: []
+                products: [],
             },
+            allWarehouseProducts: [],
             lastFetch:{
                 lastFetchWarehouse: null,
-                lastFetchPlantProtectionProduct: null
+                lastFetchPlantProtectionProduct: null,
+                lastFetchAllWarehouseProducts: null,
             },
             allPlantProtectionProducts: [],
             nextPaginationPageUrl: '',

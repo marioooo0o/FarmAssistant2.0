@@ -21,4 +21,10 @@ export default {
     setNextPaginationPageUrl(state, payload){
         state.nextPaginationPageUrl = payload;
     },
+    setAllWarehouseProducts(state, payload){
+        state.allWarehouseProducts = payload;
+    },
+    setFetchTimestampAllWarehouseProducts(state){
+        state.lastFetch.lastFetchAllWarehouseProducts = new Date().getTime();
+    }
 }

@@ -193,6 +193,7 @@ export default {
             })
         }
     },
+
     async addNewField(context, payload){
         const farmId = context.rootGetters['farm/userFarm'].id;
         const response = await axios 
@@ -347,5 +348,46 @@ export default {
 
         return response;
     },
+
+    async loadAllFields(context, payload){
+        if (!context.getters.shouldUpdateAllUserFields){
+            return;
+        }
+        const farmId = context.rootGetters['farm/userFarm'].id;
+        const response = await axios
+        .get(`farms/${farmId}/allFields`)
+        .then(function(res){
+            if(res.status === 200){
+                const fields = res.data.fields;
+                context.commit('setAllUserFields', fields)
+            }
+            context.commit('response/setResponse', {
+                status: true,
+                message: 'Pola użytkownika pobrane!',
+            }, {root: true});
+            context.commit('setFetchTimestampAllUserFields');
+            const response = {
+                status: res.status,
+                statusText: res.statusText,
+            }
+            return response;
+        })
+        .catch(function(err){
+            const response = {
+                status: err.response.status,
+                statusText: err.response.statusText,
+            }
+            if(err.response.status === 401){
+                localStorage.removeItem('isAuth');
+            }
+            context.commit('response/setResponse', {
+                status: false,
+                message: err.response.statusText,
+            }, {root: true});
+            
+            return response;
+        })
+        return response
+    }
     
 }

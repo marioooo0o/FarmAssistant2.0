@@ -14,7 +14,6 @@ class CropController extends Controller
     public function __construct(CropService $cropService)
     {
         $this->cropService = $cropService;
-        $this->middleware('auth:api');
     }
     /**
      * Display a listing of the resource.
