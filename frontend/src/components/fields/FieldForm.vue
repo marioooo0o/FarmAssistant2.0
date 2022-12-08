@@ -4,9 +4,6 @@
             <base-label id="fieldName" label="Nazwa Pola:" required v-model.trim="fieldName" type="text" name="fieldName" :error="errors['fieldName']" />
         </base-form-control>
         <base-form-control>
-            <base-label id="fieldArea" label="Powierzchnia:" required v-model="fieldArea" type="number" disabled />
-        </base-form-control>
-        <base-form-control>
             <SearchFormControl search id="fieldCrop" label="Uprawa:" required placeholder="wyszukaj uprawę:" name="crop"
                 :searchData="crops" :actualData="fieldCrop" 
                 :error="errors['fieldCrop']"
@@ -14,13 +11,16 @@
         </base-form-control>
         <base-form-control>
             <ParcelSearchInput search id="fieldParcels" label="Działki:" required placeholder="wyszukaj działkę:"
-                :searchData="parcels" :actualData="fieldParcels"
-                searchKey="parcel_number"
-                :error="errors['fieldParcels']"
-                @show-parcel-form="showParcelForm"
-                @update-parcel-list="updateParcelList" />
+                    :searchData="parcels" :actualData="fieldParcels"
+                    searchKey="parcel_number"
+                    :error="errors['fieldParcels']"
+                    @show-parcel-form="showParcelForm"
+                    @update-parcel-list="updateParcelList" />
         </base-form-control>
-    </form>
+        <base-form-control>
+            <base-label id="fieldArea" label="Powierzchnia:" required v-model="fieldArea" type="number" disabled />
+        </base-form-control>
+</form>
 </template>
 <script>
 import { ref, reactive, computed, watch, provide, onBeforeMount } from 'vue';

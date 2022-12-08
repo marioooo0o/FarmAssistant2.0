@@ -8,6 +8,10 @@ export default {
     addPractise(state, payload){
         state.userPractises.push(payload);
     },
+    editPractise(state, payload){
+        const index = state.userPractises.findIndex((practise) => practise.id === payload.id);
+        state.userPractises[index] = payload;
+    },
     setFetchTimestamp(state){
         state.lastFetch = new Date().getTime();
     },

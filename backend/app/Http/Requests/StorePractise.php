@@ -25,7 +25,7 @@ class StorePractise extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'water' => 'required|numeric',
+            'water' => 'required|numeric|min:1',
             'start_date' => 'required|date',
             'fields' => 'required|array',
             'fields.*.id' => 'required|integer|min:1|',
@@ -47,6 +47,7 @@ class StorePractise extends FormRequest
             'start_date.required' => 'Termin zabiegu jest wymagany',
             'fields.required' => 'Pola są wymagane',
             'products.required' => 'Środki są wymagane',
+            'water.min' => 'Ilość wody musi być większa od :min'
         ];
     }
 }

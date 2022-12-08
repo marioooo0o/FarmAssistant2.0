@@ -4,9 +4,7 @@
             <h1 class="flex justify-center items-center text-3xl">{{practise.name}}
                 <span class="flex justify-center items-center ml-4 gap-2">
                     <i class="fa-regular fa-pen-to-square text-2xl cursor-pointer text-fa-primary hover:text-fa-secondary"
-                        @click="handleEditClicked()"></i>
-                    <!-- <i class="fa-regular fa-pen-to-square text-2xl cursor-pointer text-fa-primary hover:text-fa-secondary"
-                        @click="$emit('show-edit-page')"></i> -->
+                        @click="$emit('show-edit-page')"></i>
                     <i class="fa-regular fa-trash-can text-2xl cursor-pointer text-fa-primary hover:text-red-500"
                         @click="handleDeleteClicked()"></i>
                 </span>
@@ -16,14 +14,14 @@
                     <div>Data wykonania:</div>
                     <div>{{ practise.start }}</div>
                     <div>Uprawy:</div>
-                    <div>
+                    <div class="flex">
                         <img v-for="crop in practiseCrops" :key="crop.id" :src="crop.image_path" :alt="crop.name" height="50px" width="50px"
-                            class="w-5">
+                            class="w-6">
                     </div>
                     <div>Pola:</div>
                     <div>
                         <ul>
-                            <li v-for="field in practise.fields" :key="field.id">Działka {{field.field_name}}</li>
+                            <li v-for="field in practise.fields" :key="field.id">{{field.field_name}}</li>
                         </ul>
                     </div>
                     <div>Środki ochrony roślin:</div>
@@ -65,9 +63,7 @@ export default {
             }
             return Object.values(map);
         });
-        function handleEditClicked() {
-            console.log('edit clicked', props.practise);
-        };
+
         async function handleDeleteClicked() {
             console.log('delete practise clicked');
             // store.commit('toggleLoading');
@@ -91,7 +87,6 @@ export default {
         }
         return {
             practiseCrops,
-            handleEditClicked,
             handleDeleteClicked,
             handleCloseCard
         }

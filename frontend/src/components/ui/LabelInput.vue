@@ -28,7 +28,12 @@
         <label class="mr-2 text-lg" :for="id">
             {{ label }}
         </label>
-        <BaseInput :id="id" @input="$emit('update:modelValue', $event.target.value)" :required="required" :disabled="disabled" :type="type" :value="modelValue" :name="name"
+        <BaseInput :id="id" @input="$emit('update:modelValue', $event.target.value)" 
+            :required="required" 
+            :disabled="disabled" 
+            :type="type" 
+            :value="modelValue" 
+            :name="name"
             :placeholder="placeholder"
             :min="min"
             :step="step"

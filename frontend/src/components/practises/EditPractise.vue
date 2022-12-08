@@ -1,10 +1,10 @@
 <template>
     <base-description-card mainIcons 
         formName="practiseForm" 
-        @close-description-card="$emit('close-add-card')"
-        @cancel-clicked="$emit('close-add-card')">
+        @close-description-card="$emit('close-edit-card')"
+        @cancel-clicked="$emit('close-edit-card')">
         <div class="flex flex-col items-center font-semibold tracking-wider px-16">
-            <h1 class="text-2xl">Dodaj Zabieg</h1>
+            <h1 class="text-2xl">Edytuj Zabieg</h1>
             <form id="practiseForm" @submit.prevent="submitForm">
                 <base-form-control>
                     <base-label id="practiseName" label="Nazwa zabiegu:" required v-model.trim="practiseName" type="text" name="practiseName"
@@ -21,7 +21,7 @@
                         :error="errors['practiseProducts']"
                         @show-product-quantity-form="showProductQuantityForm"
                         @update-product-list="updateProductList"
-                        />
+                    />
                 </base-form-control>
                 <base-form-control>
                     <FieldSearchInput search id="practiseProdcts" label="Pola:" required placeholder="wyszukaj pole:"
@@ -32,7 +32,10 @@
                         @delete-field-from-list="deleteFieldFromList"/>
                 </base-form-control>
                 <base-form-control>
-                    <base-label id="practiseWater" label="Ilość wody:" required v-model="practiseWater" type="numeric" name="practiseWater"
+                    <base-label id="practiseWater" label="Ilość wody:" 
+                        required v-model="practiseWater" type="number" 
+                        name="practiseWater"
+                        min="0"
                         unit="l"     
                     :error="errors['practiseWater']" />
                 </base-form-control>
@@ -55,13 +58,9 @@ export default {
         practise: {
             type: Object, 
             required: true
-        },
-        allProducts: {
-            type: [Array, Object],
-            required: true
         }
     },
-    emits: ['close-add-card', 'show-product-quantity-form', 'set-practise-attr'],
+    emits: ['close-edit-card', 'show-product-quantity-form', 'set-practise-attr'],
     setup(props, { emit }) {
         const store = useStore();
         const router = useRouter();
@@ -85,6 +84,10 @@ export default {
         const practiseFields = ref(props.practise.fields ? props.practise.fields : []);
         const practiseWater = ref(props.practise.water ? props.practise.water : 0);
         const selectedProduct = ref(null);
+
+        const allProducts = computed(() => {
+            return store.getters['warehouses/allWarehouseProducts'];
+        });
 
         const allFields = computed(() => {
             return store.getters['fields/allUserFields'];
@@ -143,7 +146,7 @@ export default {
             errors.practiseFields = [];
             errors.practiseWater = [];
 
-            if (practiseName.value && practiseDate.value && practiseFields.value.length !== 0 && practiseProducts.value.length !== 0 && practiseWater.value > 0) {
+            if (practiseName.value && practiseDate.value && practiseFields.value.length !== 0 && practiseProducts.value.length !== 0 && practiseWater.value) {
                 return true;
             }
 
@@ -172,20 +175,22 @@ export default {
             if (!saveFirstClicked.value) saveFirstClicked.value = true;
             if (checkForm()) {
                 const formData = {
+                    practiseId: props.practise.id,
                     name: practiseName.value,
                     water: practiseWater.value,
                     start_date: practiseDate.value,
                     fields: practiseFields.value.map((field) => ({"id": field.id})),
                     products: practiseProducts.value.map((product) => ({"id": product.id, "quantity": product.pivot.quantity})),
                 }
-                
+                console.log('formData', formData);
                 store.commit('toggleLoading');
-                const response = await store.dispatch('practises/addPractise', formData);
-                if (response.status === 201) {
+                const response = await store.dispatch('practises/editPractise', formData);
+                console.log('res', response);
+                if (response.status === 200) {
                     emit('close-add-card');
                 }
-                
                 else if (response.status === 422) {
+                    console.log('res2', response);
                     errors.practiseName = [];
                     errors.practiseDate = [];
                     errors.practiseFields = [];
@@ -227,16 +232,16 @@ export default {
             practiseProducts,
             practiseFields,
             practiseWater,
+            allProducts,
             allFields,
             showProductQuantityForm,
             UpdateProduct,
-            updateProductList,
             addFieldToList,
+            updateProductList,
             deleteFieldFromList,
             submitForm,
             errors
         }
-
     }
 }
 </script>

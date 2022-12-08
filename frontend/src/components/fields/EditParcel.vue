@@ -1,7 +1,7 @@
 <template>
     <base-description-card
     mainIcons
-    @cancel-clicked="$emit('show-add-edit-field')"
+    @cancel-clicked="$emit('show-add-edit-practise')"
     @close-description-card="$emit('close-edit-card')"
     @save-clicked="submitForm">
         <div class="flex flex-col items-center font-semibold tracking-wider">
@@ -36,7 +36,7 @@ export default {
             type: Object,
         },
     },
-    emits: ['close-edit-card', 'show-add-edit-field', 'save-parcel'],
+    emits: ['close-edit-card', 'show-add-edit-practise', 'save-parcel'],
     setup(props, {emit}) {
         
         //powierzchnia działki ewidencyjnej należącej do pola

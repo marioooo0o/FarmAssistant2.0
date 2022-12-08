@@ -8,7 +8,7 @@
         <ul v-if="selectedValues" class="flex flex-col items-end mr-4">
             <li v-for="value in selectedValues" :key="value.id" class="flex items-center justify-center">
                 <span class="my-2">
-                    Środek: {{ value.name}} {{value.quantity}} {{value.unit}}
+                    Środek: {{ value.name}} {{value.pivot.quantity}} {{value.unit}}
                 </span>
                 <span class="flex gap-1 ml-2">
                     <i class="fa-regular fa-pen-to-square text-2xl cursor-pointer text-fa-primary hover:text-fa-secondary"
@@ -51,7 +51,7 @@ export default {
         },
         error: Array,
     },
-    emits: ['show-product-quantity-form', 'update-parcel-list'],
+    emits: ['show-product-quantity-form', 'update-product-list'],
     setup(props, {emit}) {
         const selectedValues = ref(props.actualData);
         function getSelectedValue(id){
@@ -68,7 +68,7 @@ export default {
         
         function handleDeleteItem(id){
             selectedValues.value = selectedValues.value.filter((value) => value.id !== id);
-            emit('update-parcel-list', selectedValues.value);
+            emit('update-product-list', selectedValues.value);
         }
 
         return {

@@ -108,7 +108,7 @@ class PractiseController extends Controller
             return response()->json([
                 "success" => true,
                 "message" => "Practise updated successfully.",
-                'practise' => $practise
+                'practise' => new PractiseResource($practise)
             ], Response::HTTP_OK);
         } else {
             return response()->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);

@@ -166,5 +166,62 @@ export default {
         })
 
         return response;
-    }
+    },
+    async editPractise(context, payload){
+        const farmId = context.rootGetters['farm/userFarm'].id;
+        const practiseId = payload.practiseId;
+        const url = `farms/${farmId}/practises/${practiseId}`;
+        console.log('payload', payload);
+        const response = await axios
+        .put(url, payload)
+        .then((res) => {
+            if(res.status === 200){
+                const practise = {
+                    id: res.data.practise.id,
+                    farm_id: res.data.practise.farm_id,
+                    name: res.data.practise.name,
+                    start: res.data.practise.start,
+                    water: res.data.practise.water,
+                    fields: res.data.practise.fields,
+                    plant_protection_products: res.data.practise.plant_protection_products,
+                };
+                context.commit('editPractise', practise);
+                const response = {
+                    status: res.status,
+                    statusText: res.statusText,
+                }
+                return response;
+            }
+            else if(res.status == 422){
+                const response = {
+                            status: res.status,
+                            statusText: res.statusText,
+                            errors: res.data.errors
+                        }
+                return response;
+            }
+            else {
+                const response = {
+                            status: res.status,
+                            statusText: res.statusText,
+                        }
+                return response;
+            }
+        })
+        .catch((err) => {
+            const response = {
+                status: err.response.status,
+                statusText: err.response.statusText,
+            }
+            if(err.response.status === 401){
+                localStorage.removeItem('isAuth');
+            }
+            context.commit('response/setResponse', {
+                status: false,
+                message: err.response.statusText,
+            }, {root: true});
+            return response;
+        })
+        return response;
+    },
 }

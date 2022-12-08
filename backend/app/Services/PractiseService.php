@@ -55,7 +55,8 @@ class PractiseService
                     $warehousePivot = array('quantity' => ($product->pivot->quantity - $formProducts[$i]['quantity']));
                     $warehouse->plantProtectionProducts()->updateExistingPivot($formProducts[$i]['id'], $warehousePivot);
                 } else {
-                    $errors['products.' . $i . '.quantity'] = "Nie posiadasz wystarczającą ilość środka w magazynie";
+                    $errors['products'][$i]['quantity'] = "Nie posiadasz wystarczającą ilość środka w magazynie";
+                    // $errors['products.' . $i . '.quantity'] = "Nie posiadasz wystarczającą ilość środka w magazynie";
                 }
             }
             if ($errors) {
@@ -131,7 +132,7 @@ class PractiseService
                     $warehousePivot = array('quantity' => ($product->pivot->quantity - $formProducts[$i]['quantity']));
                     $warehouse->plantProtectionProducts()->updateExistingPivot($formProducts[$i]['id'], $warehousePivot);
                 } else {
-                    $errors['products.' . $i . '.quantity'] = "Nie posiadasz wystarczającą ilość środka w magazynie";
+                    $errors['products'][$i]['quantity'] = "Nie posiadasz wystarczającą ilość środka w magazynie";
                 }
             }
             if ($errors) {
@@ -168,6 +169,7 @@ class PractiseService
                 $warehouseProduct = $warehouseProducts->where('id', $product->id)->first();
                 $quantityBefore = $product->pivot->quantity + $warehouseProduct->pivot->quantity;
                 $warehouse->plantProtectionProducts()->updateExistingPivot($product->id, ['quantity' => $quantityBefore]);
+                $warehouse->save();
             }
         } catch (Exception $e) {
             throw $e;

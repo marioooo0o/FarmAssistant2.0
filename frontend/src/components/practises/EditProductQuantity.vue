@@ -1,7 +1,7 @@
 <template>
     <base-description-card
     mainIcons
-    @cancel-clicked="$emit('show-add-practise')"
+    @cancel-clicked="$emit('show-add-edit-practise')"
     @close-description-card="$emit('close-edit-card')"
     @save-clicked="submitForm">
         <div class="flex flex-col items-center font-semibold tracking-wider">
@@ -30,11 +30,21 @@ export default {
         required: Boolean,
         product: {
             type: Object,
+            required: true
         },
+        practise: {
+            type: Object,
+            required: true
+        },
+        allProducts: {
+            type: [Array, Object],
+            required: true
+        }
     },
-    emits: ['close-edit-card', 'show-add-practise', 'update-products-quantity'],
+    emits: ['close-edit-card', 'show-add-practise', 'show-add-edit-practise', 'update-products-quantity'],
     setup(props, {emit}) {
-        const productQuantity = ref(props.product.quantity ? props.product.quantity : 0);
+        const productQuantity = ref(props.practise.plant_protection_products.length > 0 && props.practise.plant_protection_products.find((product) => product.id === props.product.id)? props.practise.plant_protection_products.find((product) => product.id === props.product.id).pivot.quantity : 0);
+        // const productQuantity = ref(props.practise.plant_protection_products.length > 0 && props.allProducts.find((product) => product.id === props.product.id).pivot.quantity ? props.allProducts.find((product) => product.id === props.product.id).pivot.quantity : 0);
 
         const errors = reactive({
             productQuantity: [],
@@ -73,7 +83,7 @@ export default {
                     unit: props.product.unit.split('/')[0],
                     quantity: parseFloat(productQuantity.value),
                     pivot:{
-                        quantity: props.product.pivot.quantity
+                        quantity: props.product.pivot.quantity - parseFloat(productQuantity.value)
                     }
                 };
                 emit('update-products-quantity', formData);
