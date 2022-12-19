@@ -1,5 +1,5 @@
 <template>
-    <base-description-card mainIcons 
+    <base-description-card saveIcon cancelIcon
         formName="practiseForm" 
         @close-description-card="$emit('close-add-card')"
         @cancel-clicked="$emit('close-add-card')">

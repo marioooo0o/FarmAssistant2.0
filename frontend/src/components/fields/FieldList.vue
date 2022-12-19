@@ -5,14 +5,14 @@
                 :headers="headers" :activeHeaderIndex="activeHeaderIndex"
                 @add-new="$emit('show-create-page')" 
                 @selected-header="sortHeader" />
-            <div class="m-3" v-if="sortedList.length !== 0">
+            <div class="m-3" v-if="sortedList && sortedList.length !== 0">
                 <FieldListItem v-for="field in sortedList" :key="field.id" :field="field"
                     @click="$emit('show-description-page', field.id)" />
             </div>
-            <div class="m-3 text-lg" v-else>
+            <div class="m-3 py-6 text-lg" v-else>
                 Nie posiadasz żadnych pół
             </div>
-            <BaseButton :class="'m-3 text-lg'" @click="handleLoadMore">Załaduj więcej</BaseButton>
+            <BaseButton :class="'m-3 text-lg'" @click="handleLoadMore"  v-if="sortedList && sortedList.length !== 0">Załaduj więcej</BaseButton>
         </div>
     </BaseCard>
 </template>

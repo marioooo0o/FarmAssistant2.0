@@ -13,6 +13,7 @@ export default {
         const response = await axios
         .post('farms', data)
         .then(function(res){
+            console.log('resfarm', res);
                 if(res.status === 422){
                     const response = {
                         status: res.status,
@@ -31,6 +32,11 @@ export default {
                         cityName: res.data.farm.city,
                         farmArea: res.data.farm.area,
                     });
+
+                    context.commit('warehouses/setWarehouse', {
+                        id: res.data.farm.warehouse.id,
+                        farmId: res.data.farm.warehouse.farm_id
+                    }, {root: true})
                     
                     context.commit('response/setResponse', {
                         status: res.data.success,

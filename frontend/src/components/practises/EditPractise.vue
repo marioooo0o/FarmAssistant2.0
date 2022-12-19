@@ -1,5 +1,5 @@
 <template>
-    <base-description-card mainIcons 
+    <base-description-card saveIcon cancelIcon
         formName="practiseForm" 
         @close-description-card="$emit('close-edit-card')"
         @cancel-clicked="$emit('close-edit-card')">
@@ -187,7 +187,11 @@ export default {
                 const response = await store.dispatch('practises/editPractise', formData);
                 console.log('res', response);
                 if (response.status === 200) {
-                    emit('close-add-card');
+                    store.commit('response/setResponse', {
+                        status: true,
+                        message: 'Zabieg edytowany pomyślnie!'
+                    }, {root: true});
+                    emit('close-edit-card');
                 }
                 else if (response.status === 422) {
                     console.log('res2', response);

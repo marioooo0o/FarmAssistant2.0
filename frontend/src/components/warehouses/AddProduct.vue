@@ -1,5 +1,5 @@
 <template>
-    <base-description-card mainIcons
+    <base-description-card saveIcon cancelIcon
         formName="productForm"
         @close-description-card="$emit('close-add-card')"
         @cancel-clicked="$emit('close-add-card')">
@@ -12,7 +12,7 @@
                         @update-search-list="UpdateProduct"/>
                 </base-form-control>
                 <base-form-control>
-                    <base-label id="productQuantity" label="Ilość środka:" v-model="productQuantity" type="number" min="0" name="productQuantity" :error="errors['productQuantity']"></base-label>
+                    <base-label id="productQuantity" label="Ilość środka:" v-model="productQuantity" type="number" min="0" name="productQuantity" :error="errors['productQuantity']" :unit="unit"></base-label>
                 </base-form-control>
             </form>
         </div>
@@ -36,6 +36,12 @@ export default {
 
         const allProducts = computed(() => {
             return store.getters['warehouses/allPlantProtectionProducts'];
+        });
+        const unit = computed(()=>{
+            if(selectedProduct.value){
+                return selectedProduct.value.unit.split('/')[0];
+            }
+            else return "";
         });
 
         const productQuantity = ref("");
@@ -122,7 +128,8 @@ export default {
             productQuantity,
             UpdateProduct,
             submitForm,
-            errors
+            errors,
+            unit
         }
 
     }

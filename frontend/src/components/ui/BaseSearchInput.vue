@@ -45,7 +45,7 @@ export default {
             if(inputSearchQuery.value !== ""){
                 isVisible.value = true;
                 if(key == 'parcel_number'){
-                    inputSearchResults.value = props.searchData.filter((value) => value[key].toString().toLowerCase().startsWith(inputSearchQuery.value.toLowerCase().trim()));
+                    inputSearchResults.value = props.searchData.filter((value) => value[key].toString().toLowerCase().startsWith(inputSearchQuery.value.toLowerCase().trim())).slice(0,5);
                 }
                 else{
                     inputSearchResults.value = props.searchData.filter((value) => value[key].toLowerCase().startsWith(inputSearchQuery.value.toLowerCase().trim())).slice(0,5);

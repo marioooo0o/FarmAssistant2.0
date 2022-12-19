@@ -1,5 +1,5 @@
 <template>
-        <base-description-card mainIcons
+        <base-description-card saveIcon cancelIcon
         @close-description-card="$emit('close-create-card')"
         @cancel-clicked="$emit('close-create-card')"
         @save-clicked="saveClicked">

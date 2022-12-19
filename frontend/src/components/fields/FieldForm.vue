@@ -18,7 +18,7 @@
                     @update-parcel-list="updateParcelList" />
         </base-form-control>
         <base-form-control>
-            <base-label id="fieldArea" label="Powierzchnia:" required v-model="fieldArea" type="number" disabled />
+            <base-label id="fieldArea" label="Powierzchnia:" required v-model="fieldArea" type="number" disabled unit="ha"/>
         </base-form-control>
 </form>
 </template>

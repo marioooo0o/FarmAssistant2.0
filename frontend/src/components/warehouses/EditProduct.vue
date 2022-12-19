@@ -1,5 +1,5 @@
 <template>
-    <base-description-card mainIcons
+    <base-description-card saveIcon cancelIcon
         formName="productForm"
         @close-description-card="$emit('close-edit-card')"
         @cancel-clicked="$emit('close-edit-card')"
@@ -11,14 +11,14 @@
                     <base-label id="productName" label="Nazwa środka:"  disabled name="productName" v-model="productName" ></base-label> 
                 </base-form-control>
                 <base-form-control>
-                    <base-label id="productQuantity" label="Ilość środka:" v-model="productQuantity" type="number" min="0" name="productQuantity" :error="errors['productQuantity']"></base-label>
+                    <base-label id="productQuantity" label="Ilość środka:" v-model="productQuantity" type="number" min="0" name="productQuantity" :error="errors['productQuantity']" :unit="unit"></base-label>
                 </base-form-control>
             </form>
     </div>
     </base-description-card>
 </template>
 <script>
-import { ref, reactive, watch, provide } from 'vue'; 
+import { ref, reactive, computed, watch, provide } from 'vue'; 
 import { useStore } from 'vuex';
 import { useRouter} from 'vue-router';
 export default {
@@ -39,6 +39,14 @@ export default {
         const errors = reactive({
             productQuantity: [],
         });
+
+        const unit = computed(()=>{
+            if(props.product){
+                return props.product.unit.split('/')[0];
+            }
+            else return "";
+        });
+
 
         const saveFirstClicked = ref(false);
         watch(productName, (newValue) => {
@@ -93,7 +101,8 @@ export default {
         return{
             productName,
             productQuantity,
-            errors,           
+            errors,     
+            unit,      
             submitForm,
         }
     }

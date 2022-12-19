@@ -1,6 +1,6 @@
 <template>
     <base-description-card
-    mainIcons
+    saveIcon cancelIcon
     @cancel-clicked="$emit('show-add-edit-practise')"
     @close-description-card="$emit('close-edit-card')"
     @save-clicked="submitForm">

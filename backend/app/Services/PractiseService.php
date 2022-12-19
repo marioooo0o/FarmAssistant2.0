@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Practise;
 use App\Models\Farm;
 use App\Models\Field;
+use App\Models\PlantProtectionProduct;
 use Illuminate\Support\Facades\DB;
 use Exception;
 use Illuminate\Validation\ValidationException;
@@ -116,25 +117,30 @@ class PractiseService
             }
 
             //zmienna przechowująca listę środków które zostały uzyte do zabiegu
-            $practiseProducts = $practise->plantProtectionProducts;
-            $formProducts = $data['products'];
-            $this->restoreToOrginal($practiseProducts, $warehouse, $warehouseProducts);
+            // $practiseProducts = $practise->plantProtectionProducts;
+            // $formProducts = $data['products'];
+            // $this->restoreToOrginal($practiseProducts, $warehouse, $warehouseProducts);
             $practise->plantProtectionProducts()->detach();
-            for ($i = 0; $i < count($formProducts); $i++) {
-                //sprawdzanie czy w magazynie jest środek który dodano w formularzu
-                if (!$product = $warehouseProducts->where('id', $formProducts[$i]['id'])->first()) {
-                    throw new Exception("You don't have this product in your warehouse");
-                }
-                //sprawdzenie czy magazyn posiada wystarczającą ilość środka do wykonania zabiegu
-                if ($product->pivot->quantity >= $formProducts[$i]['quantity']) {
-                    $pivotData = array('quantity' => $formProducts[$i]['quantity']);
-                    $practise->plantProtectionProducts()->attach($product->id, $pivotData);
-                    $warehousePivot = array('quantity' => ($product->pivot->quantity - $formProducts[$i]['quantity']));
-                    $warehouse->plantProtectionProducts()->updateExistingPivot($formProducts[$i]['id'], $warehousePivot);
-                } else {
-                    $errors['products'][$i]['quantity'] = "Nie posiadasz wystarczającą ilość środka w magazynie";
-                }
+            foreach ($data['products'] as $singleProduct){
+                $product = PlantProtectionProduct::findOrFail($singleProduct['id']);
+                $pivotData = array('quantity' => $singleProduct['quantity']);
+                $practise->plantProtectionProducts()->attach($product->id, $pivotData);
             }
+            // for ($i = 0; $i < count($formProducts); $i++) {
+            //     //sprawdzanie czy w magazynie jest środek który dodano w formularzu
+            //     if (!$product = $warehouseProducts->where('id', $formProducts[$i]['id'])->first()) {
+            //         throw new Exception("You don't have this product in your warehouse");
+            //     }
+            //     //sprawdzenie czy magazyn posiada wystarczającą ilość środka do wykonania zabiegu
+            //     if ($product->pivot->quantity >= $formProducts[$i]['quantity']) {
+            //         $pivotData = array('quantity' => $formProducts[$i]['quantity']);
+            //         $practise->plantProtectionProducts()->attach($product->id, $pivotData);
+            //         $warehousePivot = array('quantity' => ($product->pivot->quantity - $formProducts[$i]['quantity']));
+            //         $warehouse->plantProtectionProducts()->updateExistingPivot($formProducts[$i]['id'], $warehousePivot);
+            //     } else {
+            //         $errors['products'][$i]['quantity'] = "Nie posiadasz wystarczającą ilość środka w magazynie";
+            //     }
+            // }
             if ($errors) {
                 throw ValidationException::withMessages($errors);
             }

@@ -92,6 +92,7 @@ export default {
     background-color: rgb(237 237 237 / var(--tw-bg-opacity)) !important;
     border-radius: 10px !important;
     border: 1px ;
+    box-shadow: 0 0 0 1px#57B148 !important;
 }
 .el-input__inner {
     background-color: rgb(237 237 237 / var(--tw-bg-opacity)) !important;

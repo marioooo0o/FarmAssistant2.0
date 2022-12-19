@@ -1,6 +1,6 @@
 <template>
     <base-description-card
-    mainIcons
+    saveIcon cancelIcon
     @cancel-clicked="$emit('show-add-edit-practise')"
     @close-description-card="$emit('close-edit-card')"
     @save-clicked="submitForm">
@@ -39,6 +39,10 @@ export default {
         allProducts: {
             type: [Array, Object],
             required: true
+        },
+        lastCreateOrEdit:{
+            type: String,
+            required: true
         }
     },
     emits: ['close-edit-card', 'show-add-practise', 'show-add-edit-practise', 'update-products-quantity'],
@@ -58,16 +62,23 @@ export default {
 
         function checkForm(){
             errors.productQuantity = [];
-            if(productQuantity.value && productQuantity.value > 0 && productQuantity.value <= props.product.pivot.quantity){
-                return true;
+            if(props.lastCreateOrEdit === 'edit'){
+                if(productQuantity.value && productQuantity.value > 0 && productQuantity.value > 0){
+                    return true;
+                }
             }
-            else if (!productQuantity.value || productQuantity.value === 0){
+            else if(props.lastCreateOrEdit === 'create'){
+                if(productQuantity.value && productQuantity.value > 0 && productQuantity.value <= props.product.pivot.quantity){
+                    return true;
+                }
+            }
+            if (!productQuantity.value || productQuantity.value === 0){
                 errors.productQuantity.push('Ilość środka jest wymagana');
             }
-            else if (productQuantity.value < 0) {
+            if (productQuantity.value < 0) {
                 errors.productQuantity.push('Ilość środka musi być większa od 0');
             }
-            else if(productQuantity.value > props.product.pivot.quantity){
+            if(productQuantity.value > props.product.pivot.quantity){
                 errors.productQuantity.push('Ilość środka jest większa od tej posiadanej w magazynie');
             }
             return false;

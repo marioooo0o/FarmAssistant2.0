@@ -15,6 +15,7 @@
         :product="activeProduct"
         :practise="activePractise"
         :allProducts="allProducts"
+        :lastCreateOrEdit="lastCreateOrEdit"
         @show-add-practise="showCreatePage"
         @close-edit-card="showProductListPage"
         @update-products-quantity="updateQuantity"
@@ -177,8 +178,13 @@ export default {
             }else{
                 activePractise.value.plant_protection_products.push(productData);
             }
-
-            showCreatePage();
+            console.log('practiseId', practiseId.value);
+            if(practiseId.value){
+                showEditPage();
+            }
+            else{
+                showCreatePage();
+            }
             // productInPractise = activePractise.value.plant_protection_products
         }
 

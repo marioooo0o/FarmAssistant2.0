@@ -1,5 +1,5 @@
 <template>
-    <base-description-card mainIcons
+    <base-description-card saveIcon
     formName="farmForm" >
         <div class="flex flex-col items-center font-semibold tracking-wider px-16">
             <h1 class="text-2xl">Dodaj Gospodarstwo</h1>

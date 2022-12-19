@@ -18,17 +18,17 @@ class CropSeeder extends Seeder
     {
         DB::table('crops')->insert([
             'name' => 'Ziemniak',
-            'image_path' => 'crops/uoCoI5mUQ5sUhsffnQsfpl1dNY88viUh9ymNGlGp.png'
+            'image_path' => 'crops/potato.png'
         ]);
 
         DB::table('crops')->insert([
             'name' => 'Gruszka',
-            'image_path' => 'crops/4gFr51sJIDdKKbrX9YymSxjoIcgLXxythsWUbiCN.png'
+            'image_path' => 'crops/pear.png'
         ]);
 
         DB::table('crops')->insert([
             'name' => 'Truskawka',
-            'image_path' => 'crops/OWnLZnSvebEDBY9Z6FSHDCntp0yjSghdnTGAVqhH.png'
+            'image_path' => 'crops/strawberry.png'
         ]);
 
         DB::table('crops')->insert([
@@ -37,25 +37,25 @@ class CropSeeder extends Seeder
 
         DB::table('crops')->insert([
             'name' => 'Soja',
-            'image_path' => 'crops/k3xi9g8N0TmkkbWsDegcOsoMB5zAnrwdJjHlubBr.png'
+            'image_path' => 'crops/peans.png'
         ]);
 
         DB::table('crops')->insert([
             'name' => 'Wiśnia',
-            'image_path' => 'crops/MCFmHa8UlGRuRxXUggXzrbyLry1929ESbXejkBoX.png'
+            'image_path' => 'crops/cherries.png'
         ]);
         DB::table('crops')->insert([
             'name' => 'Pomidor',
-            'image_path' => 'crops/7pPA9ygvNcLyRdzs0nOVzk39wVqumLdiz1CBjjZF.png'
+            'image_path' => 'crops/tomato.png'
         ]);
 
         DB::table('crops')->insert([
             'name' => 'Sałata',
-            'image_path' => 'crops/0UO32weEArP09NE9qYdePNaV0sVFWWrHMHwhbKzB.png'
+            'image_path' => 'crops/lettuce.png'
         ]);
         DB::table('crops')->insert([
             'name' => 'Ogórek',
-            'image_path' => 'crops/qLzVh8ij0MvO71BrizLUTBua7XnMqdUaSJRcTjit.png'
+            'image_path' => 'crops/cucumber.png'
         ]);
         DB::table('crops')->insert([
             'name' => 'Porzeczka czerwona',
@@ -67,12 +67,12 @@ class CropSeeder extends Seeder
 
         DB::table('crops')->insert([
             'name' => 'Papryka',
-            'image_path' => 'crops/HWmP1jE54YobyvCEZ51grs3kQlQEr2QlRDoa9dux.png'
+            'image_path' => 'crops/pepper.png'
         ]);
 
         DB::table('crops')->insert([
             'name' => 'Cebula',
-            'image_path' => 'crops/3dGSZEAGwEJ32rnTA8eVAFaov7uSsvJ9Ld9gNCE1.png'
+            'image_path' => 'crops/onion.png'
         ]);
 
         DB::table('crops')->insert([
