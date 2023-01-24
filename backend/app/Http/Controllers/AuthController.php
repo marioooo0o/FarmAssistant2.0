@@ -69,7 +69,7 @@ class AuthController extends Controller
     {
         $cookie = Cookie::forget('jwt');
         auth()->logout();
-        return response()->json(['message' => 'User successfully signed out'])->withCookie($cookie);
+        return response()->json(['message' => 'User successfully signed out'], Response::HTTP_OK)->withCookie($cookie);
     }
     // /**
     //  * Refresh a token.

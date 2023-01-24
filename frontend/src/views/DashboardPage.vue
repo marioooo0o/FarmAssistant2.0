@@ -3,6 +3,9 @@
         <div v-if="hasFarm" class="grid grid-cols-2 h-full w-full">
             <FieldsPage />
             <PractisesPage />
+            <div class="col-span-2">
+                <WarehousePage />
+            </div>
         </div>
         <AddFarm v-else  />
 </template>
@@ -15,8 +18,9 @@ import AddFarm from '../components/fams/AddFarm.vue'
 import ResponseModal from '../components/ui/ResponseModal.vue';
 import FieldsPage from './FieldsPage.vue';
 import PractisesPage from './PractisesPage.vue';
+import WarehousePage from './WarehousePage.vue';
 export default {
-    components: { Navbar, AddFarm, ResponseModal, FieldsPage, PractisesPage },
+    components: { Navbar, AddFarm, ResponseModal, FieldsPage, PractisesPage, WarehousePage },
     setup(props){
         const store = useStore();
         const route = useRoute();

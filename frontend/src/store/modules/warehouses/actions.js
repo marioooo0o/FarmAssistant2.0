@@ -197,7 +197,7 @@ export default {
                 context.commit('setProducts', res.data.warehouse.products);
                 context.commit('response/setResponse', {
                         status: true,
-                        message: res.data.message,
+                        message: 'Środek ochrony roślin dodany pomyślnie',
                 }, {root: true});
 
                 return {
@@ -241,9 +241,8 @@ export default {
         })
         .then(function(res){
             if(res.status === 200){
-                context.commit('setProducts', {
-                    products: res.data.warehouse.products
-                });
+                context.commit('setProducts', res.data.warehouse.products
+                );
                 context.commit('response/setResponse', {
                         status: true,
                         message: 'Produkt edytowany pomyślnie!',

@@ -21,16 +21,12 @@ export default {
         }
     },
     setup(props) {
-        function editProduct(){
-            console.log('edit click');
-        } 
 
         const productLink = computed(() => {
             return `/srodek-ochrony-roslin/${props.product.id}`;
         })
         
         return {
-            editProduct,
             productLink
         } 
     }

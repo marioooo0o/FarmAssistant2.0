@@ -33,6 +33,7 @@ class CropSeeder extends Seeder
 
         DB::table('crops')->insert([
             'name' => 'Kukurydza',
+            'image_path' => 'crops/corn.png'
         ]);
 
         DB::table('crops')->insert([
@@ -57,12 +58,10 @@ class CropSeeder extends Seeder
             'name' => 'Ogórek',
             'image_path' => 'crops/cucumber.png'
         ]);
-        DB::table('crops')->insert([
-            'name' => 'Porzeczka czerwona',
-        ]);
 
         DB::table('crops')->insert([
             'name' => 'Porzeczka czarna',
+            'image_path' => 'crops/blackberry.png'
         ]);
 
         DB::table('crops')->insert([
@@ -77,18 +76,22 @@ class CropSeeder extends Seeder
 
         DB::table('crops')->insert([
             'name' => 'Pszenica ozima',
-        ]);
-
-        DB::table('crops')->insert([
-            'name' => 'Rzepak ozimy',
+            'image_path' => 'crops/wheat.png'
         ]);
 
         DB::table('crops')->insert([
             'name' => 'Jęczmień jary',
+            'image_path' => 'crops/barley.png'
         ]);
 
         DB::table('crops')->insert([
             'name' => 'Cukinia',
+            'image_path' => 'crops/courgette.png'
+        ]);
+
+        DB::table('crops')->insert([
+            'name' => 'Dynia',
+            'image_path' => 'crops/pumpkin.png'
         ]);
     }
 }

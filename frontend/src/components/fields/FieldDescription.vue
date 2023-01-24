@@ -46,9 +46,6 @@ export default {
         const store = useStore();
         const router = useRouter();
 
-        function handleEditClicked() {
-            console.log('edit clicked');
-        };
         async function handleDeleteClicked() {
             store.commit('toggleLoading');
             const response = await store.dispatch('fields/deleteField', {
@@ -70,7 +67,6 @@ export default {
             emit('close-description-card');
         }
         return {
-            handleEditClicked,
             handleDeleteClicked,
             handleCloseCard
         }

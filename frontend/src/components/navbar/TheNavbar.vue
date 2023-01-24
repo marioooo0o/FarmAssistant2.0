@@ -17,6 +17,7 @@
                 <NavbarLink to="/zabiegi-ochrony-roslin">Zabiegi</NavbarLink>
                 <NavbarLink to="/grunty">Grunty</NavbarLink>
                 <NavbarLink to="/magazyn">Magazyn</NavbarLink>
+                <NavbarLink logoutLink>Wyloguj</NavbarLink>
             </div>
         </div>
     </nav>

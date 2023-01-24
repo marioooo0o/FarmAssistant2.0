@@ -65,7 +65,6 @@ export default {
         
         function handleDeleteItem(id){
             selectedValues.value = selectedValues.value.filter((value) => value.id !== id);
-            console.log('selected in delete', selectedValues.value);
             emit('delete-field-from-list', selectedValues.value);
         }
 

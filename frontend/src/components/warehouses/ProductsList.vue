@@ -5,14 +5,14 @@
             :headers="headers" :activeHeaderIndex="activeHeaderIndex"
             @add-new="$emit('show-create-page')" 
             @selected-header="sortHeader" />
-            <div v-if="sortedList.length > 0" class="m-3">
+            <div v-if="sortedList && sortedList.length > 0" class="p-3">
                 <ProductListItem v-for="product in sortedList" :key="product.id" :product="product"
                     @edit-product="$emit('edit-product', $event)" />
             </div>
-            <div v-else class="m-3 text-lg">
+            <div v-else class="p-3 text-lg">
                 Nie posiadasz żadnych środków
             </div>
-            <base-button :class="'m-3 text-lg'" @click="handleLoadMore">Załaduj więcej</base-button>
+            <base-button v-if="sortedList && sortedList.length > 5" :class="'m-3 text-lg'" @click="handleLoadMore">Załaduj więcej</base-button>
         </div>
     </base-card>
 </template>

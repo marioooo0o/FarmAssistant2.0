@@ -182,10 +182,8 @@ export default {
                     fields: practiseFields.value.map((field) => ({"id": field.id})),
                     products: practiseProducts.value.map((product) => ({"id": product.id, "quantity": product.pivot.quantity})),
                 }
-                console.log('formData', formData);
                 store.commit('toggleLoading');
                 const response = await store.dispatch('practises/editPractise', formData);
-                console.log('res', response);
                 if (response.status === 200) {
                     store.commit('response/setResponse', {
                         status: true,
@@ -194,7 +192,6 @@ export default {
                     emit('close-edit-card');
                 }
                 else if (response.status === 422) {
-                    console.log('res2', response);
                     errors.practiseName = [];
                     errors.practiseDate = [];
                     errors.practiseFields = [];
@@ -212,7 +209,6 @@ export default {
                                 const result = response.errors.products.some(product => !product.quantity ? true : false )
                                 ? response.errors.products
                                 : response.errors.products.map((error) => error.quantity);
-                                console.log('maks', result);
                                 errors.practiseProducts.push(...result);
                                 break;
                             case 'fields':

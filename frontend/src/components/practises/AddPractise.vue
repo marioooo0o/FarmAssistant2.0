@@ -32,7 +32,7 @@
                         @delete-field-from-list="deleteFieldFromList"/>
                 </base-form-control>
                 <base-form-control>
-                    <base-label id="practiseWater" label="Ilość wody:" required v-model="practiseWater" type="numeric" name="practiseWater"
+                    <base-label id="practiseWater" label="Ilość wody:" required v-model="practiseWater" type="number" name="practiseWater" min="0" step="0.01"
                         unit="l"     
                     :error="errors['practiseWater']" />
                 </base-form-control>
@@ -203,7 +203,6 @@ export default {
                                 const result = response.errors.products.some(product => !product.quantity ? true : false )
                                 ? response.errors.products
                                 : response.errors.products.map((error) => error.quantity);
-                                console.log('maks', result);
                                 errors.practiseProducts.push(...result);
                                 break;
                             case 'fields':

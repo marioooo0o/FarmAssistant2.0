@@ -62,15 +62,11 @@ export default {
 
         function checkForm(){
             errors.productQuantity = [];
-            if(props.lastCreateOrEdit === 'edit'){
-                if(productQuantity.value && productQuantity.value > 0 && productQuantity.value > 0){
-                    return true;
-                }
+            if(props.lastCreateOrEdit === 'edit' && (productQuantity.value && productQuantity.value > 0)){
+               return true;
             }
-            else if(props.lastCreateOrEdit === 'create'){
-                if(productQuantity.value && productQuantity.value > 0 && productQuantity.value <= props.product.pivot.quantity){
-                    return true;
-                }
+            else if(props.lastCreateOrEdit === 'create' && (productQuantity.value && productQuantity.value > 0 && productQuantity.value <= props.product.pivot.quantity)){
+                return true;
             }
             if (!productQuantity.value || productQuantity.value === 0){
                 errors.productQuantity.push('Ilość środka jest wymagana');

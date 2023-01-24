@@ -38,6 +38,7 @@ export default {
 
         const errors = reactive({
             productQuantity: [],
+            productName: []
         });
 
         const unit = computed(()=>{

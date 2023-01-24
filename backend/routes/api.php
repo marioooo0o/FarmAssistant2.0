@@ -63,7 +63,7 @@ Route::middleware(['auth:api'])->group(function () {
         Route::put('/farms/{farm_id}/warehouses/products/{id}', 'update');
         Route::delete('/farms/{farm_id}/warehouses/products/{id}', 'destroy');
     });
-    Route::apiResource('farms/{farm_id}/practises', PractiseController::class)->except(['destroy']);
+    Route::apiResource('farms/{farm_id}/practises', PractiseController::class);
 });
 
 Route::post('/crops', [CropController::class, 'store']);

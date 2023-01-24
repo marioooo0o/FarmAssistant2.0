@@ -121,8 +121,25 @@ class PractiseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($farmId, $id)
     {
-        //
+        $practise = $this->practiseService->find($id);
+        if(auth()->user()->id == $practise->farm->user_id){
+            $practise = $this->practiseService->delete($practise);
+            if($practise){
+                return response()->json([
+                    "success" => true,
+                    "message" => "Field deleted successfully."
+                ], Response::HTTP_OK);
+            } else {
+                return response()->json([
+                    "success" => false,
+                    "message" => $practise,
+                ], Response::HTTP_BAD_REQUEST);
+            }
+        }
+        else {
+            return response()->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
+        }
     }
 }

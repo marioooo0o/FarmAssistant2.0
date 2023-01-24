@@ -13,7 +13,7 @@ import { ref, computed } from 'vue';
 export default {
     props: {
         quantity: {
-            type: Number,
+            type: [String, Number],
             required: true,
         }
     },

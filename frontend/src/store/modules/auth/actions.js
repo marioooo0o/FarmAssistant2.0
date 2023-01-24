@@ -26,7 +26,7 @@ export default {
 
                     context.commit('response/setResponse', {
                         status: res.data.success,
-                        message: res.data.message,
+                        message: 'Użytkownik zarejestrowany pomyślnie'
                     }, {root: true})
 
                     const response = {
@@ -56,6 +56,7 @@ export default {
                         userId: res.data.user.id,
                         userEmail: res.data.user.email
                     });
+                    
                     if(res.data.user.farm){
                         context.commit('farm/setFarm',{
                             farmId: res.data.user.farm.id,
@@ -98,6 +99,7 @@ export default {
                 
             })
         .catch(function (err){
+            console.log(err);
                 const response ={
                         status: err.response.status,
                         statusText: err.response.statusText,
@@ -168,5 +170,39 @@ export default {
         return response;
         }
         
+    },
+    async logout(context, payload){
+        const response = await axios
+        .get('logout')
+        .then(function(res){
+            context.commit('response/setResponse', {
+                status: true,
+                message: 'Użytkownik wylogowany pomyślnie',
+            }, {root: true})
+
+            const response = {
+                status: res.status,
+                statusText: res.statusText,
+            }
+            return response;
+        })
+        .catch(function(err){
+            const response ={
+                status: err.response.status,
+                statusText: err.response.statusText,
+            }
+
+            if(response.status === 401){
+                localStorage.removeItem('isAuth');
+            }
+
+            context.commit('response/setResponse', {
+                    status: false,
+                    message: err.response.statusText,
+            }, {root: true});
+            return response;
+            })
+
+            return response;
     }
 }

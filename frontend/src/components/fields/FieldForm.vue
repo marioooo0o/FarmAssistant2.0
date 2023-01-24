@@ -78,7 +78,7 @@ export default {
 
         const fieldArea = computed(()=>{
             if(fieldParcels.value){
-                return fieldParcels.value.reduce((acc, item) => acc + (item.pivot.area ? item.pivot.area : 0), 0)
+                return fieldParcels.value.reduce((acc, item) => parseInt(acc) + (item.pivot.area ? parseInt(item.pivot.area) : 0), 0)
             }
             else{
                 return null;

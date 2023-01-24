@@ -13,7 +13,6 @@ export default {
         const response = await axios
         .post('farms', data)
         .then(function(res){
-            console.log('resfarm', res);
                 if(res.status === 422){
                     const response = {
                         status: res.status,
@@ -40,7 +39,7 @@ export default {
                     
                     context.commit('response/setResponse', {
                         status: res.data.success,
-                        message: res.data.message,
+                        message: 'Gospodarstwo utworzone pomyślnie',
                     }, {root: true})
 
                     const response = {

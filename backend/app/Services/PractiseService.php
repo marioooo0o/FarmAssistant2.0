@@ -168,6 +168,28 @@ class PractiseService
         }
     }
 
+    public function delete(Practise $practise)
+    {
+        $success = false;
+        DB::beginTransaction();
+        try {
+            if($practise->delete()){
+                $success = true;
+            }
+        }
+        catch (Exception $e) {
+            DB::rollback();
+            return $e->getMessage();
+        }
+        if ($success) {
+            DB::commit();
+            return true;
+        } else {
+            DB::rollback();
+            return "Something goes wrong";
+        }
+    }
+
     public function restoreToOrginal($practiseProducts, $warehouse, $warehouseProducts)
     {
         try {

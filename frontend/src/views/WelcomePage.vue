@@ -1,8 +1,8 @@
 <template>
-    <div class="absolute top-0 bottom-0 w-full h-full overflow-hidden">
-        <video src="@/assets/intro.mp4" class="w-screen h-screen object-cover fixed inset-0 -z-[1]" autoplay loop muted>
-
-        </video>
+    <div class="absolute top-0 bottom-0 w-full h-full overflow-hidden ">
+            <video src="@/assets/intro.mp4" class="w-screen h-screen object-cover fixed inset-0 -z-[1] blur-[1px]" autoplay loop muted>
+    
+            </video>
         <div class="flex flex-col my-3"></div>
         <AuthHeader />
         <div class="flex justify-around">

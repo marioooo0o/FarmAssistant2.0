@@ -65,22 +65,21 @@ export default {
         });
 
         async function handleDeleteClicked() {
-            console.log('delete practise clicked');
-            // store.commit('toggleLoading');
-            // const response = await store.dispatch('fields/deleteField', {
-            //     fieldId: props.field.id
-            // });
-            // if(response.status == 200) {
-            //     store.commit('response/setResponse', {
-            //         status: true,
-            //         message: 'Pole usunięte pomyślnie!'
-            //     }, { root: true });
-            //     emit('close-description-card');
-            // }
-            // else if(response.status == 401){
-            //     router.replace('/login');
-            // }
-            // store.commit('toggleLoading');
+            store.commit('toggleLoading');
+            const response = await store.dispatch('practises/deletePractise', {
+                practiseId: props.practise.id
+            });
+            if(response.status == 200) {
+                store.commit('response/setResponse', {
+                    status: true,
+                    message: 'Zabieg usunięty pomyślnie!'
+                }, { root: true });
+                emit('close-description-card');
+            }
+            else if(response.status == 401){
+                router.replace('/login');
+            }
+            store.commit('toggleLoading');
         };
         function handleCloseCard(){
             emit('close-description-card');

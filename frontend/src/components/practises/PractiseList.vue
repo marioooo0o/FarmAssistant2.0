@@ -5,14 +5,14 @@
                 :headers="headers" :activeHeaderIndex="activeHeaderIndex"
                 @add-new="$emit('show-create-page')"
                 @selected-header="sortHeader"  />
-            <div class="m-3" v-if="sortedList && sortedList.length !== 0">
+            <div class="p-3" v-if="sortedList && sortedList.length !== 0">
                 <PractiseListItem v-for="practise in sortedList" :key="practise.id" :practise="practise"
                     @click="$emit('show-description-page', practise.id)" />
             </div>
             <div class="m-3 py-6 text-lg" v-else>
                 Nie posiadasz żadnych zabiegów
             </div>
-            <BaseButton :class="'m-3 text-lg'" @click="handleLoadMore" v-if="sortedList && sortedList.length !== 0">Załaduj więcej</BaseButton>
+            <BaseButton :class="'m-3 text-lg'" @click="handleLoadMore" v-if="sortedList && sortedList.length > 5">Załaduj więcej</BaseButton>
         </div>
     </BaseCard>
 </template>
